@@ -40,6 +40,7 @@ class LabSimulatorEntry {
     MascotController mascotController,
     PetCompanionController companionController,
     LabCompletionController completionController,
+    VoidCallback onOpenWallet,
   )
   build;
 }
@@ -54,11 +55,17 @@ class LabSimulatorCatalog {
       titleKey: AppStrings.labCompoundInterestTitle,
       subtitleKey: AppStrings.labCompoundInterestSubtitle,
       available: true,
-      build: (mascotController, companionController, completionController) =>
-          CompoundInterestLabScreen(
+      build:
+          (
+            mascotController,
+            companionController,
+            completionController,
+            onOpenWallet,
+          ) => CompoundInterestLabScreen(
             mascotController: mascotController,
             companionController: companionController,
             completionController: completionController,
+            onOpenWallet: onOpenWallet,
           ),
     ),
     LabSimulatorEntry(
@@ -67,11 +74,17 @@ class LabSimulatorCatalog {
       titleKey: AppStrings.labInflationTitle,
       subtitleKey: AppStrings.labInflationSubtitle,
       available: true,
-      build: (mascotController, companionController, completionController) =>
-          InflationLabScreen(
+      build:
+          (
+            mascotController,
+            companionController,
+            completionController,
+            onOpenWallet,
+          ) => InflationLabScreen(
             mascotController: mascotController,
             companionController: companionController,
             completionController: completionController,
+            onOpenWallet: onOpenWallet,
           ),
     ),
     LabSimulatorEntry(
@@ -80,11 +93,17 @@ class LabSimulatorCatalog {
       titleKey: AppStrings.labFixedIncomeTitle,
       subtitleKey: AppStrings.labFixedIncomeSubtitle,
       available: true,
-      build: (mascotController, companionController, completionController) =>
-          FixedIncomeLabScreen(
+      build:
+          (
+            mascotController,
+            companionController,
+            completionController,
+            onOpenWallet,
+          ) => FixedIncomeLabScreen(
             mascotController: mascotController,
             companionController: companionController,
             completionController: completionController,
+            onOpenWallet: onOpenWallet,
           ),
     ),
     LabSimulatorEntry(
@@ -93,11 +112,17 @@ class LabSimulatorCatalog {
       titleKey: AppStrings.labDiversificationTitle,
       subtitleKey: AppStrings.labDiversificationSubtitle,
       available: true,
-      build: (mascotController, companionController, completionController) =>
-          DiversificationLabScreen(
+      build:
+          (
+            mascotController,
+            companionController,
+            completionController,
+            onOpenWallet,
+          ) => DiversificationLabScreen(
             mascotController: mascotController,
             companionController: companionController,
             completionController: completionController,
+            onOpenWallet: onOpenWallet,
           ),
     ),
     LabSimulatorEntry(
@@ -106,11 +131,17 @@ class LabSimulatorCatalog {
       titleKey: AppStrings.labPortfolioTitle,
       subtitleKey: AppStrings.labPortfolioSubtitle,
       available: true,
-      build: (mascotController, companionController, completionController) =>
-          PortfolioLabScreen(
+      build:
+          (
+            mascotController,
+            companionController,
+            completionController,
+            onOpenWallet,
+          ) => PortfolioLabScreen(
             mascotController: mascotController,
             companionController: companionController,
             completionController: completionController,
+            onOpenWallet: onOpenWallet,
           ),
     ),
   ];

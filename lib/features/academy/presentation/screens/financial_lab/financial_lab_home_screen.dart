@@ -29,14 +29,17 @@ class FinancialLabHomeScreen extends StatefulWidget {
     super.key,
     required this.mascotController,
     required this.companionController,
+    required this.onOpenWallet,
   });
 
   final MascotController mascotController;
   final PetCompanionController companionController;
 
+  /// In-app fallback for the §1.6 Wallet bridge CTA — see `WalletBridgeCta`.
+  final VoidCallback onOpenWallet;
+
   @override
-  State<FinancialLabHomeScreen> createState() =>
-      _FinancialLabHomeScreenState();
+  State<FinancialLabHomeScreen> createState() => _FinancialLabHomeScreenState();
 }
 
 class _FinancialLabHomeScreenState extends State<FinancialLabHomeScreen> {
@@ -101,7 +104,8 @@ class _FinancialLabHomeScreenState extends State<FinancialLabHomeScreen> {
                       ? null
                       : Translator.translate(entry.subtitleKey!),
                   available: entry.available,
-                  completed: entry.available &&
+                  completed:
+                      entry.available &&
                       _completionController.isCompleted(entry.id),
                   onTap: !entry.available
                       ? null
@@ -113,6 +117,7 @@ class _FinancialLabHomeScreenState extends State<FinancialLabHomeScreen> {
                                 widget.mascotController,
                                 widget.companionController,
                                 _completionController,
+                                widget.onOpenWallet,
                               ),
                             ),
                           );
@@ -204,7 +209,11 @@ class _LabTile extends StatelessWidget {
                   else if (completed)
                     Icon(Icons.check_circle, color: tokens.success, size: 18)
                   else
-                    Icon(Icons.chevron_right, color: tokens.textTertiary, size: 18),
+                    Icon(
+                      Icons.chevron_right,
+                      color: tokens.textTertiary,
+                      size: 18,
+                    ),
                 ],
               ),
             ),

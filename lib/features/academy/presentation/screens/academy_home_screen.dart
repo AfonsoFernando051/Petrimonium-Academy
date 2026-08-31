@@ -40,13 +40,18 @@ class AcademyHomeScreen extends StatefulWidget {
     super.key,
     required this.mascotController,
     required this.companionController,
+    required this.onOpenPortfolioTab,
   });
 
   final MascotController mascotController;
 
   /// Offers the "continue where you left off" companion nudge once the
-  /// next lesson is known — see `PetMessageCatalog._academyNudge`.
+  /// next lesson is known — see `AcademyPetBehavior._academyNudge`.
   final PetCompanionController companionController;
+
+  /// In-app fallback for the §1.6 Wallet bridge CTA on Financial Lab
+  /// completion — see `WalletBridgeCta`.
+  final VoidCallback onOpenPortfolioTab;
 
   @override
   State<AcademyHomeScreen> createState() => _AcademyHomeScreenState();
@@ -210,6 +215,7 @@ class _AcademyHomeScreenState extends State<AcademyHomeScreen> {
                   FinancialLabHomeScreen(
                     mascotController: widget.mascotController,
                     companionController: widget.companionController,
+                    onOpenWallet: widget.onOpenPortfolioTab,
                   ),
                 ),
               ),

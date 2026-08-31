@@ -92,6 +92,7 @@ void main() {
         body: AcademyHomeScreen(
           mascotController: mascotController,
           companionController: companionController,
+          onOpenPortfolioTab: () {},
         ),
       ),
     );

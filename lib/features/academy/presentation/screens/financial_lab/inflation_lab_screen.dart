@@ -32,11 +32,15 @@ class InflationLabScreen extends StatefulWidget {
     required this.mascotController,
     required this.companionController,
     required this.completionController,
+    required this.onOpenWallet,
   });
 
   final MascotController mascotController;
   final PetCompanionController companionController;
   final LabCompletionController completionController;
+
+  /// In-app fallback for the §1.6 Wallet bridge CTA — see WalletBridgeCta.
+  final VoidCallback onOpenWallet;
 
   // A fresh anchor per screen instance — see `LabScaffold`'s doc comment.
   final PetSpeechBubbleAnchor _headerAnchor = PetSpeechBubbleAnchor();
@@ -90,18 +94,23 @@ class _InflationLabScreenState extends State<InflationLabScreen> {
           xLabels: [for (final p in result.yearlyBreakdown) '${p.year}'],
           series: [
             LabLineSeries(
-              label: Translator.translate(AppStrings.labInflationNominalValueLabel),
+              label: Translator.translate(
+                AppStrings.labInflationNominalValueLabel,
+              ),
               color: AppColors.subtleText,
               dashed: true,
               values: [for (final p in result.yearlyBreakdown) p.nominalValue],
             ),
             LabLineSeries(
-              label: Translator.translate(AppStrings.labInflationRealValueLabel),
+              label: Translator.translate(
+                AppStrings.labInflationRealValueLabel,
+              ),
               color: AppColors.neonPink,
               values: [for (final p in result.yearlyBreakdown) p.realValue],
             ),
           ],
-          tooltipValueFormatter: (v) => AppFormatters.currency(v, showCents: false),
+          tooltipValueFormatter: (v) =>
+              AppFormatters.currency(v, showCents: false),
         ),
         LabDataTableDisclosure(
           columnLabels: [
@@ -125,9 +134,12 @@ class _InflationLabScreenState extends State<InflationLabScreen> {
             AppStrings.labInflationInterpretation,
             params: {
               'rate': AppFormatters.percentPlain(_inflationPercent),
-              'lostPercent': result.totalPurchasingPowerLostPercent.toStringAsFixed(1),
+              'lostPercent': result.totalPurchasingPowerLostPercent
+                  .toStringAsFixed(1),
               'years': '$_years',
-              'multiplier': AppFormatters.multiplier(result.basketCostMultiplier),
+              'multiplier': AppFormatters.multiplier(
+                result.basketCostMultiplier,
+              ),
             },
           ),
           variant: LabNarrativeVariant.interpretation,
@@ -136,8 +148,14 @@ class _InflationLabScreenState extends State<InflationLabScreen> {
           text: Translator.translate(
             AppStrings.labInflationInvestingConnection,
             params: {
-              'nominal': AppFormatters.percentPlain(_nominalReturnPercent, decimals: 2),
-              'inflation': AppFormatters.percentPlain(_inflationPercent, decimals: 2),
+              'nominal': AppFormatters.percentPlain(
+                _nominalReturnPercent,
+                decimals: 2,
+              ),
+              'inflation': AppFormatters.percentPlain(
+                _inflationPercent,
+                decimals: 2,
+              ),
               'exact': (result.realReturnExact * 100).toStringAsFixed(2),
               'approx': (result.realReturnApproximate * 100).toStringAsFixed(2),
             },
@@ -153,6 +171,7 @@ class _InflationLabScreenState extends State<InflationLabScreen> {
           simulatorId: LabSimulatorId.inflation,
           resolvedTitle: Translator.translate(AppStrings.labInflationTitle),
           controller: widget.completionController,
+          onOpenWallet: widget.onOpenWallet,
           canComplete: _canComplete,
         ),
       ],
@@ -170,7 +189,10 @@ class _InflationLabScreenState extends State<InflationLabScreen> {
           children: [
             LabeledSlider(
               label: Translator.translate(AppStrings.labInitialAmountLabel),
-              valueLabel: AppFormatters.currency(_initialAmount, showCents: false),
+              valueLabel: AppFormatters.currency(
+                _initialAmount,
+                showCents: false,
+              ),
               value: _initialAmount,
               min: 0,
               max: 100000,
@@ -196,7 +218,8 @@ class _InflationLabScreenState extends State<InflationLabScreen> {
               max: 30,
               divisions: 60,
               onChanged: (v) => setState(
-                () => _nominalReturnPercent = double.parse(v.toStringAsFixed(1)),
+                () =>
+                    _nominalReturnPercent = double.parse(v.toStringAsFixed(1)),
               ),
             ),
             LabeledSlider(
@@ -227,15 +250,20 @@ class _InflationLabScreenState extends State<InflationLabScreen> {
         const SizedBox(width: 10),
         Expanded(
           child: StatCard(
-            label: Translator.translate(AppStrings.labInflationLostPercentLabel),
-            value: '${result.totalPurchasingPowerLostPercent.toStringAsFixed(1)}%',
+            label: Translator.translate(
+              AppStrings.labInflationLostPercentLabel,
+            ),
+            value:
+                '${result.totalPurchasingPowerLostPercent.toStringAsFixed(1)}%',
             accent: AppColors.warningAmber,
           ),
         ),
         const SizedBox(width: 10),
         Expanded(
           child: StatCard(
-            label: Translator.translate(AppStrings.labInflationBasketMultiplierLabel),
+            label: Translator.translate(
+              AppStrings.labInflationBasketMultiplierLabel,
+            ),
             value: AppFormatters.multiplier(result.basketCostMultiplier),
             accent: AppColors.neonCyan,
           ),

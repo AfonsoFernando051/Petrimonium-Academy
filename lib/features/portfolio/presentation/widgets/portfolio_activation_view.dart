@@ -12,7 +12,7 @@ import 'package:petrimonium/core/widgets/game_button.dart';
 import 'package:petrimonium/core/widgets/glass_card.dart';
 import 'package:petrimonium/core/widgets/unavailable_badge.dart';
 import 'package:petrimonium/features/investment/presentation/screens/investment_configuration_screen.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_message_catalog.dart';
+import 'package:petrimonium/features/portfolio/domain/services/portfolio_pet_behavior.dart';
 import 'package:petrimonium/features/pet/presentation/companion/rive/pet_rive_companion.dart';
 import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
@@ -90,7 +90,7 @@ class _PortfolioActivationViewState extends State<PortfolioActivationView> {
       ),
     );
     setState(() {
-      _petReactionKey = PetMessageCatalog.investorStatusReaction(
+      _petReactionKey = PortfolioPetBehavior.investorStatusReaction(
         alreadyInvests: alreadyInvests,
       );
       _step = alreadyInvests ? _ActivationStep.connect : _ActivationStep.learn;

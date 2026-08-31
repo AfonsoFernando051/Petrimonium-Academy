@@ -4,7 +4,7 @@ import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/features/academy/domain/entities/lesson_step.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_message_catalog.dart';
+import 'package:petrimonium/features/academy/domain/services/academy_pet_behavior.dart';
 import 'package:petrimonium/features/pet/presentation/companion/rive/pet_rive_companion.dart';
 import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
@@ -28,7 +28,7 @@ class ChoiceQuestionStepView extends StatelessWidget {
   final ChoiceQuestionStep step;
 
   /// The lesson's current step index — used only to vary which pet-voiced
-  /// feedback line shows (`PetMessageCatalog.questionFeedbackTitle`'s
+  /// feedback line shows (`AcademyPetBehavior.questionFeedbackTitle`'s
   /// `seed`), so a multi-question lesson doesn't repeat the exact same line
   /// every time.
   final int stepIndex;
@@ -163,7 +163,7 @@ class _OptionTile extends StatelessWidget {
 /// small avatar plus a pet-voiced line at the exact moment feedback is
 /// already shown reads as "my companion reacted," without adding a new
 /// interruption the lesson doesn't already have (see
-/// `PetMessageCatalog.questionFeedbackTitle`'s doc comment).
+/// `AcademyPetBehavior.questionFeedbackTitle`'s doc comment).
 class _FeedbackCard extends StatelessWidget {
   const _FeedbackCard({
     required this.isCorrect,
@@ -207,7 +207,7 @@ class _FeedbackCard extends StatelessWidget {
               children: [
                 Text(
                   Translator.translate(
-                    PetMessageCatalog.questionFeedbackTitle(correct: isCorrect, seed: stepIndex),
+                    AcademyPetBehavior.questionFeedbackTitle(correct: isCorrect, seed: stepIndex),
                   ),
                   style: TextStyle(color: accent, fontWeight: FontWeight.bold, fontSize: 13),
                 ),

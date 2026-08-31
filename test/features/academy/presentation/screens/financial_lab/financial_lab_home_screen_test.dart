@@ -81,6 +81,7 @@ void main() {
       home: FinancialLabHomeScreen(
         mascotController: mascotController,
         companionController: companionController,
+        onOpenWallet: () {},
       ),
     );
   }

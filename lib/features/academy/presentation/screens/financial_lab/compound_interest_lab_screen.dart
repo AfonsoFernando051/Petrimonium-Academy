@@ -35,11 +35,15 @@ class CompoundInterestLabScreen extends StatefulWidget {
     required this.mascotController,
     required this.companionController,
     required this.completionController,
+    required this.onOpenWallet,
   });
 
   final MascotController mascotController;
   final PetCompanionController companionController;
   final LabCompletionController completionController;
+
+  /// In-app fallback for the §1.6 Wallet bridge CTA — see WalletBridgeCta.
+  final VoidCallback onOpenWallet;
 
   // A fresh anchor per screen instance — Lab screens are pushed on top of
   // each other and all remain mounted simultaneously, so a shared
@@ -51,8 +55,7 @@ class CompoundInterestLabScreen extends StatefulWidget {
       _CompoundInterestLabScreenState();
 }
 
-class _CompoundInterestLabScreenState
-    extends State<CompoundInterestLabScreen> {
+class _CompoundInterestLabScreenState extends State<CompoundInterestLabScreen> {
   double _initialAmount = 1000;
   double _monthlyContribution = 200;
   double _annualRatePercent = 8;
@@ -96,10 +99,7 @@ class _CompoundInterestLabScreenState
   }
 
   void _onMonthlyContributionChanged(double value) {
-    final from = AppFormatters.currency(
-      _monthlyContribution,
-      showCents: false,
-    );
+    final from = AppFormatters.currency(_monthlyContribution, showCents: false);
     final to = AppFormatters.currency(value, showCents: false);
     setState(() {
       _explanationKey = value > _monthlyContribution
@@ -181,10 +181,7 @@ class _CompoundInterestLabScreenState
               LabDataTableRow(
                 label: '${point.year}',
                 values: [
-                  AppFormatters.currency(
-                    point.contributions,
-                    showCents: false,
-                  ),
+                  AppFormatters.currency(point.contributions, showCents: false),
                   AppFormatters.currency(
                     point.value - point.contributions,
                     showCents: false,
@@ -211,6 +208,7 @@ class _CompoundInterestLabScreenState
             AppStrings.labCompoundInterestTitle,
           ),
           controller: widget.completionController,
+          onOpenWallet: widget.onOpenWallet,
           canComplete: _canComplete,
         ),
       ],
@@ -289,9 +287,7 @@ class _CompoundInterestLabScreenState
         const SizedBox(width: 10),
         Expanded(
           child: StatCard(
-            label: Translator.translate(
-              AppStrings.labTotalContributionsLabel,
-            ),
+            label: Translator.translate(AppStrings.labTotalContributionsLabel),
             value: AppFormatters.compactCurrency(result.totalContributions),
             accent: AppColors.neonCyan,
           ),

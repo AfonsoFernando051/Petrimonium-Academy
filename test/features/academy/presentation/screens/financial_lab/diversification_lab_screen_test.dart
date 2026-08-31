@@ -63,6 +63,7 @@ void main() {
         mascotController: mascotController,
         companionController: companionController,
         completionController: completionController,
+        onOpenWallet: () {},
       ),
     );
   }

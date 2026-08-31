@@ -32,11 +32,15 @@ class FixedIncomeLabScreen extends StatefulWidget {
     required this.mascotController,
     required this.companionController,
     required this.completionController,
+    required this.onOpenWallet,
   });
 
   final MascotController mascotController;
   final PetCompanionController companionController;
   final LabCompletionController completionController;
+
+  /// In-app fallback for the §1.6 Wallet bridge CTA — see WalletBridgeCta.
+  final VoidCallback onOpenWallet;
 
   final PetSpeechBubbleAnchor _headerAnchor = PetSpeechBubbleAnchor();
 
@@ -148,6 +152,7 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
           simulatorId: LabSimulatorId.fixedIncome,
           resolvedTitle: Translator.translate(AppStrings.labFixedIncomeTitle),
           controller: widget.completionController,
+          onOpenWallet: widget.onOpenWallet,
           canComplete: _canComplete,
         ),
       ],
@@ -243,9 +248,7 @@ class _FixedIncomeLabScreenState extends State<FixedIncomeLabScreen> {
         const SizedBox(width: 10),
         Expanded(
           child: StatCard(
-            label: Translator.translate(
-              AppStrings.labFixedIncomeInterestLabel,
-            ),
+            label: Translator.translate(AppStrings.labFixedIncomeInterestLabel),
             value: AppFormatters.compactCurrency(result.totalInterest),
             accent: AppColors.positiveGreen,
           ),

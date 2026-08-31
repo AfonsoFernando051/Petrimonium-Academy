@@ -522,6 +522,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return AcademyHomeScreen(
       mascotController: _mascotController,
       companionController: _companionController,
+      // In-app stand-in for the §1.6 Wallet bridge CTA while Wallet's
+      // screens still live in this repo (see `WalletBridgeCta`'s doc
+      // comment) — opens the Carteira tab instead of an external app.
+      onOpenPortfolioTab: () =>
+          setState(() => _selectedIndex = DashboardTabRouter.walletTab),
     );
   }
 

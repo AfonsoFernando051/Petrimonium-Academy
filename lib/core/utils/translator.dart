@@ -353,6 +353,8 @@ class Translator {
           "Repare como o crescimento (a parte dourada da barra) fica proporcionalmente maior quanto mais tempo o dinheiro fica investido.",
       AppStrings.labCompleteButton: "Concluir simulação",
       AppStrings.labCompletedLabel: "Concluído",
+      AppStrings.walletBridgeCtaLabel: "Ver isso na sua carteira real",
+      AppStrings.walletBridgeComingSoon: "Em breve na Wallet",
       AppStrings.labCompoundInterestQuestion:
           "Se você deixar o mesmo dinheiro investido por mais tempo, mantendo a mesma taxa, o que tende a acontecer com os juros ganhos?",
       AppStrings.labCompoundInterestOptionA: "Eles diminuem com o tempo",
@@ -949,6 +951,8 @@ class Translator {
           "Notice how growth (the golden part of the bar) becomes proportionally larger the longer your money stays invested.",
       AppStrings.labCompleteButton: "Complete simulation",
       AppStrings.labCompletedLabel: "Completed",
+      AppStrings.walletBridgeCtaLabel: "See this in your real portfolio",
+      AppStrings.walletBridgeComingSoon: "Coming soon in Wallet",
       AppStrings.labCompoundInterestQuestion:
           "If you keep the same money invested for longer at the same rate, what tends to happen to the interest earned?",
       AppStrings.labCompoundInterestOptionA: "It decreases over time",
@@ -1548,6 +1552,8 @@ class Translator {
           "Observa cómo el crecimiento (la parte dorada de la barra) se vuelve proporcionalmente mayor cuanto más tiempo permanece invertido tu dinero.",
       AppStrings.labCompleteButton: "Concluir simulación",
       AppStrings.labCompletedLabel: "Concluido",
+      AppStrings.walletBridgeCtaLabel: "Ver esto en tu cartera real",
+      AppStrings.walletBridgeComingSoon: "Próximamente en Wallet",
       AppStrings.labCompoundInterestQuestion:
           "Si dejas el mismo dinero invertido por más tiempo, manteniendo la misma tasa, ¿qué tiende a pasar con los intereses ganados?",
       AppStrings.labCompoundInterestOptionA: "Disminuyen con el tiempo",

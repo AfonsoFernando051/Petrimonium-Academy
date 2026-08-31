@@ -3,11 +3,25 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:petrimonium/core/events/app_event.dart';
 import 'package:petrimonium/core/events/app_event_bus.dart';
+import 'package:petrimonium/features/academy/domain/services/academy_pet_behavior.dart';
 import 'package:petrimonium/features/pet/data/repositories/pet_companion_preferences_repository.dart';
+import 'package:petrimonium/features/pet/domain/behavior/core_pet_behavior.dart';
+import 'package:petrimonium/features/pet/domain/behavior/pet_behavior.dart';
 import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
 import 'package:petrimonium/features/pet/presentation/companion/pet_message.dart';
-import 'package:petrimonium/features/pet/presentation/companion/pet_message_catalog.dart';
 import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
+import 'package:petrimonium/features/portfolio/domain/services/portfolio_pet_behavior.dart';
+
+/// The Pet's reaction scripts, tried in order for every [pageEnter]/event —
+/// first non-null result wins. `CorePetBehavior` owns identity/gamification
+/// state (XP/level/evolution) that's shared regardless of app;
+/// `AcademyPetBehavior` and `PortfolioPetBehavior` are this app's two
+/// isolated, independently swappable scripts (see their own doc comments).
+const List<PetBehavior> _kPetBehaviors = [
+  CorePetBehavior(),
+  AcademyPetBehavior(),
+  PortfolioPetBehavior(),
+];
 
 /// How long a [PetMessageTrigger.pageEnter] nudge stays cooled down after
 /// being shown, so returning to the same tab a minute later doesn't repeat
@@ -78,17 +92,27 @@ class PetCompanionController extends ChangeNotifier {
     Map<String, String> data = const {},
     bool allowAmbientFallback = false,
   }) {
-    var message = PetMessageCatalog.pageEnter(
-      context,
-      userXp: _mascotController.profile.xp,
-      data: data,
+    var message = _firstNonNull(
+      (behavior) => behavior.pageEnter(
+        context,
+        userXp: _mascotController.profile.xp,
+        data: data,
+      ),
     );
     if (allowAmbientFallback &&
         (message == null || _isCoolingDown(message.id))) {
-      message = PetMessageCatalog.homeMotivationalFallback();
+      message = _firstNonNull((behavior) => behavior.ambientFallback());
     }
     if (message == null) return;
     _offer(message, bypassCooldown: false);
+  }
+
+  PetMessage? _firstNonNull(PetMessage? Function(PetBehavior) resolve) {
+    for (final behavior in _kPetBehaviors) {
+      final message = resolve(behavior);
+      if (message != null) return message;
+    }
+    return null;
   }
 
   bool _isCoolingDown(String messageId) {
@@ -98,32 +122,11 @@ class PetCompanionController extends ChangeNotifier {
   }
 
   void _onAppEvent(AppEvent event) {
-    final message = switch (event) {
-      LessonCompletedEvent(:final lessonId) =>
-        PetMessageCatalog.lessonCompleted(lessonId),
-      XpGainedEvent(:final amount) => PetMessageCatalog.xpGained(amount),
-      UserLeveledUpEvent(:final newLevel) => PetMessageCatalog.levelUp(
-        newLevel,
-      ),
-      AchievementUnlockedEvent(:final achievement) =>
-        PetMessageCatalog.achievementUnlocked(achievement.title),
-      PetEvolvedEvent(:final newStage) => PetMessageCatalog.evolved(newStage),
-      DifficultyDetectedEvent(:final schoolTitle) =>
-        PetMessageCatalog.difficultyDetected(schoolTitle),
-      SchoolMasteredEvent(:final schoolTitle) =>
-        PetMessageCatalog.schoolMastered(schoolTitle),
-      FirstInvestmentAddedEvent() => PetMessageCatalog.firstInvestment(),
-      HighConcentrationDetectedEvent(:final ticker, :final percent) =>
-        PetMessageCatalog.highConcentration(ticker, percent),
-      MissionCompletedEvent(:final missionTitle) =>
-        PetMessageCatalog.missionCompleted(missionTitle),
-      FinancialLabSimulatorCompletedEvent(:final simulatorTitle) =>
-        PetMessageCatalog.labSimulatorCompleted(simulatorTitle),
-      // A session expiring is a plumbing concern (see ApiClient/main.dart's
-      // root listener, which handles the actual logout-and-redirect) — not
-      // a moment the companion should comment on.
-      SessionExpiredEvent() => null,
-    };
+    // A session expiring is a plumbing concern (see ApiClient/main.dart's
+    // root listener, which handles the actual logout-and-redirect) — not a
+    // moment the companion should comment on.
+    if (event is SessionExpiredEvent) return;
+    final message = _firstNonNull((behavior) => behavior.onEvent(event));
     if (message == null) return;
     _offer(message, bypassCooldown: true);
   }

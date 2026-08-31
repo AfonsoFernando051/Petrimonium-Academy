@@ -10,8 +10,7 @@ import 'package:petrimonium/features/investment/data/models/investment_type_enum
 extension LabInvestmentTypeLabel on InvestmentTypeEnum {
   String get labLabel => Translator.translate(switch (this) {
     InvestmentTypeEnum.STOCKS => AppStrings.labInvestmentTypeStocks,
-    InvestmentTypeEnum.FIXED_INCOME =>
-      AppStrings.labInvestmentTypeFixedIncome,
+    InvestmentTypeEnum.FIXED_INCOME => AppStrings.labInvestmentTypeFixedIncome,
     InvestmentTypeEnum.REAL_ESTATE => AppStrings.labInvestmentTypeRealEstate,
     InvestmentTypeEnum.CRYPTO => AppStrings.labInvestmentTypeCrypto,
     InvestmentTypeEnum.FUNDS => AppStrings.labInvestmentTypeFunds,

@@ -35,11 +35,15 @@ class PortfolioLabScreen extends StatefulWidget {
     required this.mascotController,
     required this.companionController,
     required this.completionController,
+    required this.onOpenWallet,
   });
 
   final MascotController mascotController;
   final PetCompanionController companionController;
   final LabCompletionController completionController;
+
+  /// In-app fallback for the §1.6 Wallet bridge CTA — see WalletBridgeCta.
+  final VoidCallback onOpenWallet;
 
   final PetSpeechBubbleAnchor _headerAnchor = PetSpeechBubbleAnchor();
 
@@ -128,6 +132,7 @@ class _PortfolioLabScreenState extends State<PortfolioLabScreen> {
             simulatorId: LabSimulatorId.portfolio,
             resolvedTitle: Translator.translate(AppStrings.labPortfolioTitle),
             controller: widget.completionController,
+            onOpenWallet: widget.onOpenWallet,
             canComplete: _canComplete && _isAllocationValid,
           ),
         ],

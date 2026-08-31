@@ -41,9 +41,7 @@ class LabDataTableDisclosure extends StatelessWidget {
     return GlassCard(
       borderRadius: AppRadii.lg,
       child: Theme(
-        data: Theme.of(
-          context,
-        ).copyWith(dividerColor: Colors.transparent),
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
           tilePadding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.md,

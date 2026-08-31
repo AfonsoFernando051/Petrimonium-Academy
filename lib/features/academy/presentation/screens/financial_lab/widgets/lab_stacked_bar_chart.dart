@@ -127,7 +127,10 @@ class _LabStackedBarChartState extends State<LabStackedBarChart> {
     );
   }
 
-  BarChartData _chartData(List<LabStackedBarPoint> points, AppColorTokens tokens) {
+  BarChartData _chartData(
+    List<LabStackedBarPoint> points,
+    AppColorTokens tokens,
+  ) {
     final maxY = points.last.total * 1.15;
     final double safeMaxY = maxY == 0 ? 1 : maxY;
 

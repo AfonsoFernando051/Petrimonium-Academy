@@ -366,6 +366,8 @@ class AppStrings {
   static const String labCompoundInterestInterpretation =
       "labCompoundInterestInterpretation";
   static const String labCompleteButton = "labCompleteButton";
+  static const String walletBridgeCtaLabel = "walletBridgeCtaLabel";
+  static const String walletBridgeComingSoon = "walletBridgeComingSoon";
   static const String labCompletedLabel = "labCompletedLabel";
   static const String labCompoundInterestQuestion =
       "labCompoundInterestQuestion";

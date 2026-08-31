@@ -67,6 +67,7 @@ void main() {
             resolvedTitle: 'Juros Compostos',
             controller: controller,
             canComplete: false,
+            onOpenWallet: () {},
           ),
         ),
       );
@@ -88,6 +89,7 @@ void main() {
             resolvedTitle: 'Juros Compostos',
             controller: controller,
             canComplete: true,
+            onOpenWallet: () {},
           ),
         ),
       );

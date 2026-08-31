@@ -39,11 +39,15 @@ class DiversificationLabScreen extends StatefulWidget {
     required this.mascotController,
     required this.companionController,
     required this.completionController,
+    required this.onOpenWallet,
   });
 
   final MascotController mascotController;
   final PetCompanionController companionController;
   final LabCompletionController completionController;
+
+  /// In-app fallback for the §1.6 Wallet bridge CTA — see WalletBridgeCta.
+  final VoidCallback onOpenWallet;
 
   final PetSpeechBubbleAnchor _headerAnchor = PetSpeechBubbleAnchor();
 
@@ -138,6 +142,7 @@ class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
               AppStrings.labDiversificationTitle,
             ),
             controller: widget.completionController,
+            onOpenWallet: widget.onOpenWallet,
             canComplete: _canComplete && result.isValid,
           ),
         ],
@@ -245,7 +250,8 @@ class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
             ),
             height: 44,
             colors: const [AppColors.neonPink, AppColors.neonViolet],
-            onPressed: () => setState(() => _activeShock = _Shock.concentration),
+            onPressed: () =>
+                setState(() => _activeShock = _Shock.concentration),
           ),
         ),
         const SizedBox(width: AppSpacing.sm),
@@ -283,7 +289,11 @@ class _DiversificationLabScreenState extends State<DiversificationLabScreen> {
         padding: const EdgeInsets.all(AppSpacing.md),
         child: Text(
           text,
-          style: TextStyle(color: context.colors.textSecondary, fontSize: 12, height: 1.4),
+          style: TextStyle(
+            color: context.colors.textSecondary,
+            fontSize: 12,
+            height: 1.4,
+          ),
         ),
       ),
     );
