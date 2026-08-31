@@ -15,6 +15,7 @@ class AuthRemoteDataSource {
       {
         'email': email,
         'password': password,
+        'appContext': ApiConstants.appContext,
       },
     );
 
@@ -29,7 +30,7 @@ class AuthRemoteDataSource {
   Future<UserModel> loginWithGoogle(String idToken) async {
     final response = await apiClient.post(
       ApiConstants.googleLoginEndpoint,
-      {'idToken': idToken},
+      {'idToken': idToken, 'appContext': ApiConstants.appContext},
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {

@@ -35,6 +35,13 @@ class ApiConstants {
     }
   }
 
+  // Identifies this app to the backend at login so the issued JWT carries the
+  // matching `app_context` claim — required as of backend commit 7b51782,
+  // which gates /api/v1/academy|learning|lab/** behind APP_CONTEXT_ACADEMY.
+  // Fixed per-app value, not a build flag: this binary is only ever the
+  // Academy client.
+  static const String appContext = 'academy';
+
   static const String loginEndpoint = '/auth/login';
   static const String googleLoginEndpoint = '/auth/google';
   static const String registerEndpoint = '/auth/register';

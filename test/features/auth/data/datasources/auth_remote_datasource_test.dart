@@ -36,7 +36,7 @@ void main() {
       expect(result.token, equals('mock_token'));
       verify(() => mockApiClient.post(
             ApiConstants.loginEndpoint,
-            {'email': tEmail, 'password': tPassword},
+            {'email': tEmail, 'password': tPassword, 'appContext': 'academy'},
           )).called(1);
     });
 
@@ -92,7 +92,7 @@ void main() {
       expect(result.token, equals('mock_token'));
       verify(() => mockApiClient.post(
             ApiConstants.googleLoginEndpoint,
-            {'idToken': tIdToken},
+            {'idToken': tIdToken, 'appContext': 'academy'},
           )).called(1);
     });
 

@@ -26,15 +26,21 @@ backend `identity` module:
 }
 ```
 
-- Not currently read or written anywhere in this repo — `ApiClient` stores
-  an opaque bearer token (`lib/core/network/api_client.dart`) and never
-  decodes it. Adding this claim is a backend change; this repo's job is to
-  request tokens with the right `app_context` at login/refresh once the
-  backend defines the parameter, not to invent the claim's presence today.
-- Nothing here assumes a specific claim name is final — propose it to
-  confirm before either app repo starts trusting the value for
-  app-specific logic (e.g. deciding to reject a Wallet-issued session inside
-  Academy or vice versa).
+**Status, 2026-08-31: implemented, not a proposal anymore.** The backend
+added exactly this claim (`AppContextEnum`, commit `7b51782`) and now
+enforces `hasAuthority("APP_CONTEXT_ACADEMY")` on `/api/v1/academy|
+learning|lab/**` and `hasAuthority("APP_CONTEXT_WALLET")` on
+`/api/investments/**`. This repo's `AuthRemoteDataSource.login`/
+`loginWithGoogle` (`lib/features/auth/data/datasources/
+auth_remote_datasource.dart`) now send `'appContext': ApiConstants.
+appContext` (`= 'academy'`, `lib/core/constants/api_constants.dart`) on every
+login/Google-login call. `ApiClient` still never decodes the returned JWT —
+it doesn't need to; the claim only has to round-trip through refresh, which
+the backend handles by pinning `app_context` to the value stored on the
+`RefreshToken` row at login rather than trusting a client-supplied value on
+`/auth/refresh`. Before this fix, this app's academy/learning/lab endpoints
+were already returning 403 against the current backend — this closed a live
+regression, not a preventive change.
 
 ## 2. Academy → Wallet deep-link scheme
 
