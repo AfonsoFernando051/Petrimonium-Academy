@@ -223,6 +223,25 @@ void main() {
       // No exception propagated out of loadAll — reaching this line is the assertion.
       expect(controller.newlyUnlocked, isEmpty);
     });
+
+    test('a failed real-portfolio fetch still evaluates gamification — '
+        'this is the only signal an Academy-context session gets now that '
+        'real_portfolio is Wallet-only and always 403s here', () async {
+      repository.holdingsError = Exception('network down (expected: Wallet-only endpoint)');
+      gamificationRepository.summaryToReturn = const GamificationSummary(
+        totalXp: 250,
+        level: 3,
+        xpIntoLevel: 50,
+        xpForNextLevel: 100,
+        currentStreak: 2,
+        longestStreak: 5,
+      );
+
+      await controller.loadAll();
+
+      expect(controller.error, isNotNull); // the real-portfolio fetch itself still failed...
+      expect(controller.gamificationSummary?.totalXp, 250); // ...but XP still loaded
+    });
   });
 
   group('loadAll — empty portfolio', () {
@@ -550,15 +569,20 @@ void main() {
       final sub = AppEventBus.instance.stream.listen(events.add);
       addTearDown(sub.cancel);
 
-      // Built as one combined lot set (not two separate `_holdingList()`
-      // calls) so `portfolioPercent` is normalized across both tickers
-      // together, giving a real 50/50 split rather than two independent
-      // "100% of its own list" holdings.
+      // A two-way 50/50 split is still >40% per holding — i.e. still
+      // "concentrated" under `_evaluateConcentration`'s own threshold (see
+      // `InsightGenerator`'s identical rule) — so a genuinely balanced,
+      // non-concentrated portfolio needs at least three roughly-even
+      // holdings, each ≤40%. Built as one combined lot set (not three
+      // separate `_holdingList()` calls) so `portfolioPercent` is
+      // normalized across all three tickers together.
       repository.holdingsToReturn = Holding.fromLots([
         lot(ticker: 'PETR4', quantity: 100, purchasePrice: 10),
         lot(ticker: 'VALE3', quantity: 100, purchasePrice: 10),
+        lot(ticker: 'ITUB4', quantity: 100, purchasePrice: 10),
       ]);
       await controller.loadAll();
+      await flushMicrotasks();
 
       expect(events.whereType<HighConcentrationDetectedEvent>(), isEmpty);
     });

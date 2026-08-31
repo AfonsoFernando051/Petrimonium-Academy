@@ -501,6 +501,31 @@ class AppStrings {
   static const String navAcademy = "navAcademy";
   static const String navMentor = "navMentor";
 
+  // Simulated wallet (Academy's fictitious "Carteira" tab) — never real
+  // money, never a real order, never connected to any brokerage/bank/
+  // exchange. See Petrimonium-Backend docs/BACKEND_MODULE_PLAN.md §11.
+  static const String simulatedWalletTitle = "simulatedWalletTitle";
+  static const String simulatedWalletDisclaimer = "simulatedWalletDisclaimer";
+  static const String simulatedWalletVirtualBalanceLabel = "simulatedWalletVirtualBalanceLabel";
+  static const String simulatedWalletPositionsTitle = "simulatedWalletPositionsTitle";
+  static const String simulatedWalletNoPositions = "simulatedWalletNoPositions";
+  static const String simulatedWalletNewOrderAction = "simulatedWalletNewOrderAction";
+  static const String simulatedWalletResetAction = "simulatedWalletResetAction";
+  static const String simulatedWalletResetConfirmTitle = "simulatedWalletResetConfirmTitle";
+  static const String simulatedWalletResetConfirmMessage = "simulatedWalletResetConfirmMessage";
+  static const String simulatedWalletResetConfirmAction = "simulatedWalletResetConfirmAction";
+  static const String simulatedWalletResetSuccess = "simulatedWalletResetSuccess";
+  static const String simulatedOrderScreenTitle = "simulatedOrderScreenTitle";
+  static const String simulatedOrderSearchHint = "simulatedOrderSearchHint";
+  static const String simulatedOrderBuyLabel = "simulatedOrderBuyLabel";
+  static const String simulatedOrderSellLabel = "simulatedOrderSellLabel";
+  static const String simulatedOrderQuantityLabel = "simulatedOrderQuantityLabel";
+  static const String simulatedOrderReferencePriceLabel = "simulatedOrderReferencePriceLabel";
+  static const String simulatedOrderConfirmAction = "simulatedOrderConfirmAction";
+  static const String simulatedOrderSuccessMessage = "simulatedOrderSuccessMessage";
+  static const String simulatedOrderSelectAssetFirst = "simulatedOrderSelectAssetFirst";
+  static const String simulatedWalletAllocationTitle = "simulatedWalletAllocationTitle";
+
   // Home redesign — learning-first hierarchy (docs/PRODUCT_VISION.md §8)
   static const String homeContinueLearningEyebrow =
       "homeContinueLearningEyebrow";

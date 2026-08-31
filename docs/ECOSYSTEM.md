@@ -61,6 +61,42 @@ line of work.
   claim, the deep-link scheme above, and a Pet state schema starting point.
   None of these are confirmed by the Wallet or Backend repos yet.
 
+## Update, 2026-08-31 — Stage 3: simulated wallet built, real Carteira tab retired
+
+The Wallet/Academy split plan's Stage 3 landed: this app's "Carteira" tab no
+longer shows real holdings. New `lib/features/simulated_wallet/` feature
+(entities, datasource, repository, `SimulatedWalletController`,
+`SimulatedWalletScreen`, `PlaceSimulatedOrderScreen`) talks only to the
+backend's `simulated_portfolio` context (`/api/v1/simulated-portfolios/*`,
+Petrimonium-Backend `docs/BACKEND_MODULE_PLAN.md` §11) — never imports from
+`features/portfolio`/`features/investment`, and every screen carries a
+persistent, non-dismissible `SimulationDisclaimerBanner`.
+
+`DashboardScreen._buildWalletContent()` now renders `SimulatedWalletScreen`
+instead of the old real-portfolio `PortfolioScreen`. `PortfolioScreen`/
+`InvestmentConfigurationScreen`/`PortfolioController`'s real-holdings path
+are **not deleted yet** (per the split plan's "remove real integrations
+only after the simulated flow works" ordering) — `PortfolioScreen` is
+simply no longer reachable from the dashboard. `PortfolioController` itself
+is still alive and still used, because it also owns the real,
+legitimate-for-Academy gamification orchestration (achievements/missions/
+XP fetch, `_evaluateGamification()`) — that call was fixed in the same pass
+to run independently of the (now always-failing, since real_portfolio is
+Wallet-only) holdings fetch it used to be sequenced after; before this fix,
+a failed holdings fetch silently skipped XP/achievements/missions loading
+too. Two backend endpoints were added for this (Academy-reachable ticker
+search + quote preview, since `/api/investments/search`/`quote` are
+Wallet-only) — see the backend repo's own docs.
+
+Known remaining staleness, out of scope for this pass: `HomeScreen` still
+shows a real-portfolio "not connected"/error card sourced from
+`PortfolioController.error` (now permanently non-null for Academy, since
+that fetch always 403s) and a companion holdings-count greeting that's
+always 0. Both are cosmetic leftovers of the not-yet-deleted real-portfolio
+path, not functional breakage — flagged for the eventual cleanup pass
+(Stage 7) once `PortfolioScreen`/`InvestmentConfigurationScreen`/
+`features/investment` are confirmed dead and removed.
+
 ## What hasn't been done
 
 - The actual `features/` folder restructure (Financial Lab → `features/practice`,
@@ -69,3 +105,5 @@ line of work.
   exists — duplicate-but-contract-matched was the explicit decision for now.
 - No deep-linking plugin (`url_launcher`) wired to a real external launch —
   intentionally deferred until Wallet exists as a separate installed app.
+- Real-portfolio code (`features/portfolio`, `features/investment`) still
+  exists in this repo, just unreachable from the dashboard — not removed yet.

@@ -77,4 +77,18 @@ class ApiConstants {
       '/api/v1/gamification/summary';
   static const String achievementsEndpoint = '/api/v1/achievements';
   static const String missionsEndpoint = '/api/v1/missions';
+
+  // Academy's simulated wallet — entirely separate backend context
+  // (simulated_portfolio), never real_portfolio's /api/investments/*. See
+  // Petrimonium-Backend docs/BACKEND_MODULE_PLAN.md §11.
+  static const String simulatedPortfolioMeEndpoint =
+      '/api/v1/simulated-portfolios/me';
+  static const String simulatedPortfolioOrdersEndpoint =
+      '/api/v1/simulated-portfolios/orders';
+  static const String simulatedPortfolioResetEndpoint =
+      '/api/v1/simulated-portfolios/reset';
+  static String simulatedPortfolioQuoteSearchEndpoint(String query) =>
+      '/api/v1/simulated-portfolios/quotes/search?query=$query';
+  static String simulatedPortfolioQuoteEndpoint(String ticker) =>
+      '/api/v1/simulated-portfolios/quotes/$ticker';
 }

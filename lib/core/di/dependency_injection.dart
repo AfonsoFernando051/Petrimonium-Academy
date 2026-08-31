@@ -28,6 +28,8 @@ import 'package:petrimonium/features/portfolio/data/repositories/achievements_lo
 import 'package:petrimonium/features/portfolio/data/repositories/achievements_repository.dart';
 import 'package:petrimonium/features/portfolio/data/repositories/missions_repository.dart';
 import 'package:petrimonium/features/portfolio/data/repositories/portfolio_repository.dart';
+import 'package:petrimonium/features/simulated_wallet/data/datasources/simulated_wallet_remote_datasource.dart';
+import 'package:petrimonium/features/simulated_wallet/data/repositories/simulated_wallet_repository.dart';
 import 'package:petrimonium/features/settings/data/datasources/settings_remote_datasource.dart';
 import 'package:petrimonium/features/settings/data/repositories/settings_repository.dart';
 import 'package:petrimonium/features/asset_details/data/datasources/asset_details_remote_datasource.dart';
@@ -102,6 +104,13 @@ class DI {
   // Not `final` so tests can replace it with a mock repository.
   static PortfolioRepository portfolioRepository = PortfolioRepository(
     remoteDataSource: _portfolioRemoteDataSource,
+  );
+
+  static final SimulatedWalletRemoteDataSource _simulatedWalletRemoteDataSource =
+      SimulatedWalletRemoteDataSource(apiClient: _apiClient);
+  // Not `final` so tests can replace it with a mock repository.
+  static SimulatedWalletRepository simulatedWalletRepository = SimulatedWalletRepository(
+    remoteDataSource: _simulatedWalletRemoteDataSource,
   );
 
   // Not `final` so tests can replace it with a mock repository.

@@ -171,7 +171,6 @@ class PortfolioController extends ChangeNotifier {
 
       await _loadPerformanceDeltas();
       _recomputeChart();
-      await _evaluateGamification();
 
       if (hadNoHoldingsBefore && holdings.isNotEmpty) {
         _eventBus.emit(const FirstInvestmentAddedEvent());
@@ -180,6 +179,15 @@ class PortfolioController extends ChangeNotifier {
     } catch (e) {
       error = friendlyErrorMessage(e);
     }
+
+    // Deliberately outside the try/catch above and always run: XP/
+    // achievements/missions are gamification.* endpoints, unrestricted by
+    // app_context (see backend SecurityConfig), so they must keep working
+    // even when the real-portfolio fetch above fails — as it now always
+    // does for an Academy-context session (real_portfolio is Wallet-only).
+    // Before this was split out, a failed real-portfolio fetch silently
+    // skipped gamification evaluation too.
+    await _evaluateGamification();
 
     isLoading = false;
     notifyListeners();

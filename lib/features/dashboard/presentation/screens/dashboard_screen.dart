@@ -22,7 +22,6 @@ import '../../../pet/presentation/mascot/controllers/mascot_controller.dart';
 import '../../../portfolio/domain/entities/achievement.dart';
 import '../../../portfolio/presentation/controllers/portfolio_controller.dart';
 import '../../../portfolio/presentation/screens/passive_income_screen.dart';
-import '../../../portfolio/presentation/screens/portfolio_screen.dart';
 import '../../../portfolio/presentation/widgets/achievement_celebration_overlay.dart';
 import '../../../portfolio/presentation/widgets/dividend_notifications_sheet.dart';
 import '../../../mentor/presentation/screens/mentor_screen.dart';
@@ -33,6 +32,8 @@ import '../../../pet/presentation/companion/widgets/pet_companion_header.dart';
 import '../../../pet/presentation/companion/widgets/pet_speech_bubble.dart';
 import '../../../pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
 import '../../../profile/presentation/screens/profile_screen.dart';
+import '../../../simulated_wallet/presentation/controllers/simulated_wallet_controller.dart';
+import '../../../simulated_wallet/presentation/screens/simulated_wallet_screen.dart';
 import '../services/dashboard_tab_router.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -50,6 +51,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // in-flight load — no duplicate fetches, no drift between tabs.
   late final MascotController _mascotController;
   late final PortfolioController _portfolioController;
+
+  // Academy's fictitious wallet — entirely separate from
+  // `_portfolioController` above, which still owns real-portfolio-flavored
+  // gamification orchestration (see PortfolioController's class doc) until
+  // that's untangled in a later pass. Never fed real holdings/summary data.
+  late final SimulatedWalletController _simulatedWalletController;
 
   // The persistent pet companion's speech-bubble/interaction state — one
   // instance shared by every tab and by `ProfileScreen` (pushed with it),
@@ -106,6 +113,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       gamificationRepository: DI.gamificationRepository,
       missionsRepository: DI.missionsRepository,
       mascotController: _mascotController,
+    );
+    _simulatedWalletController = SimulatedWalletController(
+      repository: DI.simulatedWalletRepository,
     );
     _initCompanionGreeting();
     _portfolioController.addListener(_onPortfolioChanged);
@@ -193,6 +203,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _eventSubscription?.cancel();
     _portfolioController.removeListener(_onPortfolioChanged);
     _portfolioController.dispose();
+    _simulatedWalletController.dispose();
     _companionController.dispose();
     _mascotController.dispose();
     super.dispose();
@@ -503,13 +514,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  // ── Wallet / Portfolio ───────────────────────────────────────────────────
+  // ── Carteira (Simulada) ──────────────────────────────────────────────────
+  // Academy's fictitious wallet (Petrimonium-Backend's simulated_portfolio
+  // context) — replaces the real-portfolio `PortfolioScreen` that used to
+  // live here. `PortfolioScreen`/`PortfolioController`'s real-holdings path
+  // stays in the codebase for now (its gamification orchestration —
+  // achievements/missions/XP — is still legitimately used, see
+  // `_buildHomeContent`) but is no longer reachable from this tab.
   Widget _buildWalletContent() {
-    return PortfolioScreen(
-      controller: _portfolioController,
-      mascotController: _mascotController,
-      onOpenAcademyTab: () => setState(() => _selectedIndex = 1),
-    );
+    return SimulatedWalletScreen(controller: _simulatedWalletController);
   }
 
   // ── Proventos / Passive Income ────────────────────────────────────────────
