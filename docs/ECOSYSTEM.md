@@ -107,3 +107,34 @@ path, not functional breakage — flagged for the eventual cleanup pass
   intentionally deferred until Wallet exists as a separate installed app.
 - Real-portfolio code (`features/portfolio`, `features/investment`) still
   exists in this repo, just unreachable from the dashboard — not removed yet.
+
+## Update, 2026-08-31 (Stage 7 — dead-code cleanup, first pass)
+
+Removed the old real-money `PortfolioScreen` and its supporting widgets
+(achievements/insights/missions UI, `portfolio_activation_view.dart`, etc.)
+under `lib/features/portfolio/presentation/widgets/` and
+`lib/features/investment/` that had been unreachable since Stage 3
+repointed the Carteira tab to `SimulatedWalletScreen` — 33 lib files + 37
+test files deleted after confirming (via grep-based reference audit) each
+has zero remaining live callers. Kept every file still genuinely used
+elsewhere: the whole data layer (`achievements_remote_datasource`,
+`missions_remote_datasource`, `portfolio_remote_datasource` + their
+repositories), domain entities/services still read by `PortfolioController`,
+`home_screen.dart`, `asset_details`, or `pet_companion_controller.dart`
+(notably `mission_display_catalog.dart`, `portfolio_pet_behavior.dart`, and
+`InvestmentType` — the last is a live dependency of the Financial Lab's
+allocation/diversification calculators), and the Proventos-tab-only
+widgets (`passive_income_screen.dart` and its cards). Full suite: 1487/1487
+green, `flutter analyze` clean, Linux build succeeds.
+
+**New finding, not yet acted on**: this cleanup pass surfaced that the
+Proventos (passive income) tab and `HomeScreen`'s
+`PortfolioReminderBanner`/`PortfolioNotConnectedCard`/`PortfolioBridgeCard`
+are still wired to the real `PortfolioController` — currently dead *in
+practice* (the real-portfolio fetch 403s for every Academy session, so
+`hasDividendPayingHoldings` is always false and holdings are always empty,
+hiding the tab and forcing the "not connected" card), but not dead *in
+code*. Whether to remove the Proventos tab and this real-portfolio-shaped
+Home content entirely (mirroring Wallet's Stage 5 Academy-tab removal) is
+a bigger, tab-shell-level change than this pass's file-level cleanup —
+flagged for a decision before doing that work.
