@@ -9,7 +9,6 @@ import '../../../../core/di/dependency_injection.dart';
 import '../../../../main.dart';
 import 'custom_text_field.dart';
 import 'signup_action_button.dart';
-import 'already_have_account_button.dart';
 import 'google_signin_button.dart';
 import 'or_divider.dart';
 
@@ -158,26 +157,9 @@ class _SignupFormState extends State<SignupForm> {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = context.colors;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(Icons.person_add, size: 64, color: tokens.textPrimary),
-        const SizedBox(height: 16),
-        Text(
-          Translator.translate(AppStrings.createAccount),
-          style: TextStyle(
-            color: tokens.textPrimary,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          Translator.translate(AppStrings.fillDetails),
-          style: TextStyle(color: tokens.textSecondary),
-        ),
-        const SizedBox(height: 24),
         CustomTextField(
           hint: Translator.translate(AppStrings.nameHint),
           icon: Icons.person,
@@ -222,8 +204,6 @@ class _SignupFormState extends State<SignupForm> {
           onPressed: _handleGoogleSignup,
           isLoading: _isGoogleLoading,
         ),
-        const SizedBox(height: 16),
-        const AlreadyHaveAccountButton(),
       ],
     );
   }

@@ -7,6 +7,7 @@ import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium/features/auth/presentation/widgets/login_card.dart';
 import 'package:petrimonium/features/auth/presentation/widgets/login_form.dart';
+import 'package:petrimonium/features/auth/presentation/widgets/signup_form.dart';
 import 'package:petrimonium/features/onboarding/data/repositories/onboarding_repository.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
@@ -30,12 +31,23 @@ void main() {
   }
 
   group('LoginCard', () {
-    testWidgets('renders the LoginForm and the fox artwork icon', (tester) async {
+    testWidgets('renders the fox mascot, brand title and LoginForm by default', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
 
-      expect(find.byType(LoginForm), findsOneWidget);
       expect(find.byType(Image), findsOneWidget);
-      expect(find.byIcon(Icons.person_outline), findsOneWidget);
+      expect(find.text('PETRIMONIUM'), findsOneWidget);
+      expect(find.byType(LoginForm), findsOneWidget);
+      expect(find.byType(SignupForm), findsNothing);
+    });
+
+    testWidgets('switches to SignupForm when Criar conta is tapped', (tester) async {
+      await tester.pumpWidget(buildTestableWidget());
+
+      await tester.tap(find.text('Criar Conta'));
+      await tester.pump();
+
+      expect(find.byType(SignupForm), findsOneWidget);
+      expect(find.byType(LoginForm), findsNothing);
     });
   });
 }

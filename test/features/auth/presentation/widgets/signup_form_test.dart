@@ -52,15 +52,15 @@ void main() {
       .at(index);
 
   group('SignupForm', () {
-    testWidgets('renders headline and all four fields', (tester) async {
+    testWidgets('renders all four fields and action buttons, no footer link', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
 
-      expect(find.text('Criar Conta'), findsOneWidget);
-      expect(find.text('Preencha seus dados'), findsOneWidget);
       expect(find.byType(CustomTextField), findsNWidgets(4));
       expect(find.byType(SignupActionButton), findsOneWidget);
       expect(find.byType(GoogleSignInButton), findsOneWidget);
-      expect(find.text('Já tem conta? Entrar'), findsOneWidget);
+      // The footer login link is gone — SignupForm is now embedded under
+      // LoginCard's inline Entrar/Criar conta toggle instead.
+      expect(find.text('Já tem conta? Entrar'), findsNothing);
     });
 
     testWidgets('shows a live name error once at least one char is typed but under minimum', (tester) async {

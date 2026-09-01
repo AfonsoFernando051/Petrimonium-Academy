@@ -57,22 +57,21 @@ void main() {
       expect(find.byType(CustomTextField), findsNWidgets(2));
       expect(find.byType(LoginButton), findsOneWidget);
 
-      expect(find.text('Bem-vindo de volta'), findsOneWidget);
+      expect(find.text('PETRIMONIUM'), findsOneWidget);
       expect(find.text('E-mail ou Usuário'), findsOneWidget);
       expect(find.text('Senha'), findsOneWidget);
-      expect(find.text('Entrar'), findsOneWidget);
+      expect(find.text('Entrar'), findsWidgets);
     });
 
     testWidgets('updates UI text when Translator language changes', (WidgetTester tester) async {
       Translator.currentLanguage = 'en';
       await tester.pumpWidget(buildTestableWidget());
 
-      expect(find.text('Welcome back'), findsOneWidget);
       expect(find.text('Email or Username'), findsOneWidget);
       expect(find.text('Password'), findsOneWidget);
-      expect(find.text('Login'), findsOneWidget);
+      expect(find.text('Login'), findsWidgets);
 
-      expect(find.text('Bem-vindo de volta'), findsNothing);
+      expect(find.text('E-mail ou Usuário'), findsNothing);
     });
 
     testWidgets('TextFields accept text input properly and attempt login', (WidgetTester tester) async {

@@ -11,7 +11,6 @@ import 'forgot_password_button.dart';
 import 'google_signin_button.dart';
 import 'login_button.dart';
 import 'or_divider.dart';
-import 'signup_button.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -94,25 +93,9 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = context.colors;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          Translator.translate(AppStrings.welcomeBack),
-          style: TextStyle(
-            color: tokens.textPrimary,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1.0,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          Translator.translate(AppStrings.loginToContinue),
-          style: TextStyle(color: tokens.textSecondary, fontSize: 14),
-        ),
-        const SizedBox(height: 32),
         CustomTextField(
           hint: Translator.translate(AppStrings.emailOrUserHint),
           icon: Icons.email_outlined,
@@ -125,7 +108,9 @@ class _LoginFormState extends State<LoginForm> {
           obscure: true,
           controller: _passwordController,
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 16),
+        _SharedAccountNotice(text: Translator.translate(AppStrings.sharedAccountNotice)),
+        const SizedBox(height: 20),
         LoginButton(
           onPressed: _handleLogin,
           isLoading: _isLoading,
@@ -139,9 +124,34 @@ class _LoginFormState extends State<LoginForm> {
         ),
         const SizedBox(height: 24),
         const ForgotPasswordButton(),
-        const SizedBox(height: 16),
-        const SignupButton(),
       ],
+    );
+  }
+}
+
+/// Reassures a user arriving from (or heading to) the Wallet that this is
+/// the same Petrimonium account, not a separate signup — see the Academy
+/// design system's login screen.
+class _SharedAccountNotice extends StatelessWidget {
+  final String text;
+
+  const _SharedAccountNotice({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.colors;
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: tokens.surfaceMuted,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: tokens.border),
+      ),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(color: tokens.textSecondary, fontSize: 12, height: 1.4),
+      ),
     );
   }
 }

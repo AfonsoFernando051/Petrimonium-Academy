@@ -53,25 +53,22 @@ void main() {
       .last;
 
   group('LoginForm', () {
-    testWidgets('renders headline, both fields, LoginButton, ForgotPasswordButton and SignupButton', (tester) async {
+    testWidgets('renders both fields, the shared-account notice, LoginButton and ForgotPasswordButton', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
 
-      expect(find.text('Bem-vindo de volta'), findsOneWidget);
-      expect(find.text('Faça login para continuar'), findsOneWidget);
       expect(find.byType(CustomTextField), findsNWidgets(2));
-      expect(find.byType(LoginButton), findsOneWidget);
-      expect(find.byType(GoogleSignInButton), findsOneWidget);
-      expect(find.text('Esqueceu a senha?'), findsOneWidget);
-      // SignupButton's prompt is a RichText with two TextSpans, not a
-      // single Text — find.text() only matches Text/Text.rich widgets, and
-      // byType(RichText) alone is ambiguous since every plain Text also
-      // renders via its own internal RichText.
       expect(
-        find.byWidgetPredicate(
-          (widget) => widget is RichText && widget.text.toPlainText() == 'Não tem conta? Cadastre-se',
+        find.text(
+          'Sua conta Petrimonium é única para Academy e Wallet. Desinstalar um dos apps não exclui sua conta nem seus dados.',
         ),
         findsOneWidget,
       );
+      expect(find.byType(LoginButton), findsOneWidget);
+      expect(find.byType(GoogleSignInButton), findsOneWidget);
+      expect(find.text('Esqueceu a senha?'), findsOneWidget);
+      // The footer signup link is gone — LoginForm is now embedded under
+      // LoginCard's inline Entrar/Criar conta toggle instead.
+      expect(find.byWidgetPredicate((widget) => widget is RichText && widget.text.toPlainText().contains('Cadastre-se')), findsNothing);
     });
 
     testWidgets('shows error snackbar and does not call login when fields are empty', (tester) async {

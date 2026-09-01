@@ -21,7 +21,6 @@ import 'package:petrimonium/features/auth/presentation/screens/login_screen.dart
 import 'package:petrimonium/features/auth/presentation/widgets/custom_text_field.dart';
 import 'package:petrimonium/features/auth/presentation/widgets/login_button.dart';
 import 'package:petrimonium/features/auth/presentation/widgets/signup_action_button.dart';
-import 'package:petrimonium/features/auth/presentation/widgets/signup_button.dart';
 import 'package:petrimonium/features/auth/presentation/widgets/signup_form.dart';
 import 'package:petrimonium/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:petrimonium/features/mentor/data/repositories/mentor_chat_repository.dart';
@@ -322,8 +321,11 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      await tester.ensureVisible(find.byType(SignupButton));
-      await tester.tap(find.byType(SignupButton));
+      // Login/signup is now an inline Entrar/Criar conta toggle (no modal) —
+      // switch to the signup side by its label.
+      final signupToggle = find.text(Translator.translate(AppStrings.createAccount));
+      await tester.ensureVisible(signupToggle);
+      await tester.tap(signupToggle);
       await tester.pump(const Duration(milliseconds: 300));
       expect(find.byType(SignupForm), findsOneWidget);
 

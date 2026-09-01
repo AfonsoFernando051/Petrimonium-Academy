@@ -56,6 +56,9 @@ class Translator {
       AppStrings.loginButton: "Entrar",
       AppStrings.continueWithGoogle: "Continuar com Google",
       AppStrings.orDivider: "ou",
+      AppStrings.brandTitle: "Petrimonium",
+      AppStrings.sharedAccountNotice:
+          "Sua conta Petrimonium é única para Academy e Wallet. Desinstalar um dos apps não exclui sua conta nem seus dados.",
       AppStrings.createAccount: "Criar Conta",
       AppStrings.fillDetails: "Preencha seus dados",
       AppStrings.nameHint: "Nome Completo",
@@ -683,6 +686,9 @@ class Translator {
       AppStrings.loginButton: "Login",
       AppStrings.continueWithGoogle: "Continue with Google",
       AppStrings.orDivider: "or",
+      AppStrings.brandTitle: "Petrimonium",
+      AppStrings.sharedAccountNotice:
+          "Your Petrimonium account is shared between Academy and Wallet. Uninstalling one app doesn't delete your account or your data.",
       AppStrings.createAccount: "Create Account",
       AppStrings.fillDetails: "Fill in your details",
       AppStrings.nameHint: "Full Name",
@@ -1303,6 +1309,9 @@ class Translator {
       AppStrings.loginButton: "Entrar",
       AppStrings.continueWithGoogle: "Continuar con Google",
       AppStrings.orDivider: "o",
+      AppStrings.brandTitle: "Petrimonium",
+      AppStrings.sharedAccountNotice:
+          "Tu cuenta Petrimonium es única para Academy y Wallet. Desinstalar una de las apps no elimina tu cuenta ni tus datos.",
       AppStrings.createAccount: "Crear Cuenta",
       AppStrings.fillDetails: "Completa tus datos",
       AppStrings.nameHint: "Nombre Completo",

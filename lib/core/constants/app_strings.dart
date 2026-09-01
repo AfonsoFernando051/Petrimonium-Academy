@@ -10,6 +10,8 @@ class AppStrings {
   static const String loginButton = "loginButton";
   static const String continueWithGoogle = "continueWithGoogle";
   static const String orDivider = "orDivider";
+  static const String brandTitle = "brandTitle";
+  static const String sharedAccountNotice = "sharedAccountNotice";
 
   // Signup
   static const String createAccount = "createAccount";
