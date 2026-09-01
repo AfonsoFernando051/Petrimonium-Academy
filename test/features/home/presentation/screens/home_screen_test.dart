@@ -13,10 +13,6 @@ import 'package:petrimonium/features/game/data/repositories/gamification_reposit
 import 'package:petrimonium/features/game/domain/entities/gamification_summary.dart';
 import 'package:petrimonium/features/home/presentation/screens/home_screen.dart';
 import 'package:petrimonium/features/home/presentation/widgets/next_action_card.dart';
-import 'package:petrimonium/features/home/presentation/widgets/portfolio_bridge_card.dart';
-import 'package:petrimonium/features/home/presentation/widgets/portfolio_not_connected_card.dart';
-import 'package:petrimonium/features/home/presentation/widgets/portfolio_reminder_banner.dart';
-import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
 import 'package:petrimonium/features/pet/data/models/pet_specie_enum.dart';
 import 'package:petrimonium/features/pet/domain/entities/pet_profile.dart';
 import 'package:petrimonium/features/pet/domain/enums/accessory_type.dart';
@@ -38,7 +34,6 @@ import 'package:petrimonium/features/portfolio/domain/entities/allocation_slice.
 import 'package:petrimonium/features/portfolio/domain/entities/dividend_event.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/history_point.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/investment_lot.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/mission_status.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/portfolio_summary.dart';
 import 'package:petrimonium/features/portfolio/domain/enums/history_range.dart';
@@ -135,22 +130,6 @@ class MockAcademyCatalogRepository extends Mock implements AcademyCatalogReposit
 
 class MockAcademyRemoteDataSource extends Mock implements AcademyRemoteDataSource {}
 
-/// A single-lot [Holding], built the same way the real pipeline does.
-Holding _holding({String ticker = 'PETR4', double quantity = 100, double purchasePrice = 10}) {
-  final lot = InvestmentLot(
-    id: 1,
-    ticker: ticker,
-    type: InvestmentTypeEnum.STOCKS,
-    quantity: quantity,
-    purchasePrice: purchasePrice,
-    purchaseDate: DateTime(2024, 1, 1),
-    currentPrice: purchasePrice,
-    investedValue: quantity * purchasePrice,
-    currentValue: quantity * purchasePrice,
-  );
-  return Holding.fromLots([lot]).single;
-}
-
 const _emptySnapshot = AcademyCatalogSnapshot(domains: [], schools: [], modules: [], lessons: []);
 
 void main() {
@@ -198,11 +177,7 @@ void main() {
   });
 
   Widget buildTestableWidget({
-    bool showPortfolioReminder = false,
-    bool investorProfileUnanswered = false,
     VoidCallback? onOpenAcademyTab,
-    VoidCallback? onOpenPortfolioTab,
-    VoidCallback? onDismissPortfolioReminder,
   }) {
     return MaterialApp(
       theme: AppTheme.dark,
@@ -211,54 +186,12 @@ void main() {
           portfolioController: portfolioController,
           mascotController: mascotController,
           onOpenAcademyTab: onOpenAcademyTab ?? () {},
-          onOpenPortfolioTab: onOpenPortfolioTab ?? () {},
-          showPortfolioReminder: showPortfolioReminder,
-          onDismissPortfolioReminder: onDismissPortfolioReminder ?? () {},
-          investorProfileUnanswered: investorProfileUnanswered,
           companionController: companionController,
           heroAnchor: PetSpeechBubbleAnchor(),
         ),
       ),
     );
   }
-
-  group('HomeScreen — no portfolio connected', () {
-    testWidgets('renders PortfolioNotConnectedCard when there are no holdings', (tester) async {
-      await portfolioController.loadAll();
-
-      await tester.pumpWidget(buildTestableWidget());
-      // Hosts several repeating AnimationControllers (LearningHeroCard,
-      // GameButton) — never call pumpAndSettle.
-      await tester.pump();
-      await tester.pump();
-      await tester.pump();
-
-      expect(find.byType(PortfolioNotConnectedCard), findsOneWidget);
-      expect(find.byType(PortfolioBridgeCard), findsNothing);
-    });
-
-    testWidgets('shows the portfolio reminder banner when asked to', (tester) async {
-      await portfolioController.loadAll();
-
-      await tester.pumpWidget(buildTestableWidget(showPortfolioReminder: true));
-      await tester.pump();
-      await tester.pump();
-      await tester.pump();
-
-      expect(find.byType(PortfolioReminderBanner), findsOneWidget);
-    });
-
-    testWidgets('omits the portfolio reminder banner by default', (tester) async {
-      await portfolioController.loadAll();
-
-      await tester.pumpWidget(buildTestableWidget());
-      await tester.pump();
-      await tester.pump();
-      await tester.pump();
-
-      expect(find.byType(PortfolioReminderBanner), findsNothing);
-    });
-  });
 
   group('HomeScreen — Next Action engine', () {
     testWidgets('renders the mission-almost-done NextAction when a mission is one lesson away', (tester) async {
@@ -286,28 +219,6 @@ void main() {
 
       expect(find.byType(NextActionCard), findsOneWidget);
       expect(find.text('Aula do Dia'), findsOneWidget);
-    });
-  });
-
-  group('HomeScreen — portfolio connected', () {
-    testWidgets('renders PortfolioBridgeCard when holdings exist', (tester) async {
-      portfolioRepository.holdingsToReturn = [_holding()];
-      portfolioRepository.summaryToReturn = const PortfolioSummary(
-        investedCapital: 1000,
-        currentValue: 1200,
-        totalGain: 200,
-        totalGainPercent: 20,
-        totalAssets: 1,
-      );
-      await portfolioController.loadAll();
-
-      await tester.pumpWidget(buildTestableWidget());
-      await tester.pump();
-      await tester.pump();
-      await tester.pump();
-
-      expect(find.byType(PortfolioBridgeCard), findsOneWidget);
-      expect(find.byType(PortfolioNotConnectedCard), findsNothing);
     });
   });
 

@@ -138,3 +138,50 @@ code*. Whether to remove the Proventos tab and this real-portfolio-shaped
 Home content entirely (mirroring Wallet's Stage 5 Academy-tab removal) is
 a bigger, tab-shell-level change than this pass's file-level cleanup —
 flagged for a decision before doing that work.
+
+## Update, 2026-08-31 (Stage 7 continued — Proventos tab removed)
+
+Acted on the finding flagged above. Removed the real-money Proventos
+(passive income) tab and the real-portfolio "connect your wallet" content
+on Home entirely:
+
+- `DashboardTabRouter` dropped `passiveIncomeTab` — 4 tabs remain
+  (Home/Academy/Wallet/Mentor), `walletTab` alone now maps to
+  `PetContext.portfolio` and `showsHoldingsCount`.
+- `DashboardScreen` dropped `_buildPassiveIncomeContent()`, the Proventos
+  entry from `_visibleTabIndices` (now a fixed 4-tab list — no tab was ever
+  actually conditional on anything else), the AppBar notification bell
+  (`_buildNotificationsButton`/`_openNotifications`/`DividendNotificationsSheet`
+  — sourced from the same always-empty real dividend radar), the
+  `loadDividendRadarIfNeeded()` call, and the whole onboarding-reminder
+  signal chain (`_showPortfolioReminder`/`_investorProfileUnanswered`/
+  `_loadOnboardingSignals()`) that only existed to feed the removed Home
+  content.
+- `HomeScreen` dropped the `ErrorBanner` tied to `portfolioController.error`
+  (previously **always shown** — the real-portfolio fetch permanently
+  403s for Academy), the `PortfolioReminderBanner`, and the
+  `PortfolioBridgeCard`/`PortfolioNotConnectedCard` branch (the "not
+  connected" card was, for the same reason, **always the one rendered** —
+  every Academy user's Home screen carried a permanent, live "connect your
+  real portfolio" nudge that opened real-asset-registration screens
+  directly). This was an active, everyday-visible bug for every Academy
+  user, not just latent debt.
+- `PortfolioController` dropped `hasDividendPayingHoldings`,
+  `passiveIncome`/`PassiveIncomeEstimator` usage, and the whole dividend-
+  radar fetch machinery (`dividendRadar`, `isDividendRadarLoading`,
+  `dividendRadarError`, `loadDividendRadarIfNeeded`, `refreshDividendRadar`)
+  — none had a remaining caller. Kept: `PassiveIncomeEstimator` itself
+  (still called directly by `achievement_catalog.dart`'s `first_dividend`/
+  `dividend_hunter` predicates, which correctly can never qualify for
+  Academy's always-empty real holdings) and `DividendEvent`/`DividendRadar`
+  domain entities (the former still used by `asset_details`'s dividend
+  history section). `PortfolioController`'s achievements/missions/XP
+  orchestration is unchanged and still runs on every load — that's the one
+  reason this controller is still instantiated in `DashboardScreen` at all.
+- Deleted the now-fully-dead `passive_income_screen.dart` and its
+  supporting widgets (`dividend_radar_section.dart`, `passive_income_card.dart`,
+  `proventos_evolution_bar_card.dart`, `dividend_notifications_sheet.dart`,
+  `dividend_event_tile.dart`) and the `dividend_type_display.dart` entity.
+
+Full suite: 1455/1455 green. `flutter analyze`: no issues. `flutter build
+linux --debug`: succeeds.

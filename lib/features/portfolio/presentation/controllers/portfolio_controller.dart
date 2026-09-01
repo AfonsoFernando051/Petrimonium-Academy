@@ -12,19 +12,16 @@ import 'package:petrimonium/features/portfolio/data/repositories/missions_reposi
 import 'package:petrimonium/features/portfolio/data/repositories/portfolio_repository.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/achievement.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/allocation_slice.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/dividend_event.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/history_point.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/holding.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/investment_lot.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/mission_status.dart';
-import 'package:petrimonium/features/portfolio/domain/entities/passive_income_estimate.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/portfolio_health.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/portfolio_stats.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/portfolio_summary.dart';
 import 'package:petrimonium/features/portfolio/domain/enums/history_range.dart';
 import 'package:petrimonium/features/portfolio/domain/services/achievement_catalog.dart';
 import 'package:petrimonium/features/portfolio/domain/services/mission_display_catalog.dart';
-import 'package:petrimonium/features/portfolio/domain/services/passive_income_estimator.dart';
 import 'package:petrimonium/features/portfolio/domain/services/portfolio_health_calculator.dart';
 import 'package:petrimonium/features/portfolio/domain/services/wealth_history_calculator.dart';
 
@@ -123,28 +120,11 @@ class PortfolioController extends ChangeNotifier {
 
   final Map<HistoryRange, List<HistoryPoint>> _backendHistoryCache = {};
 
-  // Real, provider-confirmed dividend/JCP/yield history for the user's real
-  // holdings (contrast with `passiveIncome` below, which is an *estimate*).
-  // Loaded lazily — only the Proventos tab needs it, and each ticker is a
-  // real external API round-trip server-side, so Home/Carteira shouldn't pay
-  // for it on every load.
-  bool isDividendRadarLoading = false;
-  String? dividendRadarError;
-  DividendRadar dividendRadar = DividendRadar.empty;
-  bool _dividendRadarLoaded = false;
-
   PortfolioStats get stats => PortfolioStats(summary: summary, holdings: holdings, allocation: allocation);
 
   PortfolioHealth get health => PortfolioHealthCalculator.calculate(stats);
 
   List<Achievement> get achievements => AchievementCatalog.resolve(_unlockedAchievements);
-
-  /// Whether the wallet currently holds any asset type that pays out
-  /// dividends/proventos (ações, FIIs, ETFs/fundos) — the Proventos tab is
-  /// only worth showing when this is true.
-  bool get hasDividendPayingHoldings => holdings.any((h) => h.type.paysDividends);
-
-  PassiveIncomeEstimate get passiveIncome => PassiveIncomeEstimator.estimate(stats);
 
   List<InvestmentLot> get _allLots => holdings.expand((h) => h.lots).toList();
 
@@ -194,32 +174,6 @@ class PortfolioController extends ChangeNotifier {
   }
 
   Future<void> refresh() => loadAll();
-
-  /// Fetches the real dividend radar on first use and caches it for the rest
-  /// of the session; call again via [refreshDividendRadar] to force a reload
-  /// (e.g. pull-to-refresh on the Proventos tab).
-  Future<void> loadDividendRadarIfNeeded() async {
-    if (_dividendRadarLoaded || isDividendRadarLoading) return;
-    await _fetchDividendRadar();
-  }
-
-  Future<void> refreshDividendRadar() => _fetchDividendRadar();
-
-  Future<void> _fetchDividendRadar() async {
-    isDividendRadarLoading = true;
-    dividendRadarError = null;
-    notifyListeners();
-
-    try {
-      dividendRadar = await _repository.fetchDividendRadar();
-      _dividendRadarLoaded = true;
-    } catch (e) {
-      dividendRadarError = friendlyErrorMessage(e);
-    }
-
-    isDividendRadarLoading = false;
-    notifyListeners();
-  }
 
   void setRange(HistoryRange range) {
     if (range == selectedRange) return;

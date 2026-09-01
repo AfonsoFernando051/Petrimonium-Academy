@@ -1,20 +1,24 @@
 import 'package:petrimonium/core/theme/background_presets.dart';
 import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
 
-/// Pure tab-index → behavior mappings for [DashboardScreen]'s 5 bottom-nav
-/// tabs (Home/Academy/Wallet/Passive Income/Mentor). The `dashboard` feature
-/// has no domain layer of its own, so this small but real business logic
-/// (which background mood and which persistent-companion voice each tab
-/// gets) previously lived inline in the screen; pulled out here so it's
-/// independently testable and the screen only orchestrates widgets.
+/// Pure tab-index → behavior mappings for [DashboardScreen]'s 4 bottom-nav
+/// tabs (Home/Academy/Wallet/Mentor). The `dashboard` feature has no domain
+/// layer of its own, so this small but real business logic (which background
+/// mood and which persistent-companion voice each tab gets) previously lived
+/// inline in the screen; pulled out here so it's independently testable and
+/// the screen only orchestrates widgets.
+///
+/// No Proventos (passive income) tab exists — it was removed along with the
+/// real-portfolio dividend radar it depended on (Stage 7 of the ecosystem
+/// split plan): Academy has no real holdings to report dividends on, so the
+/// tab could never actually show anything.
 class DashboardTabRouter {
   DashboardTabRouter._();
 
   static const int homeTab = 0;
   static const int academyTab = 1;
   static const int walletTab = 2;
-  static const int passiveIncomeTab = 3;
-  static const int mentorTab = 4;
+  static const int mentorTab = 3;
 
   // Content-hierarchy comes from swapping intensity per selected tab: full
   // cosmic expression on Home, progressively quieter as the screen gets more
@@ -25,26 +29,24 @@ class DashboardTabRouter {
     BackgroundIntensity.immersive, // Home
     BackgroundIntensity.subtle, // Academia
     BackgroundIntensity.balanced, // Carteira / Portfolio
-    BackgroundIntensity.balanced, // Proventos / Passive income
     BackgroundIntensity.mentor, // Mentor
   ];
 
   static BackgroundIntensity backgroundIntensityFor(int tabIndex) => _tabIntensities[tabIndex];
 
   /// (`docs/PROJECT_CONTEXT.md`'s Pet Companion section, `PetContext`'s doc
-  /// comment on why this mirrors the 5 real tabs + Profile rather than a
+  /// comment on why this mirrors the real tabs + Profile rather than a
   /// generic missions/goals set that doesn't exist in this app.)
   static PetContext petContextFor(int tabIndex) => switch (tabIndex) {
         homeTab => PetContext.home,
         academyTab => PetContext.academy,
-        walletTab || passiveIncomeTab =>
-          PetContext.portfolio, // Carteira / Proventos share the same companion voice
+        walletTab => PetContext.portfolio,
         _ => PetContext.mentor,
       };
 
-  /// Whether [tabIndex] is one of the two portfolio-flavored tabs — used to
-  /// decide whether the companion greeting needs the holdings count.
-  static bool showsHoldingsCount(int tabIndex) => tabIndex == walletTab || tabIndex == passiveIncomeTab;
+  /// Whether [tabIndex] is the portfolio-flavored tab — used to decide
+  /// whether the companion greeting needs the holdings count.
+  static bool showsHoldingsCount(int tabIndex) => tabIndex == walletTab;
 }
 
 /// Small display-formatting helpers for the Dashboard chrome — kept

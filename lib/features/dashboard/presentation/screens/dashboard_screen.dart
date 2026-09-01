@@ -6,7 +6,6 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/theme/app_color_tokens.dart';
 import '../../../../core/theme/app_motion.dart';
-import '../../../../core/theme/app_radii.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/translator.dart';
 import '../../../../core/widgets/confirm_logout_dialog.dart';
@@ -21,9 +20,7 @@ import '../../../home/presentation/screens/home_screen.dart';
 import '../../../pet/presentation/mascot/controllers/mascot_controller.dart';
 import '../../../portfolio/domain/entities/achievement.dart';
 import '../../../portfolio/presentation/controllers/portfolio_controller.dart';
-import '../../../portfolio/presentation/screens/passive_income_screen.dart';
 import '../../../portfolio/presentation/widgets/achievement_celebration_overlay.dart';
-import '../../../portfolio/presentation/widgets/dividend_notifications_sheet.dart';
 import '../../../mentor/presentation/screens/mentor_screen.dart';
 import '../../../pet/presentation/celebration/level_up_celebration_overlay.dart';
 import '../../../pet/presentation/companion/pet_companion_controller.dart';
@@ -86,13 +83,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // social-share prompt.
   int? _celebratingLevel;
 
-  // Whether the pet should nudge the user about the (skipped) portfolio
-  // step this session, and whether the risk-assessment questionnaire is
-  // still unanswered — both feed the "what to do now" placeholder content
-  // shown when there's no live portfolio yet.
-  bool _showPortfolioReminder = false;
-  bool _investorProfileUnanswered = false;
-
   // First real consumer of `AppEventBus`: reacts to game-progression events
   // (currently just level-ups) without the emitter (`MascotController`)
   // knowing this screen exists.
@@ -120,11 +110,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _initCompanionGreeting();
     _portfolioController.addListener(_onPortfolioChanged);
     _portfolioController.loadAll();
-    // Loaded here (not just on first Proventos-tab visit) so the
-    // notification bell's badge reflects real upcoming payments as soon as
-    // the dashboard opens, even if the user never taps into Proventos.
-    _portfolioController.loadDividendRadarIfNeeded();
-    _loadOnboardingSignals();
     _eventSubscription = AppEventBus.instance.stream.listen(_onAppEvent);
   }
 
@@ -141,60 +126,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _companionController.enterContext(PetContext.home);
   }
 
-  Future<void> _loadOnboardingSignals() async {
-    final showReminder = await DI.onboardingStateRepository
-        .shouldShowPortfolioReminder();
-    if (showReminder) {
-      // Recorded the moment we decide to show it, not on dismiss — so a
-      // user who just navigates away without tapping anything still gets
-      // the cooldown, instead of seeing it again next session.
-      final sessionCount = await DI.onboardingStateRepository
-          .currentSessionCount();
-      await DI.onboardingStateRepository.markReminderShown(sessionCount);
-    }
-
-    bool investorProfileUnanswered = false;
-    try {
-      final status = await DI.onboardingRepository.getStatus();
-      investorProfileUnanswered = !status.hasAnswered;
-    } catch (_) {
-      // Non-critical suggestion — if the status check fails, just omit it.
-    }
-    if (!mounted) return;
-    setState(() {
-      _showPortfolioReminder = showReminder;
-      _investorProfileUnanswered = investorProfileUnanswered;
-    });
-  }
-
   void _onPortfolioChanged() {
     setState(() {
       if (_portfolioController.newlyUnlocked.isNotEmpty) {
         _celebrating = _portfolioController.newlyUnlocked;
         _portfolioController.clearNewlyUnlocked();
       }
-      // The Proventos tab can disappear if the holdings that justified it
-      // (ações/FIIs/fundos) get sold off mid-session — bounce back to
-      // Carteira rather than leaving the user stranded on a tab with no nav
-      // item pointing at it.
-      if (_selectedIndex == DashboardTabRouter.passiveIncomeTab &&
-          !_visibleTabIndices.contains(_selectedIndex)) {
-        _selectedIndex = DashboardTabRouter.walletTab;
-      }
     });
   }
 
-  // ── Proventos tab visibility ─────────────────────────────────────────────
-  // Only shown when the wallet actually holds an asset type that pays out
-  // dividends/proventos (ações, FIIs, ETFs/fundos) — see
-  // `InvestmentTypePayout.paysDividends` and
-  // `PortfolioController.hasDividendPayingHoldings`.
-  List<int> get _visibleTabIndices => [
+  // Every tab is always visible — unlike the old Proventos tab, none of the
+  // remaining ones depend on real-portfolio state.
+  List<int> get _visibleTabIndices => const [
     DashboardTabRouter.homeTab,
     DashboardTabRouter.academyTab,
     DashboardTabRouter.walletTab,
-    if (_portfolioController.hasDividendPayingHoldings)
-      DashboardTabRouter.passiveIncomeTab,
     DashboardTabRouter.mentorTab,
   ];
 
@@ -256,13 +202,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _handleCompanionDestination(PetContext destination) {
     switch (destination) {
       case PetContext.academy:
-        _onTabSelected(1);
+        _onTabSelected(DashboardTabRouter.academyTab);
       case PetContext.portfolio:
-        _onTabSelected(2);
+        _onTabSelected(DashboardTabRouter.walletTab);
       case PetContext.mentor:
-        _onTabSelected(4);
+        _onTabSelected(DashboardTabRouter.mentorTab);
       case PetContext.home:
-        _onTabSelected(0);
+        _onTabSelected(DashboardTabRouter.homeTab);
       case PetContext.profile:
         _openProfile();
     }
@@ -316,7 +262,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
-          _buildNotificationsButton(),
           IconButton(
             icon: Icon(Icons.settings_outlined, color: tokens.textSecondary),
             tooltip: Translator.translate(AppStrings.profileTooltip),
@@ -340,7 +285,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   _buildHomeContent(),
                   _buildAcademyContent(),
                   _buildWalletContent(),
-                  _buildPassiveIncomeContent(),
                   _buildMentorContent(),
                 ],
               ),
@@ -426,74 +370,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  // ── Notifications: upcoming dividends for the user's real holdings ──────
-  // Badge count is real and provider-confirmed (`DividendRadar.upcoming`,
-  // the same data `DividendRadarSection` renders on the Proventos tab) —
-  // never a placeholder or simulated count.
-  Widget _buildNotificationsButton() {
-    final upcomingCount = _portfolioController.dividendRadar.upcoming.length;
-
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        IconButton(
-          icon: Icon(
-            Icons.notifications_outlined,
-            color: context.colors.textSecondary,
-          ),
-          tooltip: Translator.translate(AppStrings.notificationsTooltip),
-          onPressed: _openNotifications,
-        ),
-        if (upcomingCount > 0)
-          Positioned(
-            right: 6,
-            top: 6,
-            child: IgnorePointer(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                constraints: const BoxConstraints(minWidth: 15, minHeight: 15),
-                decoration: BoxDecoration(
-                  color: context.colors.error,
-                  borderRadius: BorderRadius.circular(AppRadii.sm),
-                  border: Border.all(
-                    color: context.colors.backgroundSecondary,
-                    width: 1.5,
-                  ),
-                ),
-                child: Text(
-                  DashboardFormatters.notificationBadgeLabel(upcomingCount),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 9,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-
-  void _openNotifications() {
-    HapticFeedback.selectionClick();
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (_) => AnimatedBuilder(
-        animation: _portfolioController,
-        builder: (context, _) => DividendNotificationsSheet(
-          isLoading: _portfolioController.isDividendRadarLoading,
-          error: _portfolioController.dividendRadarError,
-          upcoming: _portfolioController.dividendRadar.upcoming,
-          onRetry: _portfolioController.refreshDividendRadar,
-        ),
-      ),
-    );
-  }
-
   // ── Home: learning-first orchestration layer (docs/PRODUCT_VISION.md §8) ─
   // Detailed financial metrics, missions and achievements live on Carteira
   // (Portfolio) now — Home orients the user in their learning journey first.
@@ -504,11 +380,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       portfolioController: _portfolioController,
       mascotController: _mascotController,
       onOpenAcademyTab: () => setState(() => _selectedIndex = 1),
-      onOpenPortfolioTab: () => setState(() => _selectedIndex = 2),
-      showPortfolioReminder: _showPortfolioReminder,
-      onDismissPortfolioReminder: () =>
-          setState(() => _showPortfolioReminder = false),
-      investorProfileUnanswered: _investorProfileUnanswered,
       companionController: _companionController,
       heroAnchor: _heroAnchor,
     );
@@ -520,14 +391,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // live here. `PortfolioScreen`/`PortfolioController`'s real-holdings path
   // stays in the codebase for now (its gamification orchestration —
   // achievements/missions/XP — is still legitimately used, see
-  // `_buildHomeContent`) but is no longer reachable from this tab.
+  // `_buildHomeContent`) but is no longer reachable from this tab. There is
+  // no Proventos tab either (removed along with the real-portfolio dividend
+  // radar it depended on, Stage 7) — real holdings for Academy are always
+  // empty, so that tab could never actually show anything.
   Widget _buildWalletContent() {
     return SimulatedWalletScreen(controller: _simulatedWalletController);
-  }
-
-  // ── Proventos / Passive Income ────────────────────────────────────────────
-  Widget _buildPassiveIncomeContent() {
-    return PassiveIncomeScreen(controller: _portfolioController);
   }
 
   // ── Academia: module/lesson progression (see docs/ACADEMY_ENGINE.md) ────
@@ -574,11 +443,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         icon: const Icon(Icons.diamond_outlined),
         activeIcon: const Icon(Icons.diamond),
         label: Translator.translate(AppStrings.navWallet),
-      ),
-      DashboardTabRouter.passiveIncomeTab => BottomNavigationBarItem(
-        icon: const Icon(Icons.payments_outlined),
-        activeIcon: const Icon(Icons.payments),
-        label: Translator.translate(AppStrings.navPassiveIncome),
       ),
       _ => BottomNavigationBarItem(
         icon: const Icon(Icons.auto_awesome_outlined),

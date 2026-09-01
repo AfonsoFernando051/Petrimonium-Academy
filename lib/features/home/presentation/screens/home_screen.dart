@@ -16,9 +16,6 @@ import 'package:petrimonium/features/home/domain/services/next_action_resolver.d
 import 'package:petrimonium/features/home/presentation/widgets/knowledge_map_strip.dart';
 import 'package:petrimonium/features/home/presentation/widgets/next_action_card.dart';
 import 'package:petrimonium/features/home/presentation/widgets/learning_hero_card.dart';
-import 'package:petrimonium/features/home/presentation/widgets/portfolio_bridge_card.dart';
-import 'package:petrimonium/features/home/presentation/widgets/portfolio_not_connected_card.dart';
-import 'package:petrimonium/features/home/presentation/widgets/portfolio_reminder_banner.dart';
 import 'package:petrimonium/features/pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
 import 'package:petrimonium/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
@@ -29,27 +26,25 @@ import 'package:petrimonium/features/portfolio/presentation/widgets/shared/error
 
 /// Home — the app's learning-first orchestration layer
 /// (`docs/PRODUCT_VISION.md` §8): where the user is in their learning
-/// journey, what to learn next, XP progress, knowledge development, and a
-/// compact bridge into their real portfolio. Detailed financial metrics
-/// (charts, allocation, holdings, the full missions/achievements list) live
-/// on the Portfolio tab, not here — the one exception is `NextActionCard`
-/// (see `_nextAction`/`NextActionResolver`), which surfaces a single mission
-/// on Home only when it's one lesson away from completing, since that's a
-/// genuine, time-bound signal that would otherwise stay invisible.
+/// journey, what to learn next, XP progress, and knowledge development.
+/// `NextActionCard` (see `_nextAction`/`NextActionResolver`) surfaces a
+/// single mission on Home only when it's one lesson away from completing,
+/// since that's a genuine, time-bound signal that would otherwise stay
+/// invisible. No real-portfolio content here or anywhere in this app — Home
+/// used to bridge into the real portfolio, but that concept was removed
+/// (Stage 7 of the ecosystem split plan) since Academy has no real holdings
+/// to bridge into; `portfolioController` is kept only for the
+/// achievements/missions/XP gamification it still orchestrates (see
+/// `DashboardScreen._buildHomeContent`'s doc comment).
 ///
 /// No own `Scaffold`/`AppBar`/background — embedded directly in
-/// `DashboardScreen`'s shared chrome, mirroring `AcademyHomeScreen` and
-/// `PortfolioScreen`.
+/// `DashboardScreen`'s shared chrome, mirroring `AcademyHomeScreen`.
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
     super.key,
     required this.portfolioController,
     required this.mascotController,
     required this.onOpenAcademyTab,
-    required this.onOpenPortfolioTab,
-    required this.showPortfolioReminder,
-    required this.onDismissPortfolioReminder,
-    required this.investorProfileUnanswered,
     required this.companionController,
     required this.heroAnchor,
   });
@@ -57,10 +52,6 @@ class HomeScreen extends StatefulWidget {
   final PortfolioController portfolioController;
   final MascotController mascotController;
   final VoidCallback onOpenAcademyTab;
-  final VoidCallback onOpenPortfolioTab;
-  final bool showPortfolioReminder;
-  final VoidCallback onDismissPortfolioReminder;
-  final bool investorProfileUnanswered;
 
   /// Offers Home's own "what should I do next" companion nudge once the
   /// review/continue-lesson data is known — see
@@ -232,8 +223,6 @@ class _HomeScreenState extends State<HomeScreen> {
       return const AppLoadingIndicator();
     }
 
-    final hasPortfolio = portfolioController.holdings.isNotEmpty;
-
     return RefreshIndicator(
       color: context.colors.primary,
       backgroundColor: context.colors.surfaceElevated,
@@ -247,11 +236,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (portfolioController.error != null) ...[
-              ErrorBanner(onRetry: portfolioController.refresh),
-              const SizedBox(height: 12),
-            ],
-
             // Only when the catalog truly never loaded (no cache either) —
             // otherwise a `nextLesson == null` reads as "every lesson
             // complete" below, which would be misleading during a transient
@@ -278,13 +262,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 16),
 
-            if (widget.showPortfolioReminder) ...[
-              PortfolioReminderBanner(
-                onDismiss: widget.onDismissPortfolioReminder,
-              ),
-              const SizedBox(height: 16),
-            ],
-
             if (!_academyController.isLoading &&
                 !_academyController.isCatalogLoading) ...[
               KnowledgeMapStrip(
@@ -305,18 +282,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 16),
             ],
-
-            if (hasPortfolio)
-              PortfolioBridgeCard(
-                summary: portfolioController.summary,
-                completedLessonCount:
-                    _academyController.completedLessonIds.length,
-                onViewPortfolio: widget.onOpenPortfolioTab,
-              )
-            else
-              PortfolioNotConnectedCard(
-                showInvestorProfileAction: widget.investorProfileUnanswered,
-              ),
 
             const SizedBox(height: 32),
           ],

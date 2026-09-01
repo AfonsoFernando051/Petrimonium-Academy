@@ -255,33 +255,6 @@ void main() {
     });
   });
 
-  group('hasDividendPayingHoldings', () {
-    test('false before any load (empty holdings)', () {
-      expect(controller.hasDividendPayingHoldings, isFalse);
-    });
-
-    test('true when the wallet holds stocks', () async {
-      repository.holdingsToReturn = _holdingList(type: InvestmentTypeEnum.STOCKS);
-      await controller.loadAll();
-      expect(controller.hasDividendPayingHoldings, isTrue);
-    });
-
-    test('true when the wallet holds FIIs (real estate)', () async {
-      repository.holdingsToReturn = _holdingList(type: InvestmentTypeEnum.REAL_ESTATE);
-      await controller.loadAll();
-      expect(controller.hasDividendPayingHoldings, isTrue);
-    });
-
-    test('false when the wallet only holds non-dividend-paying types', () async {
-      repository.holdingsToReturn = [
-        ..._holdingList(ticker: 'CDB1', type: InvestmentTypeEnum.FIXED_INCOME),
-        ..._holdingList(ticker: 'BTC', type: InvestmentTypeEnum.CRYPTO),
-      ];
-      await controller.loadAll();
-      expect(controller.hasDividendPayingHoldings, isFalse);
-    });
-  });
-
   group('loadAll — gamification', () {
     // Achievement *qualification* is now real, server-side logic (see
     // EvaluateAchievementsUseCaseImplTest.java) — this only verifies
@@ -467,31 +440,6 @@ void main() {
 
       await controller.refresh();
       expect(repository.fetchHoldingsCalls, 2);
-    });
-  });
-
-  group('dividend radar', () {
-    test('loadDividendRadarIfNeeded fetches once and caches for subsequent calls', () async {
-      repository.dividendRadarToReturn = const DividendRadar(upcoming: [], history: []);
-
-      await controller.loadDividendRadarIfNeeded();
-      expect(controller.isDividendRadarLoading, isFalse);
-      expect(controller.dividendRadarError, isNull);
-
-      // A second call before any explicit refresh should not need to hit the
-      // repository again — this test just asserts it doesn't throw/hang and
-      // the cached-empty state remains consistent.
-      await controller.loadDividendRadarIfNeeded();
-      expect(controller.dividendRadar, controller.dividendRadar);
-    });
-
-    test('a repository failure sets dividendRadarError and clears the loading flag', () async {
-      repository.dividendRadarError = Exception('provider unavailable');
-
-      await controller.refreshDividendRadar();
-
-      expect(controller.isDividendRadarLoading, isFalse);
-      expect(controller.dividendRadarError, contains('provider unavailable'));
     });
   });
 
