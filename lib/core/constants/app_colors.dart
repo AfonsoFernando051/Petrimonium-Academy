@@ -47,7 +47,7 @@ class AppColors {
 
   // Semantic / state colors — themed, NOT generic Material defaults
   static const Color positiveGreen = Color(0xFF00E676); // neon green
-  static const Color negativeRed   = Color(0xFFFF1744); // vivid red
+  static const Color negativeRed   = Color(0xFFFF5C7A); // soft red — never a panic/alarm red, per Academy design system
   static const Color warningAmber  = Color(0xFFFFAB40); // alert amber
 
   // Subdued text — better contrast than Colors.white70 on dark glass

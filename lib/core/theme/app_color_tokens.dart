@@ -27,6 +27,7 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
     required this.primary,
     required this.primaryContainer,
     required this.secondary,
+    required this.mentor,
     required this.success,
     required this.warning,
     required this.error,
@@ -73,6 +74,14 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
   final Color primaryContainer;
   final Color secondary;
 
+  /// The Mentor's interpretation-layer accent (lilac). Deliberately the one
+  /// color kept identical to Petrimonium-Wallet's token of the same name —
+  /// it's how the Mentor reads as the same entity across both apps. Use this
+  /// (not [secondary] or a raw `AppColors.neonPurple`) for anything that
+  /// represents "this is the Mentor/AI interpretation", per the data /
+  /// calculation / interpretation layer guardrail.
+  final Color mentor;
+
   final Color success;
   final Color warning;
   final Color error;
@@ -104,6 +113,7 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
     primary: AppColors.neonCyan,
     primaryContainer: AppColors.neonCyan.withValues(alpha: 0.16),
     secondary: AppColors.neonPurple,
+    mentor: AppColors.neonPurple,
     success: AppColors.positiveGreen,
     warning: AppColors.warningAmber,
     error: AppColors.negativeRed,
@@ -135,6 +145,7 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
     primary: const Color(0xFF0089A0),
     primaryContainer: const Color(0xFFDDF5F8),
     secondary: const Color(0xFF6B4FD6),
+    mentor: const Color(0xFF6B4FD6),
     success: const Color(0xFF1E9E64),
     warning: const Color(0xFFAD6A00),
     error: const Color(0xFFD32F4B),
@@ -162,6 +173,7 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
     Color? primary,
     Color? primaryContainer,
     Color? secondary,
+    Color? mentor,
     Color? success,
     Color? warning,
     Color? error,
@@ -187,6 +199,7 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
       primary: primary ?? this.primary,
       primaryContainer: primaryContainer ?? this.primaryContainer,
       secondary: secondary ?? this.secondary,
+      mentor: mentor ?? this.mentor,
       success: success ?? this.success,
       warning: warning ?? this.warning,
       error: error ?? this.error,
@@ -217,6 +230,7 @@ class AppColorTokens extends ThemeExtension<AppColorTokens> {
       primary: Color.lerp(primary, other.primary, t)!,
       primaryContainer: Color.lerp(primaryContainer, other.primaryContainer, t)!,
       secondary: Color.lerp(secondary, other.secondary, t)!,
+      mentor: Color.lerp(mentor, other.mentor, t)!,
       success: Color.lerp(success, other.success, t)!,
       warning: Color.lerp(warning, other.warning, t)!,
       error: Color.lerp(error, other.error, t)!,
