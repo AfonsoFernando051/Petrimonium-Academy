@@ -38,6 +38,27 @@ class _HomeMentorCardState extends State<HomeMentorCard> {
         HomeMentorReason.returning => Translator.translate(AppStrings.homeMentorReasonReturn),
       };
 
+  /// The itemized citations backing [_reasonText] — what actually fed this
+  /// message (lesson consulted, profile/progress signal, internal guide),
+  /// so "why am I seeing this?" is auditable rather than a vague sentence.
+  List<String> get _reasonSources => switch (widget.reason) {
+        HomeMentorReason.continueLesson => [
+            Translator.translate(AppStrings.homeMentorSourceContinue1),
+            Translator.translate(AppStrings.homeMentorSourceContinue2),
+            Translator.translate(AppStrings.homeMentorSourceContinue3),
+          ],
+        HomeMentorReason.reviewDue => [
+            Translator.translate(AppStrings.homeMentorSourceReview1),
+            Translator.translate(AppStrings.homeMentorSourceReview2),
+            Translator.translate(AppStrings.homeMentorSourceReview3),
+          ],
+        HomeMentorReason.returning => [
+            Translator.translate(AppStrings.homeMentorSourceReturn1),
+            Translator.translate(AppStrings.homeMentorSourceReturn2),
+            Translator.translate(AppStrings.homeMentorSourceReturn3),
+          ],
+      };
+
   @override
   Widget build(BuildContext context) {
     final tokens = context.colors;
@@ -75,6 +96,50 @@ class _HomeMentorCardState extends State<HomeMentorCard> {
                 if (_showReason) ...[
                   const SizedBox(height: 4),
                   Text(_reasonText, style: TextStyle(color: tokens.textTertiary, fontSize: 12, height: 1.3)),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.only(top: 8),
+                    decoration: BoxDecoration(
+                      border: Border(top: BorderSide(color: tokens.border)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          Translator.translate(AppStrings.homeMentorSourcesLabel).toUpperCase(),
+                          style: TextStyle(
+                            color: tokens.textTertiary,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        for (final source in _reasonSources)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 5,
+                                  height: 5,
+                                  margin: const EdgeInsets.only(top: 4),
+                                  decoration: BoxDecoration(color: tokens.primary, shape: BoxShape.circle),
+                                ),
+                                const SizedBox(width: 6),
+                                Expanded(
+                                  child: Text(
+                                    source,
+                                    style: TextStyle(color: tokens.textSecondary, fontSize: 11, height: 1.3),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                 ],
               ],
             ),

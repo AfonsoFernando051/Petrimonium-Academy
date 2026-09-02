@@ -574,6 +574,20 @@ class AppStrings {
   static const String homeMentorReasonContinue = "homeMentorReasonContinue";
   static const String homeMentorReasonReview = "homeMentorReasonReview";
   static const String homeMentorReasonReturn = "homeMentorReasonReturn";
+  // Itemized RAG source citations shown under "Por que estou vendo isto?" —
+  // per-reason, so the mentor's interpretation always cites what actually
+  // fed it (lesson consulted, profile answers, internal guide), matching
+  // the auditability guardrail for AI-generated interpretation.
+  static const String homeMentorSourcesLabel = "homeMentorSourcesLabel";
+  static const String homeMentorSourceContinue1 = "homeMentorSourceContinue1";
+  static const String homeMentorSourceContinue2 = "homeMentorSourceContinue2";
+  static const String homeMentorSourceContinue3 = "homeMentorSourceContinue3";
+  static const String homeMentorSourceReview1 = "homeMentorSourceReview1";
+  static const String homeMentorSourceReview2 = "homeMentorSourceReview2";
+  static const String homeMentorSourceReview3 = "homeMentorSourceReview3";
+  static const String homeMentorSourceReturn1 = "homeMentorSourceReturn1";
+  static const String homeMentorSourceReturn2 = "homeMentorSourceReturn2";
+  static const String homeMentorSourceReturn3 = "homeMentorSourceReturn3";
 
   // Level tiers — motivational milestone names, never a competence
   // certification (docs/PRODUCT_VISION.md §9; docs/FEATURES.md "Levels").
