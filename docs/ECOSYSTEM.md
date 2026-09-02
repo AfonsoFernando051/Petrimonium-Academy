@@ -185,3 +185,59 @@ on Home entirely:
 
 Full suite: 1455/1455 green. `flutter analyze`: no issues. `flutter build
 linux --debug`: succeeds.
+
+## Update, 2026-09-02 — design-system parity audit (Academy Onboarding.dc.html)
+
+A Claude Design handoff bundle (`Academy Onboarding.dc.html` + its chat
+transcript + the ecosystem PRD, `Prompt 2` — Academy's critical activation
+path) was compared screen-by-screen against this repo's actual
+implementation: login/signup, pet species+naming, the goal/horizon/
+experience onboarding questions, gamification rules, the school catalog,
+quiz retry behavior, lesson completion, Home's greeting/streak, the Mentor
+tab, and the Financial Lab simulators.
+
+**Verdict: mostly already in parity, several intentionally exceeding the
+mockup.** The mockup's own 3-way layer-toggle (chips/border/icon+type) and
+its single merged Home+Academy tab read as Prompt 1's internal
+design-review exercises ("show the four layers distinguishable, correct vs
+wrong side by side"), not shipped-feature intent — this app's real 4-tab
+shell (Home/Academy/Wallet/Mentor) with dedicated Financial Lab screens is a
+more deliberate, already-documented evolution past that early sketch and
+was left alone. Locked-school reasons, no-XP-penalty quiz retries, and the
+chart accessibility data-table fallback all already meet or exceed what the
+mockup/PRD ask for.
+
+**Four concrete guardrail/parity gaps were found and fixed** (branch
+`design/academy-onboarding-parity`, commits `5d680b9`, `be76106`, `2fa6173`):
+
+1. **RAG source citations** — `HomeMentorCard`'s "Por que estou vendo
+   isto?" reveal had only a vague one-line reason, not the itemized source
+   list (lesson consulted / progress signal / internal guide) the design
+   iterated on for interpretation auditability. Added per-reason source
+   lists, pt/en/es.
+2. **Mentor tab missing its "not financial advice" disclaimer** —
+   `MentorScreen`'s header subtitle and empty-state greeting were hardcoded
+   Portuguese strings inviting investment questions with no disclaimer,
+   unlike the design's explicit "não é conselho financeiro" copy. Replaced
+   with translated strings carrying that disclaimer.
+3. **No persistent fictitious-data mark on Financial Lab screens** — the
+   PRD's non-negotiable "toda simulação carrega marcação persistente de
+   dado fictício em todas as telas" guardrail was already honored on the
+   simulated Carteira tab (`SimulationDisclaimerBanner`) but missing
+   entirely on the Financial Lab. Added a persistent badge to the shared
+   `LabScaffold` chrome so every lab/simulator gets it for free.
+4. **Financial-outcome achievements triggered a full celebration** — the
+   ten `AchievementCatalog` milestones (first investment, first dividend,
+   positive return, R$10k/50k thresholds, etc. — vestigial from the
+   pre-split `Invest-Game-V2` combined app, see "Where this actually came
+   from" above) already correctly grant zero XP (`DECISION-014`/
+   `DECISION-027`), but unlocking one still fired
+   `AchievementCelebrationOverlay` — the same full-screen, haptic,
+   reward-moment treatment used for real educational level-ups. This is
+   one of the PRD's two explicit "forbidden case" examples: "valorização,
+   dividendo, aporte ou trade nunca disparam comemoração." Replaced with a
+   plain, dismissible `GameSnack` acknowledgment; the genuinely educational
+   `LevelUpCelebrationOverlay`/`UserLeveledUpEvent` path is untouched.
+
+`flutter analyze`: clean (one pre-existing, unrelated lint). Dashboard and
+achievement-overlay test suites: 8/8 green.
