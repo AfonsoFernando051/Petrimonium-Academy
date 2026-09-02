@@ -713,6 +713,12 @@ class AppStrings {
   // carry a persistent fictitious-data mark on every screen, not just once
   // on entry).
   static const String labSimulatedDataBadge = "labSimulatedDataBadge";
+  // Quiet, non-celebratory acknowledgment for newly-unlocked *financial*
+  // milestones (see `AchievementCatalog` — holdings/dividends/returns/
+  // patrimony thresholds). Never shown via a reward-moment overlay: the
+  // design system's guardrail is explicit that valorization, dividends,
+  // contributions or trades must never trigger a celebration.
+  static const String portfolioMilestoneUnlocked = "portfolioMilestoneUnlocked";
   static const String mentorConversationHistoryTitle =
       "mentorConversationHistoryTitle";
   static const String mentorNoConversationsTitle = "mentorNoConversationsTitle";

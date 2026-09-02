@@ -678,6 +678,7 @@ class Translator {
       AppStrings.mentorEmptyStateSubtitle:
           "Não vou te dizer o que fazer com seu dinheiro — só explicar, no seu ritmo.",
       AppStrings.labSimulatedDataBadge: "Simulação — dados fictícios, não é sua carteira real",
+      AppStrings.portfolioMilestoneUnlocked: "Novo marco: {title}",
       AppStrings.mentorConversationHistoryTitle: "Conversas",
       AppStrings.mentorNoConversationsTitle: "Nenhuma conversa ainda",
       AppStrings.mentorNoConversationsSubtitle:
@@ -1339,6 +1340,7 @@ class Translator {
       AppStrings.mentorEmptyStateSubtitle:
           "I won't tell you what to do with your money — just explain, at your own pace.",
       AppStrings.labSimulatedDataBadge: "Simulation — fictional data, not your real portfolio",
+      AppStrings.portfolioMilestoneUnlocked: "New milestone: {title}",
       AppStrings.mentorConversationHistoryTitle: "Conversations",
       AppStrings.mentorNoConversationsTitle: "No conversations yet",
       AppStrings.mentorNoConversationsSubtitle:
@@ -2006,6 +2008,7 @@ class Translator {
       AppStrings.mentorEmptyStateSubtitle:
           "No voy a decirte qué hacer con tu dinero — solo a explicar, a tu ritmo.",
       AppStrings.labSimulatedDataBadge: "Simulación — datos ficticios, no es tu cartera real",
+      AppStrings.portfolioMilestoneUnlocked: "Nuevo hito: {title}",
       AppStrings.mentorConversationHistoryTitle: "Conversaciones",
       AppStrings.mentorNoConversationsTitle: "Aún no hay conversaciones",
       AppStrings.mentorNoConversationsSubtitle:
