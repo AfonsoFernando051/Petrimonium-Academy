@@ -3,7 +3,6 @@ import 'package:petrimonium/core/constants/app_colors.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/background_presets.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/core/widgets/module_chip.dart';
 import 'package:petrimonium/features/academy/presentation/controllers/academy_controller.dart';
@@ -72,7 +71,6 @@ class _AcademyIntroScreenState extends State<AcademyIntroScreen> {
       ..sort((a, b) => a.order.compareTo(b.order));
 
     return OnboardingScaffold(
-      intensity: BackgroundIntensity.subtle,
       step: 3,
       totalSteps: 7,
       showSkip: true,

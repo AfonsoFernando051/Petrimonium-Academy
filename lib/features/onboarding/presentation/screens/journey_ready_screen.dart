@@ -3,7 +3,6 @@ import 'package:petrimonium/core/constants/app_colors.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/background_presets.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/core/widgets/glass_card.dart';
 import 'package:petrimonium/features/game/domain/services/level_calculator.dart';
@@ -68,7 +67,6 @@ class _JourneyReadyScreenState extends State<JourneyReadyScreen> {
     final profile = _profile;
 
     return OnboardingScaffold(
-      intensity: BackgroundIntensity.balanced,
       step: 7,
       totalSteps: 7,
       title: Translator.translate(AppStrings.journeyReadyTitle),

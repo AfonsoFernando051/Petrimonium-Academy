@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
 import 'package:petrimonium/core/theme/app_spacing.dart';
-import 'package:petrimonium/core/theme/background_presets.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/core/widgets/cosmic_background.dart';
 import 'package:petrimonium/features/pet/presentation/companion/pet_companion_controller.dart';
@@ -25,14 +24,12 @@ class LabScaffold extends StatelessWidget {
     required this.children,
     required this.companionController,
     required this.anchor,
-    this.backgroundIntensity = BackgroundIntensity.focus,
   });
 
   final String titleKey;
   final List<Widget> children;
   final PetCompanionController companionController;
   final PetSpeechBubbleAnchor anchor;
-  final BackgroundIntensity backgroundIntensity;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +68,6 @@ class LabScaffold extends StatelessWidget {
         ),
       ),
       body: CosmicBackground(
-        intensity: backgroundIntensity,
         child: Stack(
           children: [
             SafeArea(

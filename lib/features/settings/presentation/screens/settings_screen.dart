@@ -10,7 +10,6 @@ import 'package:petrimonium/core/theme/app_text_styles.dart';
 import 'package:petrimonium/core/utils/friendly_error_message.dart';
 import 'package:petrimonium/core/utils/game_snack.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/theme/background_presets.dart';
 import 'package:petrimonium/core/widgets/cosmic_background.dart';
 import 'package:petrimonium/core/widgets/app_loading_indicator.dart';
 import 'package:petrimonium/core/widgets/confirm_logout_dialog.dart';
@@ -194,7 +193,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
       body: CosmicBackground(
-        intensity: BackgroundIntensity.balanced,
         child: SafeArea(
           child: _loadingPrefs
               ? const AppLoadingIndicator()

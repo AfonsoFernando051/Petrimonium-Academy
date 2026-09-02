@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/background_presets.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/core/widgets/cosmic_background.dart';
 import 'package:petrimonium/core/widgets/game_button.dart';
 import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_progress_dots.dart';
 
 /// Shared chrome for every screen in the onboarding narrative arc (Welcome
-/// through Journey Ready): the cosmic background at a screen-appropriate
-/// [intensity], an optional top-right Skip, a centered title/subtitle block,
-/// a scrollable [body], and a bottom bar with [OnboardingProgressDots] plus
-/// the primary CTA. Centralizing this means every screen gets identical
+/// through Journey Ready): the shared background, an optional top-right
+/// Skip, a centered title/subtitle block, a scrollable [body], and a bottom
+/// bar with [OnboardingProgressDots] plus the primary CTA. Centralizing
+/// this means every screen gets identical
 /// safe-area handling, tablet/desktop width clamping, vertical centering
 /// (short content is centered rather than hugging the top — an empty-feeling
 /// screen was one of the redesign's explicit complaints about the old
@@ -28,7 +27,6 @@ import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_
 class OnboardingScaffold extends StatelessWidget {
   const OnboardingScaffold({
     super.key,
-    required this.intensity,
     required this.step,
     required this.totalSteps,
     this.title,
@@ -42,7 +40,6 @@ class OnboardingScaffold extends StatelessWidget {
     this.maxContentWidth = 560,
   });
 
-  final BackgroundIntensity intensity;
   final int step;
   final int totalSteps;
 
@@ -69,7 +66,6 @@ class OnboardingScaffold extends StatelessWidget {
     final tokens = context.colors;
     return Scaffold(
       body: CosmicBackground(
-        intensity: intensity,
         child: SafeArea(
           child: Column(
             children: [

@@ -4,7 +4,6 @@ import 'package:petrimonium/core/constants/app_colors.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/background_presets.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/features/onboarding/presentation/screens/journey_ready_screen.dart';
 import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
@@ -47,7 +46,6 @@ class _TimeHorizonScreenState extends State<TimeHorizonScreen> {
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
-      intensity: BackgroundIntensity.subtle,
       step: 6,
       totalSteps: 7,
       maxContentWidth: 760,

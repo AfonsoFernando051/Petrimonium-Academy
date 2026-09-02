@@ -8,7 +8,6 @@ import 'package:petrimonium/core/utils/game_snack.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
 import 'package:petrimonium/core/theme/app_spacing.dart';
 import 'package:petrimonium/core/theme/app_text_styles.dart';
-import 'package:petrimonium/core/theme/background_presets.dart';
 import 'package:petrimonium/core/utils/pet_assets.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/features/onboarding/presentation/screens/academy_intro_screen.dart';
@@ -92,7 +91,6 @@ class _PetConfigurationScreenState extends State<PetConfigurationScreen> {
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
-      intensity: BackgroundIntensity.subtle,
       step: 2,
       totalSteps: 7,
       maxContentWidth: 900,

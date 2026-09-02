@@ -1,4 +1,3 @@
-import 'package:petrimonium/core/theme/background_presets.dart';
 import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
 
 /// Pure tab-index → behavior mappings for [DashboardScreen]'s 4 bottom-nav
@@ -19,20 +18,6 @@ class DashboardTabRouter {
   static const int academyTab = 1;
   static const int walletTab = 2;
   static const int mentorTab = 3;
-
-  // Content-hierarchy comes from swapping intensity per selected tab: full
-  // cosmic expression on Home, progressively quieter as the screen gets more
-  // cognitively demanding, down to Academy. Lesson/quiz screens go one step
-  // further with their own `focus`-level CosmicBackground pushed as a
-  // separate route (see LessonScreen).
-  static const List<BackgroundIntensity> _tabIntensities = [
-    BackgroundIntensity.immersive, // Home
-    BackgroundIntensity.subtle, // Academia
-    BackgroundIntensity.balanced, // Carteira / Portfolio
-    BackgroundIntensity.mentor, // Mentor
-  ];
-
-  static BackgroundIntensity backgroundIntensityFor(int tabIndex) => _tabIntensities[tabIndex];
 
   /// (`docs/PROJECT_CONTEXT.md`'s Pet Companion section, `PetContext`'s doc
   /// comment on why this mirrors the real tabs + Profile rather than a

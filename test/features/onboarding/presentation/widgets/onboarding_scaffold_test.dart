@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
-import 'package:petrimonium/core/theme/background_presets.dart';
 import 'package:petrimonium/core/widgets/game_button.dart';
 import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_progress_dots.dart';
 import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
@@ -17,7 +16,6 @@ void main() {
     return MaterialApp(
       theme: AppTheme.dark,
       home: OnboardingScaffold(
-        intensity: BackgroundIntensity.balanced,
         step: 2,
         totalSteps: 5,
         title: 'Título de teste',

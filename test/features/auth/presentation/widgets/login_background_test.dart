@@ -15,15 +15,11 @@ void main() {
   }
 
   group('LoginBackground', () {
-    testWidgets('renders a CosmicBackground with the expected asset', (tester) async {
+    testWidgets('renders the standard CosmicBackground', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
       expect(find.byType(CosmicBackground), findsOneWidget);
-      final cosmicBackground = tester.widget<CosmicBackground>(find.byType(CosmicBackground));
-      expect(cosmicBackground.assetPath, 'assets/images/questionary_space_paw.png');
-      expect(cosmicBackground.darken, 0.2);
-      expect(cosmicBackground.showArtworkInLightMode, isTrue);
     });
   });
 }

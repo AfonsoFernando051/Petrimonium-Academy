@@ -5,7 +5,6 @@ import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
 import 'package:petrimonium/core/theme/app_spacing.dart';
-import 'package:petrimonium/core/theme/background_presets.dart';
 import 'package:petrimonium/core/utils/fade_route.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/core/widgets/glass_card.dart';
@@ -80,7 +79,6 @@ class _FinancialLabHomeScreenState extends State<FinancialLabHomeScreen> {
       titleKey: AppStrings.financialLabTitle,
       companionController: widget.companionController,
       anchor: _headerAnchor,
-      backgroundIntensity: BackgroundIntensity.subtle,
       children: [
         Text(
           Translator.translate(AppStrings.financialLabSubtitle),

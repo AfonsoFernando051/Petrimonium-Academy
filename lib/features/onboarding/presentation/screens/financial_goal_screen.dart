@@ -4,7 +4,6 @@ import 'package:petrimonium/core/constants/app_colors.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/background_presets.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
 import 'package:petrimonium/features/pet/data/models/pet_goal_enum.dart';
@@ -51,7 +50,6 @@ class _FinancialGoalScreenState extends State<FinancialGoalScreen> {
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
-      intensity: BackgroundIntensity.subtle,
       step: 5,
       totalSteps: 7,
       maxContentWidth: 760,

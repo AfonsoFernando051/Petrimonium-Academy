@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_colors.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
-import 'package:petrimonium/core/theme/background_presets.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/core/widgets/xp_bar.dart';
 import 'package:petrimonium/features/onboarding/presentation/onboarding_constants.dart';
@@ -58,7 +57,6 @@ class _GamificationIntroScreenState extends State<GamificationIntroScreen> {
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
-      intensity: BackgroundIntensity.balanced,
       step: 4,
       totalSteps: 7,
       showSkip: true,

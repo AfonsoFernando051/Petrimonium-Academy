@@ -157,13 +157,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   // Shared background instance for all tabs (the IndexedStack below keeps
   // every tab's state alive, so there's one CosmicBackground behind all of
-  // them, not five) — see `DashboardTabRouter.backgroundIntensityFor` for
-  // which mood each tab gets.
+  // them, not five).
   Widget _buildBackground({required Widget child}) {
-    return CosmicBackground(
-      intensity: DashboardTabRouter.backgroundIntensityFor(_selectedIndex),
-      child: child,
-    );
+    return CosmicBackground(child: child);
   }
 
   // ── Page route helper ─────────────────────────────────────────────────────

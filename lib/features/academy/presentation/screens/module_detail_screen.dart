@@ -5,7 +5,6 @@ import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
 import 'package:petrimonium/core/theme/app_motion.dart';
-import 'package:petrimonium/core/theme/background_presets.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/core/widgets/app_loading_indicator.dart';
 import 'package:petrimonium/core/widgets/cosmic_background.dart';
@@ -128,7 +127,6 @@ class _ModuleDetailScreenState extends State<ModuleDetailScreen> {
         ),
       ),
       body: CosmicBackground(
-        intensity: BackgroundIntensity.subtle,
         child: SafeArea(
           child: _controller.isLoading || _controller.isCatalogLoading
               ? const AppLoadingIndicator()

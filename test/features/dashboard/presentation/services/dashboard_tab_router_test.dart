@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:petrimonium/core/theme/background_presets.dart';
 import 'package:petrimonium/features/dashboard/presentation/services/dashboard_tab_router.dart';
 import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
 
@@ -19,24 +18,6 @@ void main() {
 
     test('Mentor tab (and any other index) maps to PetContext.mentor', () {
       expect(DashboardTabRouter.petContextFor(DashboardTabRouter.mentorTab), PetContext.mentor);
-    });
-  });
-
-  group('DashboardTabRouter.backgroundIntensityFor', () {
-    test('Home is immersive', () {
-      expect(DashboardTabRouter.backgroundIntensityFor(DashboardTabRouter.homeTab), BackgroundIntensity.immersive);
-    });
-
-    test('Academy is subtle', () {
-      expect(DashboardTabRouter.backgroundIntensityFor(DashboardTabRouter.academyTab), BackgroundIntensity.subtle);
-    });
-
-    test('Wallet is balanced', () {
-      expect(DashboardTabRouter.backgroundIntensityFor(DashboardTabRouter.walletTab), BackgroundIntensity.balanced);
-    });
-
-    test('Mentor has its own mentor intensity', () {
-      expect(DashboardTabRouter.backgroundIntensityFor(DashboardTabRouter.mentorTab), BackgroundIntensity.mentor);
     });
   });
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
-import 'package:petrimonium/core/theme/background_presets.dart';
 import 'package:petrimonium/core/utils/game_snack.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/core/widgets/cosmic_background.dart';
@@ -128,7 +127,6 @@ class _LessonScreenState extends State<LessonScreen> {
       body: CosmicBackground(
         // Lesson steps include quiz/exercise questions — the app's most
         // cognitively demanding screen, so it gets the quietest preset.
-        intensity: BackgroundIntensity.focus,
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
