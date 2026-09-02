@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:petrimonium/features/pet/data/models/experience_level_enum.dart';
 import 'package:petrimonium/features/pet/data/models/investment_horizon_enum.dart';
 import 'package:petrimonium/features/pet/data/models/pet_goal_enum.dart';
 import 'package:petrimonium/features/pet/data/repositories/pet_preferences_repository.dart';
@@ -41,6 +42,22 @@ void main() {
     test('falls back to oneToFiveYears for an unrecognized stored value', () async {
       SharedPreferences.setMockInitialValues({'pet_investment_horizon': 'not_a_real_horizon'});
       expect(await repository.loadHorizon(), InvestmentHorizonEnum.oneToFiveYears);
+    });
+  });
+
+  group('experience level', () {
+    test('defaults to novice when nothing is saved', () async {
+      expect(await repository.loadExperienceLevel(), ExperienceLevelEnum.novice);
+    });
+
+    test('round-trips a saved experience level', () async {
+      await repository.saveExperienceLevel(ExperienceLevelEnum.practitioner);
+      expect(await repository.loadExperienceLevel(), ExperienceLevelEnum.practitioner);
+    });
+
+    test('falls back to novice for an unrecognized stored value', () async {
+      SharedPreferences.setMockInitialValues({'pet_experience_level': 'not_a_real_level'});
+      expect(await repository.loadExperienceLevel(), ExperienceLevelEnum.novice);
     });
   });
 }

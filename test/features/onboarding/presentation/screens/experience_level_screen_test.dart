@@ -4,22 +4,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/pet/data/models/investment_horizon_enum.dart';
-import 'package:petrimonium/features/pet/data/models/pet_specie_enum.dart';
-import 'package:petrimonium/features/pet/data/repositories/pet_preferences_repository.dart';
-import 'package:petrimonium/features/onboarding/data/repositories/onboarding_state_repository.dart';
 import 'package:petrimonium/features/onboarding/presentation/screens/experience_level_screen.dart';
+import 'package:petrimonium/features/onboarding/presentation/screens/journey_ready_screen.dart';
+import 'package:petrimonium/features/pet/data/models/experience_level_enum.dart';
+import 'package:petrimonium/features/pet/data/repositories/pet_preferences_repository.dart';
 import 'package:petrimonium/features/pet/domain/entities/pet_profile.dart';
 import 'package:petrimonium/features/pet/domain/enums/accessory_type.dart';
 import 'package:petrimonium/features/pet/domain/enums/pet_accessory_id.dart';
 import 'package:petrimonium/features/pet/domain/enums/pet_evolution_stage.dart';
 import 'package:petrimonium/features/pet/domain/repositories/mascot_repository.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/time_horizon_screen.dart';
+import 'package:petrimonium/features/pet/data/models/pet_specie_enum.dart';
 
-/// Minimal in-memory MascotRepository double, mirrors the one used in
-/// `mascot_controller_test.dart` — further down the onboarding chain,
-/// JourneyReadyScreen calls `loadProfile` in its own initState, and the
-/// real DI default would hit the network for real in a widget test.
+/// Minimal in-memory MascotRepository double — further down the onboarding
+/// chain, JourneyReadyScreen calls `loadProfile` in its own initState, and
+/// the real DI default would hit the network for real in a widget test.
 class FakeMascotRepository implements MascotRepository {
   PetProfile profileToReturn = PetProfile(name: 'Bolt');
 
@@ -48,52 +46,52 @@ void main() {
     Translator.currentLanguage = 'pt';
     SharedPreferences.setMockInitialValues({});
     DI.petPreferencesRepository = PetPreferencesRepository();
-    DI.onboardingStateRepository = OnboardingStateRepository();
     DI.mascotRepository = FakeMascotRepository();
   });
 
   Widget buildTestableWidget() {
     return MaterialApp(
       theme: AppTheme.dark,
-      home: const TimeHorizonScreen(),
+      home: const ExperienceLevelScreen(),
     );
   }
 
-  group('TimeHorizonScreen', () {
-    testWidgets('renders the title, subtitle and a row for every horizon', (tester) async {
+  group('ExperienceLevelScreen', () {
+    testWidgets('renders the title, subtitle and a row for every level', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       // Hosts CosmicBackground + a pulsing GameButton — never pumpAndSettle.
       await tester.pump();
 
-      expect(find.text('Para quando é esse objetivo?'), findsOneWidget);
-      expect(find.text('Sem certeza? Tudo bem, é só um ponto de partida.'), findsOneWidget);
-      for (final horizon in InvestmentHorizonEnum.values) {
-        expect(find.text(horizon.label), findsOneWidget, reason: horizon.name);
+      expect(find.text('Como está sua experiência hoje?'), findsOneWidget);
+      expect(find.text('Assim a Academy não te ensina o que você já sabe.'), findsOneWidget);
+      for (final level in ExperienceLevelEnum.values) {
+        expect(find.text(level.label), findsOneWidget, reason: level.name);
+        expect(find.text(level.description), findsOneWidget, reason: level.name);
       }
     });
 
-    testWidgets('defaults to oneToFiveYears selected', (tester) async {
+    testWidgets('defaults to novice selected', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
       expect(find.byIcon(Icons.check_circle), findsOneWidget);
     });
 
-    testWidgets('tapping a horizon row selects it', (tester) async {
+    testWidgets('tapping a level row selects it', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      await tester.tap(find.text(InvestmentHorizonEnum.moreThanFiveYears.label));
+      await tester.tap(find.text(ExperienceLevelEnum.practitioner.label));
       await tester.pump(const Duration(milliseconds: 200));
 
       expect(find.byIcon(Icons.check_circle), findsOneWidget);
     });
 
-    testWidgets('tapping Next saves the horizon, marks the goal step chosen and navigates to ExperienceLevelScreen', (tester) async {
+    testWidgets('tapping Next saves the level and navigates to JourneyReadyScreen', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      await tester.tap(find.text(InvestmentHorizonEnum.upToOneYear.label));
+      await tester.tap(find.text(ExperienceLevelEnum.curious.label));
       await tester.pump(const Duration(milliseconds: 200));
 
       await tester.tap(find.text('Próximo'));
@@ -101,9 +99,8 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 350));
 
-      expect(await DI.petPreferencesRepository.loadHorizon(), InvestmentHorizonEnum.upToOneYear);
-      expect(await DI.onboardingStateRepository.hasSetGoal(), isTrue);
-      expect(find.byType(ExperienceLevelScreen), findsOneWidget);
+      expect(await DI.petPreferencesRepository.loadExperienceLevel(), ExperienceLevelEnum.curious);
+      expect(find.byType(JourneyReadyScreen), findsOneWidget);
     });
   });
 }

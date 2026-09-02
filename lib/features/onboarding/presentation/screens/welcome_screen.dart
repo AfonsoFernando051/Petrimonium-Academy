@@ -31,7 +31,7 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return OnboardingScaffold(
       step: 1,
-      totalSteps: 7,
+      totalSteps: 8,
       showSkip: true,
       onSkip: () => _goNext(context),
       ctaLabel: Translator.translate(AppStrings.welcomeCta),

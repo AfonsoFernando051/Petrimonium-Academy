@@ -1,9 +1,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:petrimonium/features/pet/data/models/experience_level_enum.dart';
 import 'package:petrimonium/features/pet/data/models/investment_horizon_enum.dart';
 import 'package:petrimonium/features/pet/data/models/pet_goal_enum.dart';
 
-/// Persists the user's chosen main goal / investment horizon from pet
-/// profile creation. Local-only (SharedPreferences), mirroring
+/// Persists the user's chosen main goal / investment horizon / experience
+/// level from onboarding. Local-only (SharedPreferences), mirroring
 /// `MascotRepositoryImpl`'s style — there is no backend field for this yet
 /// (the `Pet` entity only stores specie/health), so this keeps the
 /// selection from being purely decorative without requiring a backend
@@ -11,6 +12,7 @@ import 'package:petrimonium/features/pet/data/models/pet_goal_enum.dart';
 class PetPreferencesRepository {
   static const _goalKey = 'pet_goal';
   static const _horizonKey = 'pet_investment_horizon';
+  static const _experienceLevelKey = 'pet_experience_level';
 
   Future<PetGoalEnum> loadGoal() async {
     final prefs = await SharedPreferences.getInstance();
@@ -30,5 +32,15 @@ class PetPreferencesRepository {
   Future<void> saveHorizon(InvestmentHorizonEnum horizon) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_horizonKey, horizon.name);
+  }
+
+  Future<ExperienceLevelEnum> loadExperienceLevel() async {
+    final prefs = await SharedPreferences.getInstance();
+    return ExperienceLevelEnumDisplay.fromName(prefs.getString(_experienceLevelKey));
+  }
+
+  Future<void> saveExperienceLevel(ExperienceLevelEnum level) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_experienceLevelKey, level.name);
   }
 }

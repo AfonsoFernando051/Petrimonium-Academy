@@ -110,6 +110,10 @@ class AppStrings {
   static const String timeHorizonTitle = "timeHorizonTitle";
   static const String timeHorizonSubtitle = "timeHorizonSubtitle";
 
+  // Experience Level (onboarding)
+  static const String experienceLevelTitle = "experienceLevelTitle";
+  static const String experienceLevelSubtitle = "experienceLevelSubtitle";
+
   // Journey Ready (onboarding — replaces the old Tutorial's final step)
   static const String journeyReadyTitle = "journeyReadyTitle";
   static const String journeyReadySubtitle = "journeyReadySubtitle";

@@ -5,42 +5,42 @@ import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
 import 'package:petrimonium/core/utils/translator.dart';
+import 'package:petrimonium/features/onboarding/presentation/screens/journey_ready_screen.dart';
 import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
-import 'package:petrimonium/features/pet/data/models/pet_goal_enum.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/time_horizon_screen.dart';
+import 'package:petrimonium/features/pet/data/models/experience_level_enum.dart';
 
-/// Onboarding's "Choose Your Financial Goal" step — framed as the player's
-/// first mission (per the redesign) rather than a risk/strategy question, so
-/// it reads as personal, not a financial form. Time horizon used to live on
-/// this same screen behind a bottom-sheet picker; it's now its own
-/// deliberate step (`TimeHorizonScreen`) right after this one. Selection
-/// personalizes future missions/recommendations; nothing here is mandatory
-/// data like a portfolio, so there is no skip affordance — picking a goal
-/// costs nothing.
-class FinancialGoalScreen extends StatefulWidget {
-  const FinancialGoalScreen({super.key});
+/// Onboarding's "Como está sua experiência hoje?" step — lets the Academy
+/// skip content the user already knows instead of a one-size-fits-all
+/// track. Sits between Time Horizon and Journey Ready; not individually
+/// tracked by `OnboardingStateRepository` (same as Academy Intro/
+/// Gamification Intro) since `TimeHorizonScreen` already marks the "goal"
+/// milestone done before pushing here — closing the app mid-screen just
+/// resumes at Journey Ready, which matches how the other untracked
+/// intermediate onboarding screens already behave.
+class ExperienceLevelScreen extends StatefulWidget {
+  const ExperienceLevelScreen({super.key});
 
   @override
-  State<FinancialGoalScreen> createState() => _FinancialGoalScreenState();
+  State<ExperienceLevelScreen> createState() => _ExperienceLevelScreenState();
 }
 
-class _FinancialGoalScreenState extends State<FinancialGoalScreen> {
-  PetGoalEnum _selectedGoal = PetGoalEnum.investWithConfidence;
+class _ExperienceLevelScreenState extends State<ExperienceLevelScreen> {
+  ExperienceLevelEnum _selected = ExperienceLevelEnum.novice;
   bool _isSaving = false;
 
-  void _selectGoal(PetGoalEnum goal) {
+  void _select(ExperienceLevelEnum level) {
     HapticFeedback.selectionClick();
-    setState(() => _selectedGoal = goal);
+    setState(() => _selected = level);
   }
 
   Future<void> _handleContinue() async {
     setState(() => _isSaving = true);
     try {
-      await DI.petPreferencesRepository.saveGoal(_selectedGoal);
+      await DI.petPreferencesRepository.saveExperienceLevel(_selected);
       if (mounted) {
         Navigator.of(
           context,
-        ).push(MaterialPageRoute(builder: (_) => const TimeHorizonScreen()));
+        ).push(MaterialPageRoute(builder: (_) => const JourneyReadyScreen()));
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -50,21 +50,21 @@ class _FinancialGoalScreenState extends State<FinancialGoalScreen> {
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
-      step: 5,
+      step: 7,
       totalSteps: 8,
-      title: Translator.translate(AppStrings.financialGoalTitle),
-      subtitle: Translator.translate(AppStrings.financialGoalSubtitle),
-      ctaLabel: Translator.translate(AppStrings.financialGoalContinue),
+      title: Translator.translate(AppStrings.experienceLevelTitle),
+      subtitle: Translator.translate(AppStrings.experienceLevelSubtitle),
+      ctaLabel: Translator.translate(AppStrings.onboardingNext),
       isCtaLoading: _isSaving,
       onCta: _handleContinue,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          for (final goal in PetGoalEnum.values)
-            _GoalRow(
-              goal: goal,
-              isSelected: goal == _selectedGoal,
-              onTap: () => _selectGoal(goal),
+          for (final level in ExperienceLevelEnum.values)
+            _ExperienceLevelRow(
+              level: level,
+              isSelected: level == _selected,
+              onTap: () => _select(level),
             ),
         ],
       ),
@@ -72,10 +72,10 @@ class _FinancialGoalScreenState extends State<FinancialGoalScreen> {
   }
 }
 
-class _GoalRow extends StatelessWidget {
-  const _GoalRow({required this.goal, required this.isSelected, required this.onTap});
+class _ExperienceLevelRow extends StatelessWidget {
+  const _ExperienceLevelRow({required this.level, required this.isSelected, required this.onTap});
 
-  final PetGoalEnum goal;
+  final ExperienceLevelEnum level;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -110,17 +110,27 @@ class _GoalRow extends StatelessWidget {
                     color: tokens.textPrimary.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(13),
                   ),
-                  child: Text(goal.emoji, style: const TextStyle(fontSize: 20)),
+                  child: Text(level.emoji, style: const TextStyle(fontSize: 20)),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
-                  child: Text(
-                    goal.label,
-                    style: TextStyle(
-                      color: tokens.textPrimary,
-                      fontSize: 15,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        level.label,
+                        style: TextStyle(
+                          color: tokens.textPrimary,
+                          fontSize: 15,
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        level.description,
+                        style: TextStyle(color: tokens.textSecondary, fontSize: 12),
+                      ),
+                    ],
                   ),
                 ),
                 if (isSelected) const Icon(Icons.check_circle, color: AppColors.neonCyan, size: 20),

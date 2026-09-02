@@ -67,8 +67,8 @@ class _JourneyReadyScreenState extends State<JourneyReadyScreen> {
     final profile = _profile;
 
     return OnboardingScaffold(
-      step: 7,
-      totalSteps: 7,
+      step: 8,
+      totalSteps: 8,
       title: Translator.translate(AppStrings.journeyReadyTitle),
       subtitle: Translator.translate(AppStrings.journeyReadySubtitle),
       ctaLabel: Translator.translate(AppStrings.journeyReadyCta),

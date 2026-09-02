@@ -127,6 +127,9 @@ class Translator {
       AppStrings.timeHorizonTitle: "Para quando é esse objetivo?",
       AppStrings.timeHorizonSubtitle: "Sem certeza? Tudo bem, é só um ponto de partida.",
 
+      AppStrings.experienceLevelTitle: "Como está sua experiência hoje?",
+      AppStrings.experienceLevelSubtitle: "Assim a Academy não te ensina o que você já sabe.",
+
       AppStrings.journeyReadyTitle: "Sua jornada está pronta.",
       AppStrings.journeyReadySubtitle: "Agora é hora de começar a evoluir.",
       AppStrings.journeyReadyGoalLabel: "Seu objetivo",
@@ -752,6 +755,9 @@ class Translator {
       AppStrings.timeHorizonTitle: "When is this goal for?",
       AppStrings.timeHorizonSubtitle: "Not sure? That's fine, it's just a starting point.",
 
+      AppStrings.experienceLevelTitle: "How's your experience today?",
+      AppStrings.experienceLevelSubtitle: "This way the Academy won't teach you what you already know.",
+
       AppStrings.journeyReadyTitle: "Your journey is ready.",
       AppStrings.journeyReadySubtitle: "Now it's time to start evolving.",
       AppStrings.journeyReadyGoalLabel: "Your goal",
@@ -1374,6 +1380,9 @@ class Translator {
 
       AppStrings.timeHorizonTitle: "¿Para cuándo es ese objetivo?",
       AppStrings.timeHorizonSubtitle: "¿No estás seguro? Está bien, es solo un punto de partida.",
+
+      AppStrings.experienceLevelTitle: "¿Cómo está tu experiencia hoy?",
+      AppStrings.experienceLevelSubtitle: "Así la Academy no te enseña lo que ya sabes.",
 
       AppStrings.journeyReadyTitle: "Tu viaje está listo.",
       AppStrings.journeyReadySubtitle:

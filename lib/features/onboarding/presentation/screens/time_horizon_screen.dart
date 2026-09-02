@@ -5,7 +5,7 @@ import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/features/onboarding/presentation/screens/journey_ready_screen.dart';
+import 'package:petrimonium/features/onboarding/presentation/screens/experience_level_screen.dart';
 import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
 import 'package:petrimonium/features/pet/data/models/investment_horizon_enum.dart';
 
@@ -36,7 +36,7 @@ class _TimeHorizonScreenState extends State<TimeHorizonScreen> {
       if (mounted) {
         Navigator.of(
           context,
-        ).push(MaterialPageRoute(builder: (_) => const JourneyReadyScreen()));
+        ).push(MaterialPageRoute(builder: (_) => const ExperienceLevelScreen()));
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -46,8 +46,8 @@ class _TimeHorizonScreenState extends State<TimeHorizonScreen> {
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
-      step: 2,
-      totalSteps: 9,
+      step: 6,
+      totalSteps: 8,
       title: Translator.translate(AppStrings.timeHorizonTitle),
       subtitle: Translator.translate(AppStrings.timeHorizonSubtitle),
       ctaLabel: Translator.translate(AppStrings.onboardingNext),

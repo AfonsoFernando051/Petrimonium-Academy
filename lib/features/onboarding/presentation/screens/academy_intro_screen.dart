@@ -72,7 +72,7 @@ class _AcademyIntroScreenState extends State<AcademyIntroScreen> {
 
     return OnboardingScaffold(
       step: 3,
-      totalSteps: 7,
+      totalSteps: 8,
       showSkip: true,
       onSkip: () => _skip(context),
       title: Translator.translate(AppStrings.academyIntroTitle),

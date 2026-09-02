@@ -58,7 +58,7 @@ class _GamificationIntroScreenState extends State<GamificationIntroScreen> {
   Widget build(BuildContext context) {
     return OnboardingScaffold(
       step: 4,
-      totalSteps: 7,
+      totalSteps: 8,
       showSkip: true,
       onSkip: () => _goNext(context),
       title: Translator.translate(AppStrings.gamificationIntroTitle),

@@ -92,7 +92,7 @@ class _PetConfigurationScreenState extends State<PetConfigurationScreen> {
   Widget build(BuildContext context) {
     return OnboardingScaffold(
       step: 2,
-      totalSteps: 7,
+      totalSteps: 8,
       maxContentWidth: 900,
       title: Translator.translate(AppStrings.meetPetTitle),
       subtitle: Translator.translate(AppStrings.meetPetIntro),
