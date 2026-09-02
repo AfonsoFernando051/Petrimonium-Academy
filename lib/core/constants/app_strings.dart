@@ -102,7 +102,12 @@ class AppStrings {
 
   // Gamification intro (onboarding)
   static const String gamificationIntroTitle = "gamificationIntroTitle";
-  static const String gamificationIntroSubtitle = "gamificationIntroSubtitle";
+  static const String gamificationIntroXpRuleTitle = "gamificationIntroXpRuleTitle";
+  static const String gamificationIntroXpRuleBody = "gamificationIntroXpRuleBody";
+  static const String gamificationIntroStreakRuleTitle = "gamificationIntroStreakRuleTitle";
+  static const String gamificationIntroStreakRuleBody = "gamificationIntroStreakRuleBody";
+  static const String gamificationIntroCompareRuleTitle = "gamificationIntroCompareRuleTitle";
+  static const String gamificationIntroCompareRuleBody = "gamificationIntroCompareRuleBody";
   static const String onboardingLevelBadge = "onboardingLevelBadge";
 
   // Mission reward card — shared by Gamification intro and Journey Ready

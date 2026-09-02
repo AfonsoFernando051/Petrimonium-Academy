@@ -119,9 +119,16 @@ class Translator {
       AppStrings.academyIntroLessonSingular: "aula",
       AppStrings.academyIntroLessonPlural: "aulas",
 
-      AppStrings.gamificationIntroTitle: "Aprenda. Jogue. Evolua.",
-      AppStrings.gamificationIntroSubtitle:
-          "Transforme conhecimento em progresso.",
+      AppStrings.gamificationIntroTitle: "Como você progride aqui",
+      AppStrings.gamificationIntroXpRuleTitle: "XP por aprender",
+      AppStrings.gamificationIntroXpRuleBody:
+          "Você ganha XP completando aulas e práticas — nunca por valorização, aporte ou operação.",
+      AppStrings.gamificationIntroStreakRuleTitle: "Ofensiva sem punição",
+      AppStrings.gamificationIntroStreakRuleBody:
+          "Perder um dia não zera seu progresso nem te penaliza — o pet só fica com saudade.",
+      AppStrings.gamificationIntroCompareRuleTitle: "Sem comparação entre pessoas",
+      AppStrings.gamificationIntroCompareRuleBody:
+          "Seu progresso é só seu. Não existe ranking de patrimônio ou retorno aqui.",
       AppStrings.onboardingLevelBadge: "Nível {level}",
 
       AppStrings.missionCompleteLabel: "Missão Concluída",
@@ -751,8 +758,16 @@ class Translator {
       AppStrings.academyIntroLessonSingular: "lesson",
       AppStrings.academyIntroLessonPlural: "lessons",
 
-      AppStrings.gamificationIntroTitle: "Learn. Play. Evolve.",
-      AppStrings.gamificationIntroSubtitle: "Turn knowledge into progress.",
+      AppStrings.gamificationIntroTitle: "How you progress here",
+      AppStrings.gamificationIntroXpRuleTitle: "XP for learning",
+      AppStrings.gamificationIntroXpRuleBody:
+          "You earn XP by completing lessons and practice — never for returns, deposits, or trades.",
+      AppStrings.gamificationIntroStreakRuleTitle: "No-punishment streak",
+      AppStrings.gamificationIntroStreakRuleBody:
+          "Missing a day doesn't reset your progress or penalize you — your pet just misses you.",
+      AppStrings.gamificationIntroCompareRuleTitle: "No comparing with others",
+      AppStrings.gamificationIntroCompareRuleBody:
+          "Your progress is yours alone. There's no net worth or returns leaderboard here.",
       AppStrings.onboardingLevelBadge: "Level {level}",
 
       AppStrings.missionCompleteLabel: "Mission Complete",
@@ -1378,9 +1393,16 @@ class Translator {
       AppStrings.academyIntroLessonSingular: "lección",
       AppStrings.academyIntroLessonPlural: "lecciones",
 
-      AppStrings.gamificationIntroTitle: "Aprende. Juega. Evoluciona.",
-      AppStrings.gamificationIntroSubtitle:
-          "Convierte el conocimiento en progreso.",
+      AppStrings.gamificationIntroTitle: "Cómo progresas aquí",
+      AppStrings.gamificationIntroXpRuleTitle: "XP por aprender",
+      AppStrings.gamificationIntroXpRuleBody:
+          "Ganas XP completando lecciones y prácticas — nunca por valorización, aportes u operaciones.",
+      AppStrings.gamificationIntroStreakRuleTitle: "Racha sin penalización",
+      AppStrings.gamificationIntroStreakRuleBody:
+          "Perder un día no reinicia tu progreso ni te penaliza — tu mascota solo te extraña.",
+      AppStrings.gamificationIntroCompareRuleTitle: "Sin comparación entre personas",
+      AppStrings.gamificationIntroCompareRuleBody:
+          "Tu progreso es solo tuyo. Aquí no existe un ranking de patrimonio ni de rentabilidad.",
       AppStrings.onboardingLevelBadge: "Nivel {level}",
 
       AppStrings.missionCompleteLabel: "Misión Completada",
