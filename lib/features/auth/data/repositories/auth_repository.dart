@@ -63,6 +63,38 @@ class AuthRepository {
     final user = await remoteDataSource.register(name, email, password);
     await _saveTokens(user);
     await _saveEmail(email);
+    // Register's response echoes the name back (unlike login's) — cache it
+    // immediately so a fresh signup shows it without a round trip.
+    await _saveUserName(user.username);
+  }
+
+  Future<void> _saveUserName(String? name) async {
+    if (name == null || name.isEmpty) return;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('auth_username', name);
+  }
+
+  /// The locally cached display name, if any — instant but possibly stale
+  /// (an existing user on a device that hasn't called [refreshUserName] yet
+  /// has none cached at all). Callers should show this immediately, then
+  /// call [refreshUserName] to fill in/update it from the backend.
+  Future<String?> getSavedUserName() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('auth_username');
+  }
+
+  /// Resolves the real display name from `GET /api/users/me` and caches it
+  /// — the only way to get one for a returning user, since `/auth/login`'s
+  /// response carries just the token pair. Best-effort: swallows failures
+  /// (offline, etc.) since a missing name should never block anything else.
+  Future<String?> refreshUserName() async {
+    try {
+      final user = await remoteDataSource.getCurrentUser();
+      await _saveUserName(user.username);
+      return user.username;
+    } catch (_) {
+      return null;
+    }
   }
 
   /// Always succeeds server-side regardless of whether [email] belongs to an
@@ -94,6 +126,7 @@ class AuthRepository {
     await remoteDataSource.apiClient.clearTokens();
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_email');
+    await prefs.remove('auth_username');
   }
 
   Future<void> _saveTokens(UserModel user) async {

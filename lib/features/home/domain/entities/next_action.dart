@@ -21,7 +21,23 @@ class ContinueLessonAction extends NextAction {
   /// scope) — `null` while the catalog is still loading.
   final String? moduleTitle;
 
-  const ContinueLessonAction({required this.lesson, this.moduleTitle});
+  /// The module's total lesson count and how many of them are already
+  /// completed — `null` while that isn't known yet. Powers the "N aulas" /
+  /// progress bar shown alongside [moduleTitle].
+  final int? moduleLessonCount;
+  final int? moduleCompletedCount;
+
+  /// The user's own onboarding goal, already resolved to display text
+  /// (`PetGoalEnum.label`) by the caller — `null` while it hasn't loaded.
+  final String? goalLabel;
+
+  const ContinueLessonAction({
+    required this.lesson,
+    this.moduleTitle,
+    this.moduleLessonCount,
+    this.moduleCompletedCount,
+    this.goalLabel,
+  });
 }
 
 /// A real mission is exactly one lesson completion away from finishing —

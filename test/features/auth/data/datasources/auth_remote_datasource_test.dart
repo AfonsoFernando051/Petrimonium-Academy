@@ -206,6 +206,31 @@ void main() {
     });
   });
 
+  group('AuthRemoteDataSource - getCurrentUser', () {
+    test('returns the decoded username/email on 200', () async {
+      when(() => mockApiClient.get(any())).thenAnswer(
+        (_) async => http.Response(jsonEncode({'username': 'investor', 'email': 'investor@test.com'}), 200),
+      );
+
+      final result = await dataSource.getCurrentUser();
+
+      expect(result.username, 'investor');
+      expect(result.email, 'investor@test.com');
+      verify(() => mockApiClient.get(ApiConstants.currentUserEndpoint)).called(1);
+    });
+
+    test('throws with the backend detail on a non-200 response', () async {
+      when(() => mockApiClient.get(any())).thenAnswer(
+        (_) async => http.Response(jsonEncode({'detail': 'User not found'}), 401),
+      );
+
+      await expectLater(
+        () => dataSource.getCurrentUser(),
+        throwsA(predicate((e) => e is Exception && e.toString().contains('User not found'))),
+      );
+    });
+  });
+
   group('AuthRemoteDataSource - resetPassword', () {
     const tToken = 'reset-token-123';
     const tNewPassword = 'NewPassw0rd';

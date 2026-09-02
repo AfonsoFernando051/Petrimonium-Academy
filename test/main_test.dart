@@ -192,6 +192,8 @@ void main() {
     testWidgets('routes to WelcomeScreen (meetPet) when the pet has no name yet', (tester) async {
       final authRepository = MockAuthRepository();
       when(() => authRepository.isLoggedIn()).thenAnswer((_) async => true);
+      when(() => authRepository.getSavedUserName()).thenAnswer((_) async => null);
+      when(() => authRepository.refreshUserName()).thenAnswer((_) async => null);
       DI.authRepository = authRepository;
 
       final petRepository = MockPetRepository();
@@ -214,6 +216,8 @@ void main() {
     testWidgets('routes to FinancialGoalScreen when the pet is configured but no goal is set', (tester) async {
       final authRepository = MockAuthRepository();
       when(() => authRepository.isLoggedIn()).thenAnswer((_) async => true);
+      when(() => authRepository.getSavedUserName()).thenAnswer((_) async => null);
+      when(() => authRepository.refreshUserName()).thenAnswer((_) async => null);
       DI.authRepository = authRepository;
 
       final petRepository = MockPetRepository();
@@ -235,6 +239,8 @@ void main() {
     testWidgets('routes to JourneyReadyScreen (tutorial) once a goal is set but the tutorial is unfinished', (tester) async {
       final authRepository = MockAuthRepository();
       when(() => authRepository.isLoggedIn()).thenAnswer((_) async => true);
+      when(() => authRepository.getSavedUserName()).thenAnswer((_) async => null);
+      when(() => authRepository.refreshUserName()).thenAnswer((_) async => null);
       DI.authRepository = authRepository;
 
       final petRepository = MockPetRepository();
@@ -257,6 +263,8 @@ void main() {
     testWidgets('routes to PortfolioChoiceScreen once tutorial is done but the portfolio step is unresolved', (tester) async {
       final authRepository = MockAuthRepository();
       when(() => authRepository.isLoggedIn()).thenAnswer((_) async => true);
+      when(() => authRepository.getSavedUserName()).thenAnswer((_) async => null);
+      when(() => authRepository.refreshUserName()).thenAnswer((_) async => null);
       DI.authRepository = authRepository;
 
       final petRepository = MockPetRepository();
@@ -280,6 +288,8 @@ void main() {
     testWidgets('routes to DashboardScreen once every onboarding step is resolved', (tester) async {
       final authRepository = MockAuthRepository();
       when(() => authRepository.isLoggedIn()).thenAnswer((_) async => true);
+      when(() => authRepository.getSavedUserName()).thenAnswer((_) async => null);
+      when(() => authRepository.refreshUserName()).thenAnswer((_) async => null);
       DI.authRepository = authRepository;
 
       final petRepository = MockPetRepository();

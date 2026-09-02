@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
+import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
 import 'package:petrimonium/core/widgets/app_loading_indicator.dart';
 import 'package:petrimonium/features/academy/domain/entities/academy_module.dart';
@@ -13,9 +15,12 @@ import 'package:petrimonium/features/academy/presentation/screens/module_detail_
 import 'package:petrimonium/features/academy/presentation/widgets/recommended_for_you_section.dart';
 import 'package:petrimonium/features/home/domain/entities/next_action.dart';
 import 'package:petrimonium/features/home/domain/services/next_action_resolver.dart';
+import 'package:petrimonium/features/home/presentation/widgets/home_greeting_row.dart';
+import 'package:petrimonium/features/home/presentation/widgets/home_mentor_card.dart';
 import 'package:petrimonium/features/home/presentation/widgets/knowledge_map_strip.dart';
 import 'package:petrimonium/features/home/presentation/widgets/next_action_card.dart';
 import 'package:petrimonium/features/home/presentation/widgets/learning_hero_card.dart';
+import 'package:petrimonium/features/pet/data/models/pet_goal_enum.dart';
 import 'package:petrimonium/features/pet/presentation/companion/pet_companion_controller.dart';
 import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart';
 import 'package:petrimonium/features/pet/presentation/companion/widgets/pet_speech_bubble_anchor.dart';
@@ -73,6 +78,17 @@ class _HomeScreenState extends State<HomeScreen> {
   late final AcademyController _academyController;
   bool _companionNotified = false;
 
+  /// The user's own onboarding goal, resolved to display text — loaded once
+  /// (it's local-only, see `PetPreferencesRepository`'s doc comment) rather
+  /// than re-read every rebuild.
+  PetGoalEnum? _goal;
+
+  /// The account's registered display name. Set first from the local cache
+  /// (instant, may be stale/absent), then refreshed from `GET
+  /// /api/users/me` (real backend value) — see `AuthRepository`'s doc
+  /// comments on why login alone can't supply this.
+  String? _userName;
+
   @override
   void initState() {
     super.initState();
@@ -83,6 +99,15 @@ class _HomeScreenState extends State<HomeScreen> {
     );
     _academyController.addListener(_onAcademyChanged);
     _academyController.load();
+    DI.petPreferencesRepository.loadGoal().then((goal) {
+      if (mounted) setState(() => _goal = goal);
+    });
+    DI.authRepository.getSavedUserName().then((name) {
+      if (mounted && name != null) setState(() => _userName = name);
+    });
+    DI.authRepository.refreshUserName().then((name) {
+      if (mounted && name != null) setState(() => _userName = name);
+    });
   }
 
   void _onAcademyChanged() {
@@ -136,13 +161,53 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Read both by [build] (to render `NextActionCard`) and by
   /// [_notifyCompanionOnce] (so the pet's nudge agrees with it) — computed
   /// once per rebuild rather than twice, so the two can never disagree.
-  NextAction get _nextAction => NextActionResolver.resolve(
-        nextLesson: _academyController.nextLesson,
-        moduleTitle: _academyController.nextLesson == null
-            ? null
-            : _academyController.snapshot?.moduleById(_academyController.nextLesson!.moduleId)?.title,
-        missions: widget.portfolioController.missions,
+  NextAction get _nextAction {
+    final nextLesson = _academyController.nextLesson;
+    final module = nextLesson == null ? null : _academyController.snapshot?.moduleById(nextLesson.moduleId);
+    return NextActionResolver.resolve(
+      nextLesson: nextLesson,
+      moduleTitle: module?.title,
+      missions: widget.portfolioController.missions,
+      moduleLessonCount: module?.lessonIds.length,
+      moduleCompletedCount: module == null ? null : _academyController.completedLessonCountFor(module),
+      goalLabel: _goal?.label,
+    );
+  }
+
+  /// Real signals, checked in the same priority order as
+  /// `AcademyPetBehavior._homeNudge` (returning-user greeting outranks
+  /// review-due, which outranks the default continue-lesson nudge) — kept
+  /// independent of `PetCompanionController`'s transient, auto-hiding
+  /// speech bubble, since this card is meant to stay visible in the feed
+  /// rather than disappear after a few seconds. `null` when no real signal
+  /// applies, in which case the card is simply omitted.
+  ({String textKey, Map<String, String> params, HomeMentorReason reason})? get _mentorInsight {
+    final daysAway = widget.mascotController.daysSinceLastSession;
+    if (daysAway != null && daysAway >= kSleepAfterInactiveDays) {
+      final pool = [AppStrings.companionHomeReturnGreeting1, AppStrings.companionHomeReturnGreeting2];
+      return (textKey: pool[daysAway % pool.length], params: const {}, reason: HomeMentorReason.returning);
+    }
+
+    final reviewCount = _reviewRecommendations.length;
+    if (reviewCount > 0) {
+      return (
+        textKey: AppStrings.companionAcademyReviewDue,
+        params: {'count': '$reviewCount'},
+        reason: HomeMentorReason.reviewDue,
       );
+    }
+
+    final nextLesson = _academyController.nextLesson;
+    if (nextLesson != null) {
+      return (
+        textKey: AppStrings.companionAcademyContinueLesson,
+        params: {'lessonTitle': nextLesson.title},
+        reason: HomeMentorReason.continueLesson,
+      );
+    }
+
+    return null;
+  }
 
   @override
   void dispose() {
@@ -236,6 +301,22 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            HomeGreetingRow(
+              userName: _userName,
+              streakDays: portfolioController.gamificationSummary?.currentStreak,
+            ),
+            const SizedBox(height: 16),
+
+            if (_mentorInsight != null) ...[
+              HomeMentorCard(
+                mascotController: widget.mascotController,
+                petName: widget.mascotController.profile.name ?? widget.mascotController.profile.specie.name,
+                message: Translator.translate(_mentorInsight!.textKey, params: _mentorInsight!.params),
+                reason: _mentorInsight!.reason,
+              ),
+              const SizedBox(height: 16),
+            ],
+
             // Only when the catalog truly never loaded (no cache either) —
             // otherwise a `nextLesson == null` reads as "every lesson
             // complete" below, which would be misleading during a transient

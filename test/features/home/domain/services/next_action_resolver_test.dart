@@ -36,6 +36,23 @@ void main() {
       expect(action.moduleTitle, testModule.title);
     });
 
+    test('threads module lesson count/completed count/goal label through to ContinueLessonAction', () {
+      final action = NextActionResolver.resolve(
+        nextLesson: testLesson1,
+        moduleTitle: testModule.title,
+        missions: const [],
+        moduleLessonCount: 4,
+        moduleCompletedCount: 1,
+        goalLabel: 'Reserva de emergência',
+      );
+
+      expect(action, isA<ContinueLessonAction>());
+      final continueAction = action as ContinueLessonAction;
+      expect(continueAction.moduleLessonCount, 4);
+      expect(continueAction.moduleCompletedCount, 1);
+      expect(continueAction.goalLabel, 'Reserva de emergência');
+    });
+
     test('falls back to AllLessonsCompleteAction when there is no next lesson and no urgent mission', () {
       final action = NextActionResolver.resolve(nextLesson: null, moduleTitle: null, missions: const []);
 

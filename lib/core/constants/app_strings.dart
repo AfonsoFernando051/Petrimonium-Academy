@@ -567,6 +567,13 @@ class AppStrings {
   static const String homeMissionAlmostDoneEyebrow =
       "homeMissionAlmostDoneEyebrow";
   static const String homeMissionAlmostDoneBody = "homeMissionAlmostDoneBody";
+  static const String homeGreetingWithName = "homeGreetingWithName";
+  static const String homeStreakDaysLabel = "homeStreakDaysLabel";
+  static const String homeContinueGoalSubtitle = "homeContinueGoalSubtitle";
+  static const String homeMentorWhySeeing = "homeMentorWhySeeing";
+  static const String homeMentorReasonContinue = "homeMentorReasonContinue";
+  static const String homeMentorReasonReview = "homeMentorReasonReview";
+  static const String homeMentorReasonReturn = "homeMentorReasonReturn";
 
   // Level tiers — motivational milestone names, never a competence
   // certification (docs/PRODUCT_VISION.md §9; docs/FEATURES.md "Levels").

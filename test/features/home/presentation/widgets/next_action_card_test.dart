@@ -81,6 +81,30 @@ void main() {
 
       expect(tapped, isTrue);
     });
+
+    testWidgets('renders the lesson count, goal subtitle and a progress bar when known', (tester) async {
+      await tester.pumpWidget(
+        buildTestableWidget(
+          action: const ContinueLessonAction(
+            lesson: _lesson,
+            moduleTitle: 'Fundamentos',
+            moduleLessonCount: 4,
+            moduleCompletedCount: 1,
+            goalLabel: 'Reserva de emergência',
+          ),
+        ),
+      );
+
+      expect(find.text('4 aulas'), findsOneWidget);
+      expect(find.text('Baseado no seu objetivo: Reserva de emergência'), findsOneWidget);
+    });
+
+    testWidgets('omits lesson count and goal subtitle when unknown', (tester) async {
+      await tester.pumpWidget(buildTestableWidget(action: action));
+
+      expect(find.textContaining('aulas'), findsNothing);
+      expect(find.textContaining('Baseado no seu objetivo'), findsNothing);
+    });
   });
 
   group('NextActionCard — CompleteMissionAction', () {

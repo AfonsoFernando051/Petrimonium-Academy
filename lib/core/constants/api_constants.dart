@@ -49,6 +49,7 @@ class ApiConstants {
   static const String resetPasswordEndpoint = '/auth/reset-password';
   static const String refreshTokenEndpoint = '/auth/refresh';
   static const String logoutEndpoint = '/auth/logout';
+  static const String currentUserEndpoint = '/api/users/me';
 
   static const String onboardingQuestionsEndpoint = '/api/onboarding/questions';
   static const String onboardingSubmitEndpoint = '/api/onboarding/submit';

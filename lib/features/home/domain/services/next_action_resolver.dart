@@ -20,12 +20,21 @@ class NextActionResolver {
     required Lesson? nextLesson,
     required String? moduleTitle,
     required List<MissionStatus> missions,
+    int? moduleLessonCount,
+    int? moduleCompletedCount,
+    String? goalLabel,
   }) {
     final urgentMission = _oneAwayFromCompletion(missions);
     if (urgentMission != null) return CompleteMissionAction(urgentMission);
 
     if (nextLesson != null) {
-      return ContinueLessonAction(lesson: nextLesson, moduleTitle: moduleTitle);
+      return ContinueLessonAction(
+        lesson: nextLesson,
+        moduleTitle: moduleTitle,
+        moduleLessonCount: moduleLessonCount,
+        moduleCompletedCount: moduleCompletedCount,
+        goalLabel: goalLabel,
+      );
     }
 
     return const AllLessonsCompleteAction();

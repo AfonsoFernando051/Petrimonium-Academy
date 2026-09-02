@@ -7,6 +7,7 @@ import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/features/academy/data/datasources/academy_remote_datasource.dart';
 import 'package:petrimonium/features/academy/data/repositories/academy_catalog_repository.dart';
 import 'package:petrimonium/features/academy/data/repositories/academy_progress_local_repository.dart';
+import 'package:petrimonium/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:petrimonium/features/game/data/datasources/gamification_remote_datasource.dart';
 import 'package:petrimonium/features/game/data/repositories/gamification_repository.dart';
@@ -152,6 +153,8 @@ class MockOnboardingRepository extends Mock implements OnboardingRepository {}
 
 class MockPetRepository extends Mock implements PetRepository {}
 
+class MockAuthRepository extends Mock implements AuthRepository {}
+
 void main() {
   setUp(() {
     Translator.currentLanguage = 'pt';
@@ -185,6 +188,11 @@ void main() {
     final mockPetRepository = MockPetRepository();
     when(() => mockPetRepository.getMyPet()).thenAnswer((_) async => null);
     DI.petRepository = mockPetRepository;
+
+    final mockAuthRepository = MockAuthRepository();
+    when(() => mockAuthRepository.getSavedUserName()).thenAnswer((_) async => null);
+    when(() => mockAuthRepository.refreshUserName()).thenAnswer((_) async => null);
+    DI.authRepository = mockAuthRepository;
   });
 
   Widget buildTestable() {

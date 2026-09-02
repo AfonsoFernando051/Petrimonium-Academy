@@ -58,5 +58,27 @@ void main() {
 
       expect(result.refreshToken, isNull);
     });
+
+    test('fromJson parses username when present (register/users-me responses)', () {
+      final Map<String, dynamic> jsonMap = {
+        'email': 'test@test.com',
+        'username': 'investor',
+      };
+
+      final result = UserModel.fromJson(jsonMap);
+
+      expect(result.username, 'investor');
+    });
+
+    test('fromJson handles missing username safely (login response)', () {
+      final Map<String, dynamic> jsonMap = {
+        'accessToken': 'mock_token',
+        'refreshToken': 'mock_refresh_token',
+      };
+
+      final result = UserModel.fromJson(jsonMap);
+
+      expect(result.username, isNull);
+    });
   });
 }

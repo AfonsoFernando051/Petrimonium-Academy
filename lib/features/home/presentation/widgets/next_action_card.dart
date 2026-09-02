@@ -5,6 +5,7 @@ import 'package:petrimonium/core/theme/app_color_tokens.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/core/widgets/game_button.dart';
 import 'package:petrimonium/core/widgets/glass_card.dart';
+import 'package:petrimonium/core/widgets/xp_bar.dart';
 import 'package:petrimonium/features/academy/domain/entities/lesson.dart';
 import 'package:petrimonium/features/home/domain/entities/next_action.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/mission_status.dart';
@@ -31,8 +32,21 @@ class NextActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (action) {
-      ContinueLessonAction(:final lesson, :final moduleTitle) =>
-        _ContinueLessonContent(lesson: lesson, moduleTitle: moduleTitle, onStartLesson: onStartLesson),
+      ContinueLessonAction(
+        :final lesson,
+        :final moduleTitle,
+        :final moduleLessonCount,
+        :final moduleCompletedCount,
+        :final goalLabel,
+      ) =>
+        _ContinueLessonContent(
+          lesson: lesson,
+          moduleTitle: moduleTitle,
+          moduleLessonCount: moduleLessonCount,
+          moduleCompletedCount: moduleCompletedCount,
+          goalLabel: goalLabel,
+          onStartLesson: onStartLesson,
+        ),
       CompleteMissionAction(:final mission) =>
         _CompleteMissionContent(mission: mission, onStartLesson: onStartLesson, onOpenAcademy: onOpenAcademy),
       AllLessonsCompleteAction() => _AllLessonsCompleteContent(onOpenAcademy: onOpenAcademy),
@@ -86,10 +100,20 @@ class _Eyebrow extends StatelessWidget {
 }
 
 class _ContinueLessonContent extends StatelessWidget {
-  const _ContinueLessonContent({required this.lesson, required this.moduleTitle, required this.onStartLesson});
+  const _ContinueLessonContent({
+    required this.lesson,
+    required this.moduleTitle,
+    required this.moduleLessonCount,
+    required this.moduleCompletedCount,
+    required this.goalLabel,
+    required this.onStartLesson,
+  });
 
   final Lesson lesson;
   final String? moduleTitle;
+  final int? moduleLessonCount;
+  final int? moduleCompletedCount;
+  final String? goalLabel;
   final VoidCallback onStartLesson;
 
   @override
@@ -99,7 +123,19 @@ class _ContinueLessonContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _Eyebrow(icon: Icons.flag_circle, label: Translator.translate(AppStrings.homeContinueLearningEyebrow)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _Eyebrow(icon: Icons.flag_circle, label: Translator.translate(AppStrings.homeContinueLearningEyebrow)),
+              if (moduleLessonCount != null)
+                Text(
+                  '$moduleLessonCount ${Translator.translate(
+                    moduleLessonCount == 1 ? AppStrings.academyIntroLessonSingular : AppStrings.academyIntroLessonPlural,
+                  )}',
+                  style: TextStyle(color: tokens.textTertiary, fontSize: 11),
+                ),
+            ],
+          ),
           const SizedBox(height: 10),
           if (moduleTitle != null) ...[
             Text(
@@ -117,6 +153,17 @@ class _ContinueLessonContent extends StatelessWidget {
             Translator.translate(AppStrings.academyXpToCompleteLabel, params: {'xp': '${lesson.xpReward}'}),
             style: TextStyle(color: tokens.textSecondary, fontSize: 12),
           ),
+          if (goalLabel != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              Translator.translate(AppStrings.homeContinueGoalSubtitle, params: {'goal': goalLabel!}),
+              style: TextStyle(color: tokens.textTertiary, fontSize: 12),
+            ),
+          ],
+          if (moduleLessonCount != null && moduleLessonCount! > 0 && moduleCompletedCount != null) ...[
+            const SizedBox(height: 12),
+            XpBar(progress: moduleCompletedCount! / moduleLessonCount!, color: AppColors.neonCyan, height: 6),
+          ],
           const SizedBox(height: 16),
           GameButton(
             label: Translator.translate(AppStrings.homeContinueLearningCta),

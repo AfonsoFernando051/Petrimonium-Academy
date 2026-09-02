@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/module_chip.dart';
 import 'package:petrimonium/features/academy/domain/entities/academy_module.dart';
 import 'package:petrimonium/features/academy/domain/services/academy_progress_calculator.dart';
 import 'package:petrimonium/features/home/presentation/widgets/knowledge_map_strip.dart';
@@ -14,6 +13,7 @@ const _module1 = AcademyModule(
   description: 'desc',
   icon: Icons.savings,
   order: 2,
+  lessonIds: ['l1', 'l2'],
   contentAvailable: true,
 );
 
@@ -24,6 +24,7 @@ const _module2 = AcademyModule(
   description: 'desc',
   icon: Icons.school,
   order: 1,
+  lessonIds: ['l3', 'l4'],
   contentAvailable: true,
 );
 
@@ -54,26 +55,27 @@ void main() {
   }
 
   group('KnowledgeMapStrip', () {
-    testWidgets('renders the section label, view-all CTA and one chip per module', (tester) async {
+    testWidgets('renders the section label, view-all CTA and one row per module', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
 
-      expect(find.text('SUA TRILHA DE CONHECIMENTO'), findsOneWidget);
-      expect(find.text('Ver trilha completa'), findsOneWidget);
-      expect(find.byType(ModuleChip), findsNWidgets(2));
+      expect(find.text('SUA TRILHA'), findsOneWidget);
+      expect(find.text('Ver todas as escolas'), findsOneWidget);
+      expect(find.text('Renda Fixa'), findsOneWidget);
+      expect(find.text('Fundamentos'), findsOneWidget);
     });
 
     testWidgets('renders modules sorted by order, not input order', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
 
-      final chipTitles = tester
-          .widgetList<ModuleChip>(find.byType(ModuleChip))
-          .map((c) => c.module.title)
-          .toList();
-
-      expect(chipTitles, ['Fundamentos', 'Renda Fixa']);
+      // _module2 ("Fundamentos") has order 1, _module1 ("Renda Fixa") has
+      // order 2, but the widget is given them in the opposite order — the
+      // rendered vertical position must reflect sorted order regardless.
+      final fundamentosY = tester.getTopLeft(find.text('Fundamentos')).dy;
+      final rendaFixaY = tester.getTopLeft(find.text('Renda Fixa')).dy;
+      expect(fundamentosY, lessThan(rendaFixaY));
     });
 
-    testWidgets('tapping a chip invokes onTapModule with that module', (tester) async {
+    testWidgets('tapping a row invokes onTapModule with that module', (tester) async {
       AcademyModule? tapped;
       await tester.pumpWidget(buildTestableWidget(onTapModule: (m) => tapped = m));
 
@@ -83,21 +85,22 @@ void main() {
       expect(tapped?.id, 'm2');
     });
 
-    testWidgets('tapping "Ver trilha completa" invokes onViewAll', (tester) async {
+    testWidgets('tapping "Ver todas as escolas" invokes onViewAll', (tester) async {
       var tapped = false;
       await tester.pumpWidget(buildTestableWidget(onViewAll: () => tapped = true));
 
-      await tester.tap(find.text('Ver trilha completa'));
+      await tester.tap(find.text('Ver todas as escolas'));
       await tester.pump();
 
       expect(tapped, isTrue);
     });
 
-    testWidgets('renders nothing in the chip row when modules is empty', (tester) async {
+    testWidgets('renders nothing in the list when modules is empty', (tester) async {
       await tester.pumpWidget(buildTestableWidget(modules: const []));
 
-      expect(find.byType(ModuleChip), findsNothing);
-      expect(find.text('SUA TRILHA DE CONHECIMENTO'), findsOneWidget);
+      expect(find.text('Fundamentos'), findsNothing);
+      expect(find.text('Renda Fixa'), findsNothing);
+      expect(find.text('SUA TRILHA'), findsOneWidget);
     });
   });
 }

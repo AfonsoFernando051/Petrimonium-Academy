@@ -74,6 +74,47 @@ void main() {
       verifyNever(() => mockApiClient.saveTokens(accessToken: any(named: 'accessToken'), refreshToken: any(named: 'refreshToken')));
     });
 
+    test('register caches the username the backend echoed back', () async {
+      when(() => mockRemoteDataSource.register(any(), any(), any()))
+          .thenAnswer((_) async => UserModel(email: tEmail, token: tToken, refreshToken: tRefreshToken, username: tName));
+
+      await repository.register(tName, tEmail, tPassword);
+
+      expect(await repository.getSavedUserName(), tName);
+    });
+
+    test('getSavedUserName returns null when nothing is cached yet', () async {
+      expect(await repository.getSavedUserName(), isNull);
+    });
+
+    test('refreshUserName fetches and caches the real name from GET /api/users/me', () async {
+      when(() => mockRemoteDataSource.getCurrentUser())
+          .thenAnswer((_) async => UserModel(email: tEmail, username: tName));
+
+      final result = await repository.refreshUserName();
+
+      expect(result, tName);
+      expect(await repository.getSavedUserName(), tName);
+    });
+
+    test('refreshUserName swallows failures and returns null (best-effort)', () async {
+      when(() => mockRemoteDataSource.getCurrentUser()).thenThrow(Exception('offline'));
+
+      final result = await repository.refreshUserName();
+
+      expect(result, isNull);
+    });
+
+    test('logout also clears the cached username', () async {
+      SharedPreferences.setMockInitialValues({'auth_email': tEmail, 'auth_username': tName});
+      when(() => mockApiClient.readRefreshToken()).thenAnswer((_) async => tRefreshToken);
+
+      await repository.logout();
+
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getString('auth_username'), isNull);
+    });
+
     test('should call requestPasswordReset on remote data source', () async {
       when(() => mockRemoteDataSource.requestPasswordReset(any())).thenAnswer((_) async {});
 

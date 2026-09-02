@@ -88,6 +88,22 @@ class AuthRemoteDataSource {
     }
   }
 
+  /// Resolves the authenticated user's own display name/email — the only
+  /// way to get a name for a returning user, since `/auth/login`'s response
+  /// carries just the token pair. See `AuthRepository.refreshUserName`.
+  Future<UserModel> getCurrentUser() async {
+    final response = await apiClient.get(ApiConstants.currentUserEndpoint);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return UserModel.fromJson(data);
+    } else {
+      throw Exception(
+        extractErrorDetail(response, fallback: 'Failed to load current user. Status Code: ${response.statusCode}'),
+      );
+    }
+  }
+
   /// Revokes [refreshToken] server-side (see backend `LogoutUseCase` — always
   /// 200, even for an already-invalid/unknown token) so a copy of it can't
   /// keep minting new access tokens after the user believes they've logged
