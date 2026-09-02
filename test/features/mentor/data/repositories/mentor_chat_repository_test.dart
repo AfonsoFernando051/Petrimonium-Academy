@@ -116,7 +116,7 @@ void main() {
       () async {
         await petPreferencesRepository.saveGoal(PetGoalEnum.getOutOfDebt);
         await petPreferencesRepository.saveHorizon(
-          InvestmentHorizonEnum.longTerm,
+          InvestmentHorizonEnum.moreThanFiveYears,
         );
         when(
           () => mockDataSource.sendMessage(
@@ -144,7 +144,7 @@ void main() {
         expect(captured['petGoal'], PetGoalEnum.getOutOfDebt.label);
         expect(
           captured['investmentHorizon'],
-          InvestmentHorizonEnum.longTerm.label,
+          InvestmentHorizonEnum.moreThanFiveYears.label,
         );
         expect(captured['currentScreen'], 'mentor');
         expect(captured['language'], 'pt');

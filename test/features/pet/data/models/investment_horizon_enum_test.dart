@@ -3,18 +3,17 @@ import 'package:petrimonium/features/pet/data/models/investment_horizon_enum.dar
 
 void main() {
   group('InvestmentHorizonEnumDisplay', () {
-    test('every value has a non-empty label, description and icon', () {
+    test('every value has a non-empty label', () {
       for (final horizon in InvestmentHorizonEnum.values) {
         expect(horizon.label, isNotEmpty);
-        expect(horizon.description, isNotEmpty);
-        expect(horizon.icon, isNotNull);
       }
     });
 
     test('label distinguishes each horizon', () {
-      expect(InvestmentHorizonEnum.shortTerm.label, 'Curto Prazo');
-      expect(InvestmentHorizonEnum.mediumTerm.label, 'Médio Prazo');
-      expect(InvestmentHorizonEnum.longTerm.label, 'Longo Prazo');
+      expect(InvestmentHorizonEnum.upToOneYear.label, 'Até 1 ano');
+      expect(InvestmentHorizonEnum.oneToFiveYears.label, '1 a 5 anos');
+      expect(InvestmentHorizonEnum.moreThanFiveYears.label, 'Mais de 5 anos');
+      expect(InvestmentHorizonEnum.notSureYet.label, 'Ainda não sei');
     });
   });
 
@@ -25,9 +24,9 @@ void main() {
       }
     });
 
-    test('falls back to mediumTerm for an unknown or null name', () {
-      expect(InvestmentHorizonEnumDisplay.fromName('bogus'), InvestmentHorizonEnum.mediumTerm);
-      expect(InvestmentHorizonEnumDisplay.fromName(null), InvestmentHorizonEnum.mediumTerm);
+    test('falls back to oneToFiveYears for an unknown or null name', () {
+      expect(InvestmentHorizonEnumDisplay.fromName('bogus'), InvestmentHorizonEnum.oneToFiveYears);
+      expect(InvestmentHorizonEnumDisplay.fromName(null), InvestmentHorizonEnum.oneToFiveYears);
     });
   });
 }

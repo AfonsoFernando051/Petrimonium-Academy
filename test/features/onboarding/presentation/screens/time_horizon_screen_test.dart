@@ -60,33 +60,30 @@ void main() {
   }
 
   group('TimeHorizonScreen', () {
-    testWidgets('renders the title, subtitle and a card for every horizon', (tester) async {
+    testWidgets('renders the title, subtitle and a row for every horizon', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       // Hosts CosmicBackground + a pulsing GameButton — never pumpAndSettle.
       await tester.pump();
 
-      expect(find.text('Quando você quer alcançar isso?'), findsOneWidget);
-      expect(
-        find.text('Isso ajusta o ritmo da sua jornada — você pode mudar depois.'),
-        findsOneWidget,
-      );
+      expect(find.text('Para quando é esse objetivo?'), findsOneWidget);
+      expect(find.text('Sem certeza? Tudo bem, é só um ponto de partida.'), findsOneWidget);
       for (final horizon in InvestmentHorizonEnum.values) {
         expect(find.text(horizon.label), findsOneWidget, reason: horizon.name);
       }
     });
 
-    testWidgets('defaults to mediumTerm selected', (tester) async {
+    testWidgets('defaults to oneToFiveYears selected', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
       expect(find.byIcon(Icons.check_circle), findsOneWidget);
     });
 
-    testWidgets('tapping a horizon card selects it', (tester) async {
+    testWidgets('tapping a horizon row selects it', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      await tester.tap(find.text(InvestmentHorizonEnum.longTerm.label));
+      await tester.tap(find.text(InvestmentHorizonEnum.moreThanFiveYears.label));
       await tester.pump(const Duration(milliseconds: 200));
 
       expect(find.byIcon(Icons.check_circle), findsOneWidget);
@@ -96,7 +93,7 @@ void main() {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      await tester.tap(find.text(InvestmentHorizonEnum.shortTerm.label));
+      await tester.tap(find.text(InvestmentHorizonEnum.upToOneYear.label));
       await tester.pump(const Duration(milliseconds: 200));
 
       await tester.tap(find.text('Próximo'));
@@ -104,7 +101,7 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 350));
 
-      expect(await DI.petPreferencesRepository.loadHorizon(), InvestmentHorizonEnum.shortTerm);
+      expect(await DI.petPreferencesRepository.loadHorizon(), InvestmentHorizonEnum.upToOneYear);
       expect(await DI.onboardingStateRepository.hasSetGoal(), isTrue);
       expect(find.byType(JourneyReadyScreen), findsOneWidget);
     });

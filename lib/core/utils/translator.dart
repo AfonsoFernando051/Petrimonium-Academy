@@ -124,9 +124,8 @@ class Translator {
       AppStrings.missionCompleteLabel: "Missão Concluída",
       AppStrings.missionCompoundInterestTitle: "Aprenda sobre juros compostos",
 
-      AppStrings.timeHorizonTitle: "Quando você quer alcançar isso?",
-      AppStrings.timeHorizonSubtitle:
-          "Isso ajusta o ritmo da sua jornada — você pode mudar depois.",
+      AppStrings.timeHorizonTitle: "Para quando é esse objetivo?",
+      AppStrings.timeHorizonSubtitle: "Sem certeza? Tudo bem, é só um ponto de partida.",
 
       AppStrings.journeyReadyTitle: "Sua jornada está pronta.",
       AppStrings.journeyReadySubtitle: "Agora é hora de começar a evoluir.",
@@ -750,9 +749,8 @@ class Translator {
       AppStrings.missionCompleteLabel: "Mission Complete",
       AppStrings.missionCompoundInterestTitle: "Learn about compound interest",
 
-      AppStrings.timeHorizonTitle: "When do you want to achieve it?",
-      AppStrings.timeHorizonSubtitle:
-          "This paces your journey — you can change it later.",
+      AppStrings.timeHorizonTitle: "When is this goal for?",
+      AppStrings.timeHorizonSubtitle: "Not sure? That's fine, it's just a starting point.",
 
       AppStrings.journeyReadyTitle: "Your journey is ready.",
       AppStrings.journeyReadySubtitle: "Now it's time to start evolving.",
@@ -1374,9 +1372,8 @@ class Translator {
       AppStrings.missionCompoundInterestTitle:
           "Aprende sobre el interés compuesto",
 
-      AppStrings.timeHorizonTitle: "¿Cuándo quieres lograrlo?",
-      AppStrings.timeHorizonSubtitle:
-          "Esto marca el ritmo de tu viaje — puedes cambiarlo después.",
+      AppStrings.timeHorizonTitle: "¿Para cuándo es ese objetivo?",
+      AppStrings.timeHorizonSubtitle: "¿No estás seguro? Está bien, es solo un punto de partida.",
 
       AppStrings.journeyReadyTitle: "Tu viaje está listo.",
       AppStrings.journeyReadySubtitle:

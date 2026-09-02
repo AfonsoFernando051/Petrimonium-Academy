@@ -29,18 +29,18 @@ void main() {
   });
 
   group('horizon', () {
-    test('defaults to mediumTerm when nothing is saved', () async {
-      expect(await repository.loadHorizon(), InvestmentHorizonEnum.mediumTerm);
+    test('defaults to oneToFiveYears when nothing is saved', () async {
+      expect(await repository.loadHorizon(), InvestmentHorizonEnum.oneToFiveYears);
     });
 
     test('round-trips a saved horizon', () async {
-      await repository.saveHorizon(InvestmentHorizonEnum.longTerm);
-      expect(await repository.loadHorizon(), InvestmentHorizonEnum.longTerm);
+      await repository.saveHorizon(InvestmentHorizonEnum.moreThanFiveYears);
+      expect(await repository.loadHorizon(), InvestmentHorizonEnum.moreThanFiveYears);
     });
 
-    test('falls back to mediumTerm for an unrecognized stored value', () async {
+    test('falls back to oneToFiveYears for an unrecognized stored value', () async {
       SharedPreferences.setMockInitialValues({'pet_investment_horizon': 'not_a_real_horizon'});
-      expect(await repository.loadHorizon(), InvestmentHorizonEnum.mediumTerm);
+      expect(await repository.loadHorizon(), InvestmentHorizonEnum.oneToFiveYears);
     });
   });
 }

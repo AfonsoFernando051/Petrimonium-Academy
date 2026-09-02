@@ -50,8 +50,8 @@ class _FinancialGoalScreenState extends State<FinancialGoalScreen> {
   @override
   Widget build(BuildContext context) {
     return OnboardingScaffold(
-      step: 5,
-      totalSteps: 7,
+      step: 1,
+      totalSteps: 9,
       title: Translator.translate(AppStrings.financialGoalTitle),
       subtitle: Translator.translate(AppStrings.financialGoalSubtitle),
       ctaLabel: Translator.translate(AppStrings.financialGoalContinue),
