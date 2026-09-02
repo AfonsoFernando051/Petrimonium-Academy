@@ -109,11 +109,15 @@ class Translator {
           "Transforme conhecimento financeiro em progresso de verdade.",
       AppStrings.welcomeCta: "Começar",
 
-      AppStrings.academyIntroTitle: "Aprenda no seu ritmo.",
-      AppStrings.academyIntroSubtitle: "Conhecimento antes de investir.",
+      AppStrings.academyIntroTitle: "Sua trilha começa aqui",
+      AppStrings.academyIntroSubtitle: "O resto libera conforme você avança — sem pular etapas.",
       AppStrings.academyIntroBody:
           "Lições curtas, desafios e quizzes para você realmente entender de investimentos.",
       AppStrings.academyIntroXpBadge: "+{xp} XP por lição concluída",
+      AppStrings.academyIntroStartsNow: "começa agora",
+      AppStrings.academyIntroMentorIntro: "Vamos começar por {module}. {count} — dá pra começar agora.",
+      AppStrings.academyIntroLessonSingular: "aula",
+      AppStrings.academyIntroLessonPlural: "aulas",
 
       AppStrings.gamificationIntroTitle: "Aprenda. Jogue. Evolua.",
       AppStrings.gamificationIntroSubtitle:
@@ -737,11 +741,15 @@ class Translator {
       AppStrings.welcomeBody: "Turn financial knowledge into real progress.",
       AppStrings.welcomeCta: "Start",
 
-      AppStrings.academyIntroTitle: "Learn at your own pace.",
-      AppStrings.academyIntroSubtitle: "Knowledge before investing.",
+      AppStrings.academyIntroTitle: "Your track starts here",
+      AppStrings.academyIntroSubtitle: "The rest unlocks as you go — no skipping steps.",
       AppStrings.academyIntroBody:
           "Short lessons, challenges, and quizzes designed to help you actually understand investing.",
       AppStrings.academyIntroXpBadge: "+{xp} XP per completed lesson",
+      AppStrings.academyIntroStartsNow: "starts now",
+      AppStrings.academyIntroMentorIntro: "Let's start with {module}. {count} — you can do it now.",
+      AppStrings.academyIntroLessonSingular: "lesson",
+      AppStrings.academyIntroLessonPlural: "lessons",
 
       AppStrings.gamificationIntroTitle: "Learn. Play. Evolve.",
       AppStrings.gamificationIntroSubtitle: "Turn knowledge into progress.",
@@ -1360,11 +1368,15 @@ class Translator {
           "Convierte el conocimiento financiero en progreso real.",
       AppStrings.welcomeCta: "Comenzar",
 
-      AppStrings.academyIntroTitle: "Aprende a tu ritmo.",
-      AppStrings.academyIntroSubtitle: "Conocimiento antes de invertir.",
+      AppStrings.academyIntroTitle: "Tu camino comienza aquí",
+      AppStrings.academyIntroSubtitle: "El resto se desbloquea a medida que avanzas — sin saltar pasos.",
       AppStrings.academyIntroBody:
           "Lecciones cortas, desafíos y quizzes para que realmente entiendas de inversiones.",
       AppStrings.academyIntroXpBadge: "+{xp} XP por lección completada",
+      AppStrings.academyIntroStartsNow: "empieza ahora",
+      AppStrings.academyIntroMentorIntro: "Empecemos por {module}. {count} — puedes hacerlo ahora.",
+      AppStrings.academyIntroLessonSingular: "lección",
+      AppStrings.academyIntroLessonPlural: "lecciones",
 
       AppStrings.gamificationIntroTitle: "Aprende. Juega. Evoluciona.",
       AppStrings.gamificationIntroSubtitle:

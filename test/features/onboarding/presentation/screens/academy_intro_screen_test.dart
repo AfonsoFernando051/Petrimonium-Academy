@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/module_chip.dart';
 import 'package:petrimonium/features/academy/data/datasources/academy_remote_datasource.dart';
 import 'package:petrimonium/features/academy/data/models/academy_catalog_snapshot.dart';
 import 'package:petrimonium/features/academy/data/repositories/academy_catalog_repository.dart';
@@ -31,6 +30,7 @@ const _snapshot = AcademyCatalogSnapshot(
       description: 'desc',
       icon: Icons.school,
       order: 1,
+      lessonIds: ['l1', 'l2', 'l3', 'l4'],
       contentAvailable: true,
     ),
     AcademyModule(
@@ -40,6 +40,8 @@ const _snapshot = AcademyCatalogSnapshot(
       description: 'desc',
       icon: Icons.savings,
       order: 2,
+      lessonIds: ['l5', 'l6', 'l7'],
+      prerequisites: ['m1'],
       contentAvailable: true,
     ),
   ],
@@ -74,41 +76,49 @@ void main() {
   }
 
   group('AcademyIntroScreen', () {
-    testWidgets('renders the title, subtitle, body and XP badge', (tester) async {
+    testWidgets('renders the title and subtitle', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       // Hosts CosmicBackground + a pulsing GameButton (repeating
       // AnimationControllers) — never call pumpAndSettle.
       await tester.pump();
       await tester.pump();
 
-      expect(find.text('Aprenda no seu ritmo.'), findsOneWidget);
-      expect(find.text('Conhecimento antes de investir.'), findsOneWidget);
-      expect(
-        find.text('Lições curtas, desafios e quizzes para você realmente entender de investimentos.'),
-        findsOneWidget,
-      );
-      expect(find.text('+20 XP por lição concluída'), findsOneWidget);
+      expect(find.text('Sua trilha começa aqui'), findsOneWidget);
+      expect(find.text('O resto libera conforme você avança — sem pular etapas.'), findsOneWidget);
     });
 
-    testWidgets('renders a preview chip for each catalog module once loaded', (tester) async {
+    testWidgets('renders a track step for each catalog module, real lesson counts, no fabricated claims', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
       await tester.pump();
-      await tester.pump();
 
-      expect(find.byType(ModuleChip), findsNWidgets(2));
       expect(find.text('Fundamentos de Investimento'), findsOneWidget);
       expect(find.text('Renda Fixa'), findsOneWidget);
+      // m1 has no prerequisites → available → shows the "starts now" suffix.
+      expect(find.text('4 aulas · começa agora'), findsOneWidget);
+      // m2 requires m1 (not completed) → locked → plain lesson count only.
+      expect(find.text('3 aulas'), findsOneWidget);
     });
 
-    testWidgets('omits the module grid while the catalog has not loaded yet', (tester) async {
+    testWidgets('renders the Mentor intro card naming the first module', (tester) async {
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+      await tester.pump();
+
+      expect(
+        find.text('Vamos começar por Fundamentos de Investimento. 4 aulas — dá pra começar agora.'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('omits the track while the catalog has not loaded yet', (tester) async {
       final completer = Completer<AcademyCatalogSnapshot>();
       when(() => mockCatalogRepository.fetchAndCache(any())).thenAnswer((_) => completer.future);
 
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      expect(find.byType(ModuleChip), findsNothing);
+      expect(find.text('Fundamentos de Investimento'), findsNothing);
 
       // Resolve the pending future so it doesn't leak past the test.
       completer.complete(_snapshot);

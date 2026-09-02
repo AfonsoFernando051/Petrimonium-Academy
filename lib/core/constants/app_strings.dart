@@ -95,6 +95,10 @@ class AppStrings {
   static const String academyIntroSubtitle = "academyIntroSubtitle";
   static const String academyIntroBody = "academyIntroBody";
   static const String academyIntroXpBadge = "academyIntroXpBadge";
+  static const String academyIntroStartsNow = "academyIntroStartsNow";
+  static const String academyIntroMentorIntro = "academyIntroMentorIntro";
+  static const String academyIntroLessonSingular = "academyIntroLessonSingular";
+  static const String academyIntroLessonPlural = "academyIntroLessonPlural";
 
   // Gamification intro (onboarding)
   static const String gamificationIntroTitle = "gamificationIntroTitle";

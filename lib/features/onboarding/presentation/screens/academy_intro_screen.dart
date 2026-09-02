@@ -3,22 +3,24 @@ import 'package:petrimonium/core/constants/app_colors.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
+import 'package:petrimonium/core/utils/pet_assets.dart';
 import 'package:petrimonium/core/utils/translator.dart';
-import 'package:petrimonium/core/widgets/module_chip.dart';
+import 'package:petrimonium/features/academy/domain/entities/academy_module.dart';
+import 'package:petrimonium/features/academy/domain/services/academy_progress_calculator.dart';
 import 'package:petrimonium/features/academy/presentation/controllers/academy_controller.dart';
-import 'package:petrimonium/features/onboarding/presentation/onboarding_constants.dart';
 import 'package:petrimonium/features/onboarding/presentation/screens/gamification_intro_screen.dart';
 import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_scaffold.dart';
 import 'package:petrimonium/features/onboarding/presentation/screens/financial_goal_screen.dart';
 
-/// Onboarding's "there is a real investment school inside this app" beat.
-/// Modules/icons/titles are read live from the Academy catalog — the same
-/// data the real Academy screen shows — so onboarding never drifts from
-/// what the user will actually see once they get there. Owns its own
-/// `AcademyController` (same pattern as every other Academy screen) purely
-/// to fetch that catalog; if it's still loading or unreachable, the module
-/// preview grid is simply omitted rather than blocking onboarding — this
-/// screen's own progress never depends on the catalog.
+/// Onboarding's "here's your track" beat — a vertical, locked/unlocked
+/// sequence of the first real Academy modules (matching the Notion
+/// mockup's "Sua trilha começa aqui"), not a generic preview grid. Modules
+/// and their locked state are read live from the same `AcademyController`/
+/// `AcademyProgressCalculator` the real Academy screen uses, so onboarding
+/// never drifts from what the user will actually see once they get there —
+/// no fabricated lesson counts or "starts now" claims. If the catalog is
+/// still loading or unreachable, the track is simply omitted rather than
+/// blocking onboarding — this screen's own progress never depends on it.
 class AcademyIntroScreen extends StatefulWidget {
   const AcademyIntroScreen({super.key});
 
@@ -66,7 +68,6 @@ class _AcademyIntroScreenState extends State<AcademyIntroScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = context.colors;
     final previewModules = [..._controller.modules.where((m) => m.order <= 4)]
       ..sort((a, b) => a.order.compareTo(b.order));
 
@@ -81,65 +82,145 @@ class _AcademyIntroScreenState extends State<AcademyIntroScreen> {
       onCta: () => _goNext(context),
       body: Column(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            Translator.translate(AppStrings.academyIntroBody),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: tokens.textSecondary,
-              fontSize: 13,
-              height: 1.4,
+          for (var i = 0; i < previewModules.length; i++)
+            _TrackStep(
+              index: i + 1,
+              module: previewModules[i],
+              status: _controller.statusFor(previewModules[i]),
+              isLast: i == previewModules.length - 1,
             ),
-          ),
-          const SizedBox(height: 24),
-          if (previewModules.isNotEmpty)
-            GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 1.7,
-              children: [
-                for (final module in previewModules) ModuleChip(module: module),
-              ],
-            ),
-          const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            decoration: BoxDecoration(
-              color: AppColors.goldenBorder.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(999),
-              border: Border.all(
-                color: AppColors.goldenBorder.withValues(alpha: 0.4),
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.auto_awesome,
-                  color: AppColors.goldenBorder,
-                  size: 16,
+          if (previewModules.isNotEmpty) ...[
+            const SizedBox(height: 20),
+            _MentorIntroCard(module: previewModules.first),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+String _lessonCountLabel(AcademyModule module) {
+  final count = module.lessonIds.length;
+  final unit = Translator.translate(
+    count == 1 ? AppStrings.academyIntroLessonSingular : AppStrings.academyIntroLessonPlural,
+  );
+  return '$count $unit';
+}
+
+class _TrackStep extends StatelessWidget {
+  const _TrackStep({required this.index, required this.module, required this.status, required this.isLast});
+
+  final int index;
+  final AcademyModule module;
+  final ModuleStatus status;
+  final bool isLast;
+
+  bool get _isActive => status == ModuleStatus.available || status == ModuleStatus.inProgress;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.colors;
+    final subtitle = _isActive
+        ? '${_lessonCountLabel(module)} · ${Translator.translate(AppStrings.academyIntroStartsNow)}'
+        : _lessonCountLabel(module);
+
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Column(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: _isActive ? const LinearGradient(colors: AppColors.brandGradient) : null,
+                  color: _isActive ? null : tokens.textPrimary.withValues(alpha: 0.08),
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  Translator.translate(
-                    AppStrings.academyIntroXpBadge,
-                    params: {'xp': '$kStandardLessonXpReward'},
-                  ),
-                  style: const TextStyle(
-                    color: AppColors.goldenBorder,
+                child: Text(
+                  '$index',
+                  style: TextStyle(
+                    color: _isActive ? Colors.white : tokens.textTertiary,
                     fontWeight: FontWeight.bold,
                     fontSize: 13,
                   ),
                 ),
-              ],
+              ),
+              if (!isLast)
+                Expanded(
+                  child: Container(width: 1.5, color: tokens.textPrimary.withValues(alpha: 0.12)),
+                ),
+            ],
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: isLast ? 0 : 16, top: 4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    module.title,
+                    style: TextStyle(
+                      color: _isActive ? tokens.textPrimary : tokens.textTertiary,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(subtitle, style: TextStyle(color: tokens.textTertiary, fontSize: 12)),
+                ],
+              ),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _MentorIntroCard extends StatelessWidget {
+  const _MentorIntroCard({required this.module});
+
+  final AcademyModule module;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.colors;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ClipOval(
+          child: Image.asset(
+            PetAssets.imageFor(null),
+            width: 36,
+            height: 36,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) => Icon(Icons.pets, size: 20, color: tokens.mentor),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            decoration: BoxDecoration(
+              color: tokens.textPrimary.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: tokens.textPrimary.withValues(alpha: 0.1)),
+            ),
+            child: Text(
+              Translator.translate(
+                AppStrings.academyIntroMentorIntro,
+                params: {'module': module.title, 'count': _lessonCountLabel(module)},
+              ),
+              style: TextStyle(color: tokens.textSecondary, fontSize: 13, height: 1.4),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
