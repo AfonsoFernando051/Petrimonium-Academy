@@ -10,6 +10,7 @@ import 'package:petrimonium/features/academy/domain/entities/academy_recommendat
 import 'package:petrimonium/features/academy/domain/entities/lesson.dart';
 import 'package:petrimonium/features/academy/domain/services/academy_progress_calculator.dart';
 import 'package:petrimonium/features/academy/presentation/controllers/academy_controller.dart';
+import 'package:petrimonium/features/academy/presentation/screens/all_modules_screen.dart';
 import 'package:petrimonium/features/academy/presentation/screens/lesson_screen.dart';
 import 'package:petrimonium/features/academy/presentation/screens/module_detail_screen.dart';
 import 'package:petrimonium/features/academy/presentation/widgets/recommended_for_you_section.dart';
@@ -261,6 +262,14 @@ class _HomeScreenState extends State<HomeScreen> {
     _academyController.load();
   }
 
+  Future<void> _openAllModules() async {
+    HapticFeedback.selectionClick();
+    await Navigator.of(context).push(
+      _fadeRoute(AllModulesScreen(mascotController: widget.mascotController)),
+    );
+    _academyController.load();
+  }
+
   /// Only the `review` recommendation, if any — `continueLearning` is
   /// already this screen's `NextActionCard` (when nothing more urgent
   /// outranks it), so showing it again here would be redundant (brief's own
@@ -351,7 +360,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 completedLessonCountFor:
                     _academyController.completedLessonCountFor,
                 onTapModule: _tapModuleChip,
-                onViewAll: widget.onOpenAcademyTab,
+                onViewAll: _openAllModules,
               ),
               const SizedBox(height: 16),
             ],

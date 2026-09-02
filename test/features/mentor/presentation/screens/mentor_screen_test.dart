@@ -54,7 +54,7 @@ void main() {
 
         expect(find.text('Seu Mentor'), findsOneWidget);
         expect(
-          find.text('Oi! Eu sou seu mentor de investimentos.'),
+          find.text('Oi! Posso te ajudar a entender qualquer conceito da sua trilha.'),
           findsOneWidget,
         );
         expect(find.byType(SuggestedPromptChip), findsWidgets);
@@ -97,6 +97,9 @@ void main() {
         ).called(1);
         expect(find.byType(ChatBubble), findsWidgets);
         expect(find.text('Dividendos são...'), findsOneWidget);
+        // A same-day conversation gets exactly one "Hoje" date divider,
+        // shown once above the first message.
+        expect(find.text('Hoje'), findsOneWidget);
       },
     );
 

@@ -283,6 +283,8 @@ class AppStrings {
   static const String academyContentLabel = "academyContentLabel";
   static const String academyExampleLabel = "academyExampleLabel";
   static const String academyLessonOfLabel = "academyLessonOfLabel";
+  static const String mentorInterpretationLabel = "mentorInterpretationLabel";
+  static const String mentorTodayLabel = "mentorTodayLabel";
   static const String academyContinueButton = "academyContinueButton";
   static const String academyConcludeButton = "academyConcludeButton";
   static const String academyBackToAcademyButton = "academyBackToAcademyButton";
@@ -297,6 +299,7 @@ class AppStrings {
       "academyModuleStatusComingSoon";
   static const String academyLockedPrerequisiteLabel =
       "academyLockedPrerequisiteLabel";
+  static const String academyAllModulesTitle = "academyAllModulesTitle";
   static const String academyMicroExerciseLabel = "academyMicroExerciseLabel";
   static const String academyApplyLabel = "academyApplyLabel";
   static const String academyCorrectFeedbackTitle =

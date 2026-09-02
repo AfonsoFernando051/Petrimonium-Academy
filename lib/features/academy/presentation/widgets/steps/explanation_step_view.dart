@@ -4,7 +4,7 @@ import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/features/academy/domain/entities/lesson_step.dart';
-import 'package:petrimonium/features/academy/presentation/widgets/steps/lesson_layer_chip.dart';
+import 'package:petrimonium/core/widgets/layer_chip.dart';
 
 class ExplanationStepView extends StatelessWidget {
   const ExplanationStepView({super.key, required this.step, this.breadcrumb});
@@ -25,7 +25,7 @@ class ExplanationStepView extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LessonLayerChip(
+            LayerChip(
               label: Translator.translate(AppStrings.academyContentLabel),
               color: AppColors.neonCyan,
             ),

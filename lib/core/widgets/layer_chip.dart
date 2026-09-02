@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 /// A small filled pill labeling which "layer" of the data/calculation/Mentor
-/// guardrail a lesson step's content belongs to — content, worked example,
-/// or practice — always via an explicit text label, never color alone (per
-/// the design system's accessibility rule).
-class LessonLayerChip extends StatelessWidget {
-  const LessonLayerChip({super.key, required this.label, required this.color});
+/// guardrail a piece of content belongs to — content, worked example,
+/// practice, or Mentor/AI interpretation — always via an explicit text
+/// label, never color alone (per the design system's accessibility rule).
+/// Shared across lesson step views and the Mentor chat bubble.
+class LayerChip extends StatelessWidget {
+  const LayerChip({super.key, required this.label, required this.color});
 
   final String label;
   final Color color;

@@ -6,6 +6,7 @@ import 'package:petrimonium/core/di/dependency_injection.dart';
 import 'package:petrimonium/core/theme/app_theme.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/features/academy/data/datasources/academy_remote_datasource.dart';
+import 'package:petrimonium/features/academy/presentation/screens/all_modules_screen.dart';
 import 'package:petrimonium/features/auth/data/repositories/auth_repository.dart';
 import 'package:petrimonium/features/academy/data/models/academy_catalog_snapshot.dart';
 import 'package:petrimonium/features/academy/data/repositories/academy_catalog_repository.dart';
@@ -304,6 +305,25 @@ void main() {
       await tester.pump();
 
       expect(find.text('Por que estou vendo isto?'), findsNothing);
+    });
+  });
+
+  group('HomeScreen — Sua trilha', () {
+    testWidgets('tapping "Ver todas as escolas" pushes AllModulesScreen', (tester) async {
+      await portfolioController.loadAll();
+
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pump();
+      await tester.pump();
+      await tester.pump();
+
+      await tester.ensureVisible(find.text('Ver todas as escolas'));
+      await tester.pump();
+      await tester.tap(find.text('Ver todas as escolas'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.byType(AllModulesScreen), findsOneWidget);
     });
   });
 }
