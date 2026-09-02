@@ -45,15 +45,15 @@ void main() {
       // pumpAndSettle.
       await tester.pump();
 
-      expect(find.text('Conheça seu Companheiro'), findsOneWidget);
+      expect(find.text('Escolha seu parceiro de jornada'), findsOneWidget);
       expect(
-        find.text('Sou o seu companheiro financeiro. Vou te ajudar a aprender sobre investimentos, manter a disciplina e comemorar cada conquista da sua jornada.'),
+        find.text('Ele evolui com o que você aprende — nunca com quanto você tem.'),
         findsOneWidget,
       );
       expect(find.text('Mas antes... eu preciso de um nome!'), findsOneWidget);
       expect(find.text('Como você gostaria de chamar seu companheiro?'), findsOneWidget);
-      // One species entry per PetSpecieEnum value — the selector is a
-      // horizontally scrollable list, so later entries need scrolling into
+      // One species entry per PetSpecieEnum value — the screen's body is a
+      // vertically scrollable column, so later entries need scrolling into
       // view first.
       for (final specie in PetSpecieEnum.values) {
         final label = specie.name[0].toUpperCase() + specie.name.substring(1).toLowerCase();

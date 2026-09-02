@@ -74,10 +74,9 @@ class Translator {
       AppStrings.petProfileTitle: "Perfil do PET",
       AppStrings.failedToSavePet: "Falha ao salvar o pet",
 
-      AppStrings.meetPetTitle: "Conheça seu Companheiro",
+      AppStrings.meetPetTitle: "Escolha seu parceiro de jornada",
       AppStrings.meetPetGreeting: "Olá!",
-      AppStrings.meetPetIntro:
-          "Sou o seu companheiro financeiro. Vou te ajudar a aprender sobre investimentos, manter a disciplina e comemorar cada conquista da sua jornada.",
+      AppStrings.meetPetIntro: "Ele evolui com o que você aprende — nunca com quanto você tem.",
       AppStrings.meetPetNeedName: "Mas antes... eu preciso de um nome!",
       AppStrings.meetPetSpeciesPrompt: "Escolha a espécie do seu companheiro",
       AppStrings.meetPetContinue: "Vamos começar!",
@@ -705,10 +704,9 @@ class Translator {
       AppStrings.petProfileTitle: "Pet Profile",
       AppStrings.failedToSavePet: "Failed to save pet",
 
-      AppStrings.meetPetTitle: "Meet Your Companion",
+      AppStrings.meetPetTitle: "Choose your journey partner",
       AppStrings.meetPetGreeting: "Hello!",
-      AppStrings.meetPetIntro:
-          "I'm your financial companion. I'll help you learn about investing, stay disciplined and celebrate every achievement along your journey.",
+      AppStrings.meetPetIntro: "It grows with what you learn — never with how much you have.",
       AppStrings.meetPetNeedName: "But first... I need a name!",
       AppStrings.meetPetSpeciesPrompt: "Choose your companion's species",
       AppStrings.meetPetContinue: "Let's get started!",
@@ -1329,10 +1327,9 @@ class Translator {
       AppStrings.petProfileTitle: "Perfil de la Mascota",
       AppStrings.failedToSavePet: "Error al guardar la mascota",
 
-      AppStrings.meetPetTitle: "Conoce a tu Compañero",
+      AppStrings.meetPetTitle: "Elige tu compañero de viaje",
       AppStrings.meetPetGreeting: "¡Hola!",
-      AppStrings.meetPetIntro:
-          "Soy tu compañero financiero. Te ayudaré a aprender sobre inversiones, mantener la disciplina y celebrar cada logro en tu camino.",
+      AppStrings.meetPetIntro: "Evoluciona con lo que aprendes — nunca con cuánto tienes.",
       AppStrings.meetPetNeedName: "Pero antes... ¡necesito un nombre!",
       AppStrings.meetPetSpeciesPrompt: "Elige la especie de tu compañero",
       AppStrings.meetPetContinue: "¡Vamos a empezar!",
