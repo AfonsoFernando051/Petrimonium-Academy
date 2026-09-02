@@ -207,7 +207,7 @@ class _MentorScreenState extends State<MentorScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Seu Mentor',
+                  Translator.translate(AppStrings.mentorHeaderTitle),
                   style: TextStyle(
                     color: tokens.textPrimary,
                     fontWeight: FontWeight.bold,
@@ -215,7 +215,7 @@ class _MentorScreenState extends State<MentorScreen> {
                   ),
                 ),
                 Text(
-                  'Educação financeira, no seu ritmo',
+                  Translator.translate(AppStrings.mentorHeaderSubtitle),
                   style: TextStyle(color: tokens.textSecondary, fontSize: 11),
                 ),
               ],
@@ -259,20 +259,22 @@ class _MentorScreenState extends State<MentorScreen> {
     }
 
     final messages = _controller.messages;
-    final itemCount = messages.length + (_showTypingIndicator ? 1 : 0);
 
-    return ListView.builder(
+    return ListView(
       controller: _scrollController,
       padding: const EdgeInsets.symmetric(vertical: 8),
-      itemCount: itemCount,
-      itemBuilder: (context, index) {
-        if (index >= messages.length) {
-          return const TypingIndicator();
-        }
-        return ChatBubble(message: messages[index]);
-      },
+      children: [
+        for (var i = 0; i < messages.length; i++) ...[
+          if (i == 0 || !_isSameDay(messages[i - 1].timestamp, messages[i].timestamp))
+            _DateDivider(date: messages[i].timestamp),
+          ChatBubble(message: messages[i]),
+        ],
+        if (_showTypingIndicator) const TypingIndicator(),
+      ],
     );
   }
+
+  bool _isSameDay(DateTime a, DateTime b) => a.year == b.year && a.month == b.month && a.day == b.day;
 
   Widget _buildEmptyState() {
     final tokens = context.colors;
@@ -300,7 +302,7 @@ class _MentorScreenState extends State<MentorScreen> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Oi! Eu sou seu mentor de investimentos.',
+            Translator.translate(AppStrings.mentorEmptyStateGreeting),
             textAlign: TextAlign.center,
             style: TextStyle(
               color: tokens.textPrimary,
@@ -310,7 +312,7 @@ class _MentorScreenState extends State<MentorScreen> {
           ),
           const SizedBox(height: 6),
           Text(
-            'Pergunte o que quiser sobre investir — vamos aprender juntos, no seu ritmo.',
+            Translator.translate(AppStrings.mentorEmptyStateSubtitle),
             textAlign: TextAlign.center,
             style: TextStyle(color: tokens.textSecondary, fontSize: 13),
           ),
@@ -330,6 +332,43 @@ class _MentorScreenState extends State<MentorScreen> {
                   .toList(),
             ),
         ],
+      ),
+    );
+  }
+}
+
+/// A small centered date-divider chip between messages sent on different
+/// days — "Hoje"/"Today"/"Hoy" for the current day (real device time, not
+/// hardcoded), a plain day/month number otherwise since a localized month
+/// name isn't worth pulling in `intl` for one chip.
+class _DateDivider extends StatelessWidget {
+  const _DateDivider({required this.date});
+
+  final DateTime date;
+
+  bool get _isToday {
+    final now = DateTime.now();
+    return now.year == date.year && now.month == date.month && now.day == date.day;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.colors;
+    final label = _isToday
+        ? Translator.translate(AppStrings.mentorTodayLabel)
+        : '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}';
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Center(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: tokens.surface.withValues(alpha: 0.6),
+            borderRadius: BorderRadius.circular(999),
+          ),
+          child: Text(label, style: TextStyle(color: tokens.textTertiary, fontSize: 11, fontWeight: FontWeight.w600)),
+        ),
       ),
     );
   }

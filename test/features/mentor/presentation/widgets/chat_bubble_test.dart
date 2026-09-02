@@ -74,5 +74,63 @@ void main() {
       final align = tester.widget<Align>(find.byType(Align));
       expect(align.alignment, Alignment.centerLeft);
     });
+
+    testWidgets('renders the layered content/interpretation chips when the reply uses the structured format', (tester) async {
+      final message = ChatMessage(
+        id: '5',
+        role: ChatRole.mentor,
+        text: '[[CONTENT]]\nReserva de emergência é dinheiro acessível.\n[[INTERPRETATION]]\nIsso conecta com sua última aula.',
+        timestamp: DateTime(2024, 1, 1),
+      );
+
+      await tester.pumpWidget(buildTestableWidget(message));
+
+      expect(find.text('CONTEÚDO EDUCATIVO'), findsOneWidget);
+      expect(find.text('MENTOR · INTERPRETAÇÃO DE IA'), findsOneWidget);
+      expect(find.byType(MarkdownBody), findsNWidgets(2));
+    });
+
+    testWidgets('renders just the content chip when there is no interpretation section', (tester) async {
+      final message = ChatMessage(
+        id: '6',
+        role: ChatRole.mentor,
+        text: '[[CONTENT]]\nReserva de emergência é dinheiro acessível.',
+        timestamp: DateTime(2024, 1, 1),
+      );
+
+      await tester.pumpWidget(buildTestableWidget(message));
+
+      expect(find.text('CONTEÚDO EDUCATIVO'), findsOneWidget);
+      expect(find.text('MENTOR · INTERPRETAÇÃO DE IA'), findsNothing);
+    });
+
+    testWidgets('a plain reply with no markers renders as before, no chips', (tester) async {
+      final message = ChatMessage(
+        id: '7',
+        role: ChatRole.mentor,
+        text: 'Oi! Como posso ajudar?',
+        timestamp: DateTime(2024, 1, 1),
+      );
+
+      await tester.pumpWidget(buildTestableWidget(message));
+
+      expect(find.text('CONTEÚDO EDUCATIVO'), findsNothing);
+      expect(find.text('MENTOR · INTERPRETAÇÃO DE IA'), findsNothing);
+      expect(find.byType(MarkdownBody), findsOneWidget);
+    });
+
+    testWidgets('an error message is never layered even if its text happens to contain markers', (tester) async {
+      final message = ChatMessage(
+        id: '8',
+        role: ChatRole.mentor,
+        text: '[[CONTENT]]\nnever shown layered',
+        timestamp: DateTime(2024, 1, 1),
+        isError: true,
+      );
+
+      await tester.pumpWidget(buildTestableWidget(message));
+
+      expect(find.text('CONTEÚDO EDUCATIVO'), findsNothing);
+    });
   });
 }

@@ -8,6 +8,7 @@ import '../../../../core/theme/app_color_tokens.dart';
 import '../../../../core/theme/app_motion.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/translator.dart';
+import '../../../../core/utils/game_snack.dart';
 import '../../../../core/widgets/confirm_logout_dialog.dart';
 import '../../../../core/widgets/cosmic_background.dart';
 import '../../../../core/di/dependency_injection.dart';
@@ -20,7 +21,6 @@ import '../../../home/presentation/screens/home_screen.dart';
 import '../../../pet/presentation/mascot/controllers/mascot_controller.dart';
 import '../../../portfolio/domain/entities/achievement.dart';
 import '../../../portfolio/presentation/controllers/portfolio_controller.dart';
-import '../../../portfolio/presentation/widgets/achievement_celebration_overlay.dart';
 import '../../../mentor/presentation/screens/mentor_screen.dart';
 import '../../../pet/presentation/celebration/level_up_celebration_overlay.dart';
 import '../../../pet/presentation/companion/pet_companion_controller.dart';
@@ -72,11 +72,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   PetSpeechBubbleAnchor get _activeCompanionAnchor =>
       _selectedIndex == 0 ? _heroAnchor : _headerAnchor;
 
-  // Newly-unlocked achievements awaiting their celebration overlay (see
-  // `PortfolioController.newlyUnlocked`) — previously these unlocked
-  // completely silently, with no on-screen reward moment at all.
-  List<Achievement> _celebrating = [];
-
   // The level just reached, awaiting `LevelUpCelebrationOverlay` — `null`
   // when there's no level-up celebration to show. Replaces the old plain
   // `GameSnack` toast with a real reward moment that doubles as a
@@ -127,12 +122,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _onPortfolioChanged() {
-    setState(() {
-      if (_portfolioController.newlyUnlocked.isNotEmpty) {
-        _celebrating = _portfolioController.newlyUnlocked;
-        _portfolioController.clearNewlyUnlocked();
-      }
-    });
+    if (_portfolioController.newlyUnlocked.isEmpty) return;
+    final unlocked = _portfolioController.newlyUnlocked;
+    _portfolioController.clearNewlyUnlocked();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _acknowledgeFinancialMilestones(unlocked),
+    );
+  }
+
+  /// Financial-outcome milestones (holdings, dividends, returns, patrimony
+  /// thresholds — see `AchievementCatalog`) are acknowledged with a plain,
+  /// dismissible snack, never `AchievementCelebrationOverlay`'s reward-moment
+  /// treatment: the design system's guardrail is explicit that valorization,
+  /// dividends, contributions or trades must never trigger a celebration —
+  /// only educational progress may (see `LevelUpCelebrationOverlay` /
+  /// `UserLeveledUpEvent` above for that path).
+  void _acknowledgeFinancialMilestones(List<Achievement> unlocked) {
+    if (!mounted) return;
+    final title = unlocked.map((a) => a.title).join(', ');
+    GameSnack.show(
+      context,
+      Translator.translate(AppStrings.portfolioMilestoneUnlocked, params: {'title': title}),
+    );
   }
 
   // Every tab is always visible — unlike the old Proventos tab, none of the
@@ -294,11 +305,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   _handleCompanionDestination(action.destination),
             ),
           ),
-          if (_celebrating.isNotEmpty)
-            AchievementCelebrationOverlay(
-              achievements: _celebrating,
-              onDismiss: () => setState(() => _celebrating = []),
-            ),
           if (_celebratingLevel != null)
             LevelUpCelebrationOverlay(
               newLevel: _celebratingLevel!,

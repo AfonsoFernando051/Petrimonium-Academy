@@ -283,6 +283,8 @@ class AppStrings {
   static const String academyContentLabel = "academyContentLabel";
   static const String academyExampleLabel = "academyExampleLabel";
   static const String academyLessonOfLabel = "academyLessonOfLabel";
+  static const String mentorInterpretationLabel = "mentorInterpretationLabel";
+  static const String mentorTodayLabel = "mentorTodayLabel";
   static const String academyContinueButton = "academyContinueButton";
   static const String academyConcludeButton = "academyConcludeButton";
   static const String academyBackToAcademyButton = "academyBackToAcademyButton";
@@ -297,6 +299,7 @@ class AppStrings {
       "academyModuleStatusComingSoon";
   static const String academyLockedPrerequisiteLabel =
       "academyLockedPrerequisiteLabel";
+  static const String academyAllModulesTitle = "academyAllModulesTitle";
   static const String academyMicroExerciseLabel = "academyMicroExerciseLabel";
   static const String academyApplyLabel = "academyApplyLabel";
   static const String academyCorrectFeedbackTitle =
@@ -574,6 +577,20 @@ class AppStrings {
   static const String homeMentorReasonContinue = "homeMentorReasonContinue";
   static const String homeMentorReasonReview = "homeMentorReasonReview";
   static const String homeMentorReasonReturn = "homeMentorReasonReturn";
+  // Itemized RAG source citations shown under "Por que estou vendo isto?" —
+  // per-reason, so the mentor's interpretation always cites what actually
+  // fed it (lesson consulted, profile answers, internal guide), matching
+  // the auditability guardrail for AI-generated interpretation.
+  static const String homeMentorSourcesLabel = "homeMentorSourcesLabel";
+  static const String homeMentorSourceContinue1 = "homeMentorSourceContinue1";
+  static const String homeMentorSourceContinue2 = "homeMentorSourceContinue2";
+  static const String homeMentorSourceContinue3 = "homeMentorSourceContinue3";
+  static const String homeMentorSourceReview1 = "homeMentorSourceReview1";
+  static const String homeMentorSourceReview2 = "homeMentorSourceReview2";
+  static const String homeMentorSourceReview3 = "homeMentorSourceReview3";
+  static const String homeMentorSourceReturn1 = "homeMentorSourceReturn1";
+  static const String homeMentorSourceReturn2 = "homeMentorSourceReturn2";
+  static const String homeMentorSourceReturn3 = "homeMentorSourceReturn3";
 
   // Level tiers — motivational milestone names, never a competence
   // certification (docs/PRODUCT_VISION.md §9; docs/FEATURES.md "Levels").
@@ -686,6 +703,25 @@ class AppStrings {
   // Mentor
   static const String mentorNewChatTooltip = "mentorNewChatTooltip";
   static const String mentorHistoryTooltip = "mentorHistoryTooltip";
+  static const String mentorHeaderTitle = "mentorHeaderTitle";
+  // Explicit "not financial advice" disclaimer on the Mentor tab's own
+  // header — per the design system's guardrail that the mentor explains
+  // and asks questions but never prescribes or substitutes regulated
+  // advice, this can't just be implied by tone.
+  static const String mentorHeaderSubtitle = "mentorHeaderSubtitle";
+  static const String mentorEmptyStateGreeting = "mentorEmptyStateGreeting";
+  static const String mentorEmptyStateSubtitle = "mentorEmptyStateSubtitle";
+  // Persistent "this is simulated, not your real portfolio" marker shown on
+  // every Financial Lab screen (design-system guardrail: simulations must
+  // carry a persistent fictitious-data mark on every screen, not just once
+  // on entry).
+  static const String labSimulatedDataBadge = "labSimulatedDataBadge";
+  // Quiet, non-celebratory acknowledgment for newly-unlocked *financial*
+  // milestones (see `AchievementCatalog` — holdings/dividends/returns/
+  // patrimony thresholds). Never shown via a reward-moment overlay: the
+  // design system's guardrail is explicit that valorization, dividends,
+  // contributions or trades must never trigger a celebration.
+  static const String portfolioMilestoneUnlocked = "portfolioMilestoneUnlocked";
   static const String mentorConversationHistoryTitle =
       "mentorConversationHistoryTitle";
   static const String mentorNoConversationsTitle = "mentorNoConversationsTitle";

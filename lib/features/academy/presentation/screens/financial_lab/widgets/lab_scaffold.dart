@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:petrimonium/core/constants/app_colors.dart';
+import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
 import 'package:petrimonium/core/theme/app_spacing.dart';
 import 'package:petrimonium/core/utils/translator.dart';
@@ -71,13 +73,20 @@ class LabScaffold extends StatelessWidget {
         child: Stack(
           children: [
             SafeArea(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  spacing: AppSpacing.lg,
-                  children: children,
-                ),
+              child: Column(
+                children: [
+                  const _SimulatedDataBadge(),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        spacing: AppSpacing.lg,
+                        children: children,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Positioned.fill(
@@ -86,6 +95,49 @@ class LabScaffold extends StatelessWidget {
                 anchor: anchor,
                 onActionSelected: (action) =>
                     Navigator.of(context).pop(action.destination),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Persistent "this is a simulation" mark, shown outside the scroll view so
+/// it never scrolls away — every Financial Lab screen must carry it on
+/// every screen per the design system's guardrail (simulated/fictional data
+/// is never allowed to read as the user's real portfolio).
+class _SimulatedDataBadge extends StatelessWidget {
+  const _SimulatedDataBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.colors;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, kToolbarHeight + 8, 20, 0),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+        decoration: BoxDecoration(
+          color: AppColors.warningAmber.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(color: AppColors.warningAmber.withValues(alpha: 0.35)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.science_outlined, size: 14, color: AppColors.warningAmber),
+            const SizedBox(width: 6),
+            Expanded(
+              child: Text(
+                Translator.translate(AppStrings.labSimulatedDataBadge),
+                style: TextStyle(
+                  color: tokens.textPrimary,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
