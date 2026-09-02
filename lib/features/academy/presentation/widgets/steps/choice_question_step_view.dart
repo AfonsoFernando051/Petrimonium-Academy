@@ -5,6 +5,7 @@ import 'package:petrimonium/core/theme/app_color_tokens.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/features/academy/domain/entities/lesson_step.dart';
 import 'package:petrimonium/features/academy/domain/services/academy_pet_behavior.dart';
+import 'package:petrimonium/features/academy/presentation/widgets/steps/lesson_layer_chip.dart';
 import 'package:petrimonium/features/pet/presentation/companion/rive/pet_rive_companion.dart';
 import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
@@ -53,15 +54,9 @@ class ChoiceQuestionStepView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-          children: [
-            Icon(isApply ? Icons.psychology_outlined : Icons.quiz_outlined, color: AppColors.neonCyan, size: 18),
-            const SizedBox(width: 8),
-            Text(
-              Translator.translate(isApply ? AppStrings.academyApplyLabel : AppStrings.academyMicroExerciseLabel),
-              style: const TextStyle(color: AppColors.neonCyan, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.2),
-            ),
-          ],
+        LessonLayerChip(
+          label: Translator.translate(isApply ? AppStrings.academyApplyLabel : AppStrings.academyMicroExerciseLabel),
+          color: tokens.mentor,
         ),
         const SizedBox(height: 10),
         Text(

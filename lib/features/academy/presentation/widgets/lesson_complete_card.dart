@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:petrimonium/core/constants/app_colors.dart';
 import 'package:petrimonium/core/constants/app_strings.dart';
 import 'package:petrimonium/core/theme/app_color_tokens.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/core/widgets/game_button.dart';
 import 'package:petrimonium/core/widgets/glass_card.dart';
+import 'package:petrimonium/features/pet/presentation/companion/rive/pet_rive_companion.dart';
+import 'package:petrimonium/features/pet/presentation/mascot/controllers/mascot_controller.dart';
 
-/// The lesson's reward moment — same visual language as
-/// `AchievementCelebrationOverlay` (gold glow `GlassCard`, trophy icon,
-/// `+N XP` pill) but rendered inline as the final state of `LessonScreen`
-/// rather than a full-screen overlay, since it's the natural end of a
-/// screen the user is already on, not an interrupt.
+/// The lesson's reward moment — the player's own pet (not a generic trophy)
+/// celebrating, with a green "learning progress" pill rather than the app's
+/// gold reward color: this is XP for learning, deliberately decoupled from
+/// the gold used for financial/portfolio achievements elsewhere, per the
+/// "gamification never mixes with wealth" guardrail.
 class LessonCompleteCard extends StatelessWidget {
   const LessonCompleteCard({
     super.key,
     required this.lessonTitle,
     required this.xpEarned,
+    required this.mascotController,
     required this.onContinue,
     required this.onBackToAcademy,
   });
 
   final String lessonTitle;
   final int xpEarned;
+  final MascotController mascotController;
   final VoidCallback onContinue;
   final VoidCallback onBackToAcademy;
 
@@ -30,17 +33,19 @@ class LessonCompleteCard extends StatelessWidget {
     final tokens = context.colors;
     return GlassCard(
       backgroundColor: tokens.surfaceElevated.withValues(alpha: context.isDarkMode ? 0.85 : 0.96),
-      borderColor: AppColors.goldenBorder.withValues(alpha: 0.7),
+      borderColor: tokens.success.withValues(alpha: 0.6),
       borderRadius: 24,
       boxShadow: [
-        BoxShadow(color: AppColors.goldenBorder.withValues(alpha: 0.3), blurRadius: 28, spreadRadius: 2),
+        BoxShadow(color: tokens.success.withValues(alpha: 0.25), blurRadius: 28, spreadRadius: 2),
       ],
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.emoji_events, color: AppColors.goldenBorder, size: 48),
+            ClipOval(
+              child: PetRiveCompanion(controller: mascotController, size: 64, interactive: false),
+            ),
             const SizedBox(height: 12),
             Text(
               Translator.translate(AppStrings.academyLessonCompleteTitle),
@@ -56,12 +61,12 @@ class LessonCompleteCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
               decoration: BoxDecoration(
-                color: AppColors.goldenBorder.withValues(alpha: 0.15),
+                color: tokens.success.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                Translator.translate(AppStrings.academyXpPill, params: {'xp': '$xpEarned'}),
-                style: const TextStyle(color: AppColors.goldenBorder, fontWeight: FontWeight.bold, fontSize: 15),
+                Translator.translate(AppStrings.academyLearningProgressPill, params: {'xp': '$xpEarned'}),
+                style: TextStyle(color: tokens.success, fontWeight: FontWeight.bold, fontSize: 15),
               ),
             ),
             const SizedBox(height: 24),

@@ -91,10 +91,10 @@ void main() {
       expect(find.text('3'), findsOneWidget);
       expect(find.text('4'), findsOneWidget);
       expect(find.text('5'), findsOneWidget);
-      expect(find.byIcon(Icons.quiz_outlined), findsOneWidget);
+      expect(find.text('EXERCÍCIO RÁPIDO'), findsOneWidget);
     });
 
-    testWidgets('uses the apply icon for the apply framing', (tester) async {
+    testWidgets('uses the apply label for the apply framing', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.dark,
@@ -118,7 +118,7 @@ void main() {
         ),
       );
 
-      expect(find.byIcon(Icons.psychology_outlined), findsOneWidget);
+      expect(find.text('APLIQUE O QUE APRENDEU'), findsOneWidget);
     });
 
     testWidgets('invokes onSelect when an option is tapped before answering', (tester) async {

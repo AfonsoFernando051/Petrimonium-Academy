@@ -148,11 +148,27 @@ class _LessonScreenState extends State<LessonScreen> {
     );
   }
 
+  /// "{Module} · Lesson N of M" for the lesson's own position within its
+  /// module — purely derived from the real catalog (no stored index), null
+  /// if the module/lesson can't be resolved in it.
+  String? _breadcrumb() {
+    final module = widget.catalog.moduleById(widget.lesson.moduleId);
+    if (module == null) return null;
+    final lessons = widget.catalog.lessonsForModule(module.id);
+    final index = lessons.indexWhere((l) => l.id == widget.lesson.id);
+    if (index == -1) return null;
+    final lessonOf = Translator.translate(
+      AppStrings.academyLessonOfLabel,
+      params: {'n': '${index + 1}', 'total': '${lessons.length}'},
+    );
+    return '${module.title} · $lessonOf';
+  }
+
   Widget _buildStep(BuildContext context) {
     final step = _controller.currentStep;
     final Widget stepView = switch (step) {
-      ExplanationStep() => ExplanationStepView(step: step),
-      ExampleStep() => ExampleStepView(step: step),
+      ExplanationStep() => ExplanationStepView(step: step, breadcrumb: _breadcrumb()),
+      ExampleStep() => ExampleStepView(step: step, breadcrumb: _breadcrumb()),
       ChoiceQuestionStep() => ChoiceQuestionStepView(
         step: step,
         stepIndex: _controller.currentStepIndex,
@@ -192,6 +208,7 @@ class _LessonScreenState extends State<LessonScreen> {
       child: LessonCompleteCard(
         lessonTitle: widget.lesson.title,
         xpEarned: widget.lesson.xpReward,
+        mascotController: widget.mascotController,
         onContinue: () => _onCompleteContinue(context),
         onBackToAcademy: _backToAcademy,
       ),

@@ -279,6 +279,10 @@ class AppStrings {
       "academyLessonsProgressLabel";
   static const String academyLessonCompleteTitle = "academyLessonCompleteTitle";
   static const String academyXpPill = "academyXpPill";
+  static const String academyLearningProgressPill = "academyLearningProgressPill";
+  static const String academyContentLabel = "academyContentLabel";
+  static const String academyExampleLabel = "academyExampleLabel";
+  static const String academyLessonOfLabel = "academyLessonOfLabel";
   static const String academyContinueButton = "academyContinueButton";
   static const String academyConcludeButton = "academyConcludeButton";
   static const String academyBackToAcademyButton = "academyBackToAcademyButton";
