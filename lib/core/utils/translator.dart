@@ -672,6 +672,12 @@ class Translator {
           "Algo inesperado aconteceu. Tente novamente.",
       AppStrings.mentorNewChatTooltip: "Nova conversa",
       AppStrings.mentorHistoryTooltip: "Histórico",
+      AppStrings.mentorHeaderTitle: "Seu Mentor",
+      AppStrings.mentorHeaderSubtitle: "Tira dúvidas e explica conceitos — não é conselho financeiro",
+      AppStrings.mentorEmptyStateGreeting: "Oi! Posso te ajudar a entender qualquer conceito da sua trilha.",
+      AppStrings.mentorEmptyStateSubtitle:
+          "Não vou te dizer o que fazer com seu dinheiro — só explicar, no seu ritmo.",
+      AppStrings.labSimulatedDataBadge: "Simulação — dados fictícios, não é sua carteira real",
       AppStrings.mentorConversationHistoryTitle: "Conversas",
       AppStrings.mentorNoConversationsTitle: "Nenhuma conversa ainda",
       AppStrings.mentorNoConversationsSubtitle:
@@ -1327,6 +1333,12 @@ class Translator {
           "Something unexpected happened. Please try again.",
       AppStrings.mentorNewChatTooltip: "New chat",
       AppStrings.mentorHistoryTooltip: "History",
+      AppStrings.mentorHeaderTitle: "Your Mentor",
+      AppStrings.mentorHeaderSubtitle: "Answers questions and explains concepts — not financial advice",
+      AppStrings.mentorEmptyStateGreeting: "Hi! I can help you understand any concept from your path.",
+      AppStrings.mentorEmptyStateSubtitle:
+          "I won't tell you what to do with your money — just explain, at your own pace.",
+      AppStrings.labSimulatedDataBadge: "Simulation — fictional data, not your real portfolio",
       AppStrings.mentorConversationHistoryTitle: "Conversations",
       AppStrings.mentorNoConversationsTitle: "No conversations yet",
       AppStrings.mentorNoConversationsSubtitle:
@@ -1988,6 +2000,12 @@ class Translator {
           "Ocurrió algo inesperado. Inténtalo de nuevo.",
       AppStrings.mentorNewChatTooltip: "Nueva conversación",
       AppStrings.mentorHistoryTooltip: "Historial",
+      AppStrings.mentorHeaderTitle: "Tu Mentor",
+      AppStrings.mentorHeaderSubtitle: "Responde dudas y explica conceptos — no es asesoría financiera",
+      AppStrings.mentorEmptyStateGreeting: "¡Hola! Puedo ayudarte a entender cualquier concepto de tu ruta.",
+      AppStrings.mentorEmptyStateSubtitle:
+          "No voy a decirte qué hacer con tu dinero — solo a explicar, a tu ritmo.",
+      AppStrings.labSimulatedDataBadge: "Simulación — datos ficticios, no es tu cartera real",
       AppStrings.mentorConversationHistoryTitle: "Conversaciones",
       AppStrings.mentorNoConversationsTitle: "Aún no hay conversaciones",
       AppStrings.mentorNoConversationsSubtitle:

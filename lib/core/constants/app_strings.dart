@@ -700,6 +700,19 @@ class AppStrings {
   // Mentor
   static const String mentorNewChatTooltip = "mentorNewChatTooltip";
   static const String mentorHistoryTooltip = "mentorHistoryTooltip";
+  static const String mentorHeaderTitle = "mentorHeaderTitle";
+  // Explicit "not financial advice" disclaimer on the Mentor tab's own
+  // header — per the design system's guardrail that the mentor explains
+  // and asks questions but never prescribes or substitutes regulated
+  // advice, this can't just be implied by tone.
+  static const String mentorHeaderSubtitle = "mentorHeaderSubtitle";
+  static const String mentorEmptyStateGreeting = "mentorEmptyStateGreeting";
+  static const String mentorEmptyStateSubtitle = "mentorEmptyStateSubtitle";
+  // Persistent "this is simulated, not your real portfolio" marker shown on
+  // every Financial Lab screen (design-system guardrail: simulations must
+  // carry a persistent fictitious-data mark on every screen, not just once
+  // on entry).
+  static const String labSimulatedDataBadge = "labSimulatedDataBadge";
   static const String mentorConversationHistoryTitle =
       "mentorConversationHistoryTitle";
   static const String mentorNoConversationsTitle = "mentorNoConversationsTitle";

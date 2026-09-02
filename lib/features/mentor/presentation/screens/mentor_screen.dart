@@ -207,7 +207,7 @@ class _MentorScreenState extends State<MentorScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Seu Mentor',
+                  Translator.translate(AppStrings.mentorHeaderTitle),
                   style: TextStyle(
                     color: tokens.textPrimary,
                     fontWeight: FontWeight.bold,
@@ -215,7 +215,7 @@ class _MentorScreenState extends State<MentorScreen> {
                   ),
                 ),
                 Text(
-                  'Educação financeira, no seu ritmo',
+                  Translator.translate(AppStrings.mentorHeaderSubtitle),
                   style: TextStyle(color: tokens.textSecondary, fontSize: 11),
                 ),
               ],
@@ -300,7 +300,7 @@ class _MentorScreenState extends State<MentorScreen> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Oi! Eu sou seu mentor de investimentos.',
+            Translator.translate(AppStrings.mentorEmptyStateGreeting),
             textAlign: TextAlign.center,
             style: TextStyle(
               color: tokens.textPrimary,
@@ -310,7 +310,7 @@ class _MentorScreenState extends State<MentorScreen> {
           ),
           const SizedBox(height: 6),
           Text(
-            'Pergunte o que quiser sobre investir — vamos aprender juntos, no seu ritmo.',
+            Translator.translate(AppStrings.mentorEmptyStateSubtitle),
             textAlign: TextAlign.center,
             style: TextStyle(color: tokens.textSecondary, fontSize: 13),
           ),
