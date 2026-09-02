@@ -3,10 +3,10 @@ import 'package:petrimonium/features/pet/data/models/pet_goal_enum.dart';
 
 void main() {
   group('PetGoalEnumDisplay', () {
-    test('every value has a non-empty label, description and icon', () {
+    test('every value has a non-empty label, emoji and icon', () {
       for (final goal in PetGoalEnum.values) {
         expect(goal.label, isNotEmpty);
-        expect(goal.description, isNotEmpty);
+        expect(goal.emoji, isNotEmpty);
         expect(goal.icon, isNotNull);
       }
     });
@@ -24,9 +24,9 @@ void main() {
       }
     });
 
-    test('falls back to buildWealth for an unknown or null name', () {
-      expect(PetGoalEnumDisplay.fromName('bogus'), PetGoalEnum.buildWealth);
-      expect(PetGoalEnumDisplay.fromName(null), PetGoalEnum.buildWealth);
+    test('falls back to investWithConfidence for an unknown or null name', () {
+      expect(PetGoalEnumDisplay.fromName('bogus'), PetGoalEnum.investWithConfidence);
+      expect(PetGoalEnumDisplay.fromName(null), PetGoalEnum.investWithConfidence);
     });
   });
 }

@@ -1,55 +1,50 @@
 import 'package:flutter/material.dart';
 
 /// The user's main financial-life objective, chosen during onboarding's
-/// "Choose Your Financial Goal" step. Framed around life outcomes (per the
-/// pet-naming/onboarding redesign) rather than investment-strategy jargon,
-/// so it reads as a personal goal, not a risk-tolerance question — that
-/// scored assessment is a separate, now-optional step (see `OnboardingScreen`).
+/// "Qual é o seu objetivo agora?" step. Matches the Notion mockup's 5
+/// options exactly (a 6th option exists in the mockup but its label is cut
+/// off in every capture available — left out rather than guessed).
 enum PetGoalEnum {
-  buildWealth,
-  generatePassiveIncome,
-  retireEarly,
-  learnAboutInvesting,
-  buyFirstHome,
-  travel,
-  financialFreedom,
+  emergencyFund,
+  getOutOfDebt,
+  buyImportantThing,
+  investWithConfidence,
+  justWantToLearn,
 }
 
 extension PetGoalEnumDisplay on PetGoalEnum {
   String get label => switch (this) {
-        PetGoalEnum.buildWealth => 'Construir Patrimônio',
-        PetGoalEnum.generatePassiveIncome => 'Gerar Renda Passiva',
-        PetGoalEnum.retireEarly => 'Aposentar Cedo',
-        PetGoalEnum.learnAboutInvesting => 'Aprender a Investir',
-        PetGoalEnum.buyFirstHome => 'Comprar Minha Casa',
-        PetGoalEnum.travel => 'Viajar',
-        PetGoalEnum.financialFreedom => 'Liberdade Financeira',
+        PetGoalEnum.emergencyFund => 'Reserva de emergência',
+        PetGoalEnum.getOutOfDebt => 'Sair das dívidas',
+        PetGoalEnum.buyImportantThing => 'Comprar algo importante',
+        PetGoalEnum.investWithConfidence => 'Investir com confiança',
+        PetGoalEnum.justWantToLearn => 'Só quero aprender',
       };
 
-  String get description => switch (this) {
-        PetGoalEnum.buildWealth => 'Crescer meu patrimônio de forma consistente ao longo do tempo.',
-        PetGoalEnum.generatePassiveIncome => 'Focar em ativos que geram renda recorrente.',
-        PetGoalEnum.retireEarly => 'Construir independência financeira para parar de trabalhar mais cedo.',
-        PetGoalEnum.learnAboutInvesting => 'Explorar o app e entender o básico antes de se comprometer.',
-        PetGoalEnum.buyFirstHome => 'Juntar para dar entrada no meu primeiro imóvel.',
-        PetGoalEnum.travel => 'Guardar dinheiro para viagens e novas experiências.',
-        PetGoalEnum.financialFreedom => 'Ter liberdade para escolher como viver, sem depender de um salário.',
+  /// The mockup's goal-picker card uses a literal emoji per option (not a
+  /// monochrome icon) — this is what [_GoalCard] renders. [icon] below
+  /// stays available for the handful of places (e.g. the onboarding summary
+  /// row) that need an `IconData` instead.
+  String get emoji => switch (this) {
+        PetGoalEnum.emergencyFund => '🆘',
+        PetGoalEnum.getOutOfDebt => '⚖️',
+        PetGoalEnum.buyImportantThing => '🎯',
+        PetGoalEnum.investWithConfidence => '📈',
+        PetGoalEnum.justWantToLearn => '🌱',
       };
 
   IconData get icon => switch (this) {
-        PetGoalEnum.buildWealth => Icons.trending_up,
-        PetGoalEnum.generatePassiveIncome => Icons.paid_outlined,
-        PetGoalEnum.retireEarly => Icons.beach_access_outlined,
-        PetGoalEnum.learnAboutInvesting => Icons.school_outlined,
-        PetGoalEnum.buyFirstHome => Icons.home_outlined,
-        PetGoalEnum.travel => Icons.flight_takeoff,
-        PetGoalEnum.financialFreedom => Icons.rocket_launch,
+        PetGoalEnum.emergencyFund => Icons.health_and_safety_outlined,
+        PetGoalEnum.getOutOfDebt => Icons.balance,
+        PetGoalEnum.buyImportantThing => Icons.track_changes_outlined,
+        PetGoalEnum.investWithConfidence => Icons.trending_up,
+        PetGoalEnum.justWantToLearn => Icons.eco_outlined,
       };
 
   static PetGoalEnum fromName(String? name) {
     return PetGoalEnum.values.firstWhere(
       (g) => g.name == name,
-      orElse: () => PetGoalEnum.buildWealth,
+      orElse: () => PetGoalEnum.investWithConfidence,
     );
   }
 }

@@ -23,70 +23,61 @@ void main() {
     );
   }
 
-  /// The check mark on each goal card is always present in the tree — its
-  /// visibility is driven by an `AnimatedOpacity` (opacity 0/1), not
-  /// conditional rendering — so "is this goal selected" is asserted via
-  /// that opacity rather than a raw icon-presence count.
+  /// The selected goal row is the only one carrying a `check_circle` icon
+  /// (conditionally built, not just faded) — so "is this goal selected" is
+  /// asserted by whether that icon is present inside its row.
   bool isGoalSelected(WidgetTester tester, PetGoalEnum goal) {
-    // Locate the card (the InkWell ancestor of its label) and check its
-    // one AnimatedOpacity — the check mark is always present in the tree,
-    // just faded out (opacity 0) when not selected.
-    final cardFinder = find.ancestor(
+    final rowFinder = find.ancestor(
       of: find.text(goal.label),
       matching: find.byType(InkWell),
     );
-    final opacity = tester.widget<AnimatedOpacity>(
-      find.descendant(of: cardFinder, matching: find.byType(AnimatedOpacity)).first,
-    );
-    return opacity.opacity == 1.0;
+    return find.descendant(of: rowFinder, matching: find.byIcon(Icons.check_circle)).evaluate().isNotEmpty;
   }
 
   group('FinancialGoalScreen', () {
-    testWidgets('renders the title, subtitle and a card for every goal', (tester) async {
+    testWidgets('renders the title, subtitle and a row for every goal', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       // Hosts CosmicBackground + a pulsing GameButton — never pumpAndSettle.
       await tester.pump();
 
-      expect(find.text('Qual será sua primeira missão?'), findsOneWidget);
-      expect(
-        find.text('Escolha o que você quer alcançar. Você pode mudar isso depois.'),
-        findsOneWidget,
-      );
+      expect(find.text('Qual é o seu objetivo agora?'), findsOneWidget);
+      expect(find.text('Isso ajusta sua trilha. Você pode mudar depois.'), findsOneWidget);
       for (final goal in PetGoalEnum.values) {
         expect(find.text(goal.label), findsOneWidget, reason: goal.name);
+        expect(find.text(goal.emoji), findsOneWidget, reason: goal.name);
       }
     });
 
-    testWidgets('defaults to buildWealth selected', (tester) async {
+    testWidgets('defaults to investWithConfidence selected', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      expect(isGoalSelected(tester, PetGoalEnum.buildWealth), isTrue);
-      expect(isGoalSelected(tester, PetGoalEnum.travel), isFalse);
+      expect(isGoalSelected(tester, PetGoalEnum.investWithConfidence), isTrue);
+      expect(isGoalSelected(tester, PetGoalEnum.justWantToLearn), isFalse);
     });
 
-    testWidgets('tapping a goal card selects it', (tester) async {
+    testWidgets('tapping a goal row selects it', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      final travelCard = find.text(PetGoalEnum.travel.label);
-      await tester.ensureVisible(travelCard);
+      final learnRow = find.text(PetGoalEnum.justWantToLearn.label);
+      await tester.ensureVisible(learnRow);
       await tester.pump();
-      await tester.tap(travelCard);
+      await tester.tap(learnRow);
       await tester.pump(const Duration(milliseconds: 200));
 
-      expect(isGoalSelected(tester, PetGoalEnum.travel), isTrue);
-      expect(isGoalSelected(tester, PetGoalEnum.buildWealth), isFalse);
+      expect(isGoalSelected(tester, PetGoalEnum.justWantToLearn), isTrue);
+      expect(isGoalSelected(tester, PetGoalEnum.investWithConfidence), isFalse);
     });
 
     testWidgets('tapping Continue saves the selected goal and navigates to TimeHorizonScreen', (tester) async {
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();
 
-      final retireCard = find.text(PetGoalEnum.retireEarly.label);
-      await tester.ensureVisible(retireCard);
+      final debtRow = find.text(PetGoalEnum.getOutOfDebt.label);
+      await tester.ensureVisible(debtRow);
       await tester.pump();
-      await tester.tap(retireCard);
+      await tester.tap(debtRow);
       await tester.pump(const Duration(milliseconds: 200));
 
       final continueButton = find.text('Continuar');
@@ -97,7 +88,7 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 350));
 
-      expect(await DI.petPreferencesRepository.loadGoal(), PetGoalEnum.retireEarly);
+      expect(await DI.petPreferencesRepository.loadGoal(), PetGoalEnum.getOutOfDebt);
       expect(find.byType(TimeHorizonScreen), findsOneWidget);
     });
   });

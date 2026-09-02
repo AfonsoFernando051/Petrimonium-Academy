@@ -13,18 +13,18 @@ void main() {
   });
 
   group('goal', () {
-    test('defaults to buildWealth when nothing is saved', () async {
-      expect(await repository.loadGoal(), PetGoalEnum.buildWealth);
+    test('defaults to investWithConfidence when nothing is saved', () async {
+      expect(await repository.loadGoal(), PetGoalEnum.investWithConfidence);
     });
 
     test('round-trips a saved goal', () async {
-      await repository.saveGoal(PetGoalEnum.travel);
-      expect(await repository.loadGoal(), PetGoalEnum.travel);
+      await repository.saveGoal(PetGoalEnum.justWantToLearn);
+      expect(await repository.loadGoal(), PetGoalEnum.justWantToLearn);
     });
 
-    test('falls back to buildWealth for an unrecognized stored value', () async {
+    test('falls back to investWithConfidence for an unrecognized stored value', () async {
       SharedPreferences.setMockInitialValues({'pet_goal': 'not_a_real_goal'});
-      expect(await repository.loadGoal(), PetGoalEnum.buildWealth);
+      expect(await repository.loadGoal(), PetGoalEnum.investWithConfidence);
     });
   });
 

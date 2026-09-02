@@ -25,7 +25,7 @@ class FinancialGoalScreen extends StatefulWidget {
 }
 
 class _FinancialGoalScreenState extends State<FinancialGoalScreen> {
-  PetGoalEnum _selectedGoal = PetGoalEnum.buildWealth;
+  PetGoalEnum _selectedGoal = PetGoalEnum.investWithConfidence;
   bool _isSaving = false;
 
   void _selectGoal(PetGoalEnum goal) {
@@ -52,7 +52,6 @@ class _FinancialGoalScreenState extends State<FinancialGoalScreen> {
     return OnboardingScaffold(
       step: 5,
       totalSteps: 7,
-      maxContentWidth: 760,
       title: Translator.translate(AppStrings.financialGoalTitle),
       subtitle: Translator.translate(AppStrings.financialGoalSubtitle),
       ctaLabel: Translator.translate(AppStrings.financialGoalContinue),
@@ -61,39 +60,20 @@ class _FinancialGoalScreenState extends State<FinancialGoalScreen> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final columns = constraints.maxWidth > 560 ? 2 : 1;
-              return GridView.count(
-                crossAxisCount: columns,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: columns == 2 ? 1.5 : 2.4,
-                children: [
-                  for (final goal in PetGoalEnum.values)
-                    _GoalCard(
-                      goal: goal,
-                      isSelected: goal == _selectedGoal,
-                      onTap: () => _selectGoal(goal),
-                    ),
-                ],
-              );
-            },
-          ),
+          for (final goal in PetGoalEnum.values)
+            _GoalRow(
+              goal: goal,
+              isSelected: goal == _selectedGoal,
+              onTap: () => _selectGoal(goal),
+            ),
         ],
       ),
     );
   }
 }
 
-class _GoalCard extends StatelessWidget {
-  const _GoalCard({
-    required this.goal,
-    required this.isSelected,
-    required this.onTap,
-  });
+class _GoalRow extends StatelessWidget {
+  const _GoalRow({required this.goal, required this.isSelected, required this.onTap});
 
   final PetGoalEnum goal;
   final bool isSelected;
@@ -102,96 +82,48 @@ class _GoalCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.colors;
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        child: AnimatedScale(
-          scale: isSelected ? 1.02 : 1.0,
-          duration: const Duration(milliseconds: 180),
-          curve: Curves.easeOut,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 180),
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
-              color: isSelected
-                  ? AppColors.neonCyan.withValues(alpha: 0.14)
-                  : tokens.textPrimary.withValues(alpha: 0.05),
-              borderRadius: BorderRadius.circular(20),
+              color: isSelected ? AppColors.neonCyan.withValues(alpha: 0.14) : tokens.textPrimary.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: isSelected
-                    ? AppColors.neonCyan
-                    : tokens.textPrimary.withValues(alpha: 0.12),
+                color: isSelected ? AppColors.neonCyan : tokens.textPrimary.withValues(alpha: 0.12),
                 width: isSelected ? 1.5 : 1,
               ),
-              boxShadow: isSelected
-                  ? [
-                      BoxShadow(
-                        color: AppColors.neonCyan.withValues(alpha: 0.22),
-                        blurRadius: 16,
-                        spreadRadius: 1,
-                      ),
-                    ]
-                  : null,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color:
-                            (isSelected
-                                    ? AppColors.neonCyan
-                                    : tokens.textPrimary)
-                                .withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(13),
-                      ),
-                      child: Icon(
-                        goal.icon,
-                        color: isSelected
-                            ? AppColors.neonCyan
-                            : tokens.textSecondary,
-                        size: 20,
-                      ),
-                    ),
-                    const Spacer(),
-                    AnimatedOpacity(
-                      opacity: isSelected ? 1 : 0,
-                      duration: const Duration(milliseconds: 150),
-                      child: const Icon(
-                        Icons.check_circle,
-                        color: AppColors.neonCyan,
-                        size: 20,
-                      ),
-                    ),
-                  ],
+                Container(
+                  width: 44,
+                  height: 44,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: tokens.textPrimary.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(13),
+                  ),
+                  child: Text(goal.emoji, style: const TextStyle(fontSize: 20)),
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  goal.label,
-                  style: TextStyle(
-                    color: tokens.textPrimary,
-                    fontSize: 14.5,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Text(
+                    goal.label,
+                    style: TextStyle(
+                      color: tokens.textPrimary,
+                      fontSize: 15,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  goal.description,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: tokens.textSecondary,
-                    fontSize: 11.5,
-                    height: 1.3,
-                  ),
-                ),
+                if (isSelected) const Icon(Icons.check_circle, color: AppColors.neonCyan, size: 20),
               ],
             ),
           ),

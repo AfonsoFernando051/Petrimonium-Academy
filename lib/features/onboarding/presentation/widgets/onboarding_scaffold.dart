@@ -4,13 +4,13 @@ import 'package:petrimonium/core/theme/app_color_tokens.dart';
 import 'package:petrimonium/core/utils/translator.dart';
 import 'package:petrimonium/core/widgets/cosmic_background.dart';
 import 'package:petrimonium/core/widgets/game_button.dart';
-import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_progress_dots.dart';
+import 'package:petrimonium/features/onboarding/presentation/widgets/onboarding_progress_bar.dart';
 
 /// Shared chrome for every screen in the onboarding narrative arc (Welcome
-/// through Journey Ready): the shared background, an optional top-right
-/// Skip, a centered title/subtitle block, a scrollable [body], and a bottom
-/// bar with [OnboardingProgressDots] plus the primary CTA. Centralizing
-/// this means every screen gets identical
+/// through Journey Ready): the shared background, a top bar (back button +
+/// [OnboardingProgressBar], with an optional Skip alongside it), a centered
+/// title/subtitle block, a scrollable [body], and a bottom bar with just
+/// the primary CTA. Centralizing this means every screen gets identical
 /// safe-area handling, tablet/desktop width clamping, vertical centering
 /// (short content is centered rather than hugging the top — an empty-feeling
 /// screen was one of the redesign's explicit complaints about the old
@@ -69,23 +69,30 @@ class OnboardingScaffold extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              SizedBox(
-                height: 44,
-                child: showSkip
-                    ? Align(
-                        alignment: Alignment.topRight,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: TextButton(
-                            onPressed: onSkip,
-                            child: Text(
-                              Translator.translate(AppStrings.onboardingSkip),
-                              style: TextStyle(color: tokens.textSecondary),
-                            ),
-                          ),
-                        ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 16, 8),
+                child: Row(
+                  children: [
+                    if (Navigator.canPop(context))
+                      IconButton(
+                        icon: Icon(Icons.arrow_back_ios_new, size: 18, color: tokens.textSecondary),
+                        onPressed: () => Navigator.of(context).maybePop(),
                       )
-                    : null,
+                    else
+                      const SizedBox(width: 44),
+                    Expanded(child: OnboardingProgressBar(step: step, total: totalSteps)),
+                    if (showSkip) ...[
+                      const SizedBox(width: 8),
+                      TextButton(
+                        onPressed: onSkip,
+                        child: Text(
+                          Translator.translate(AppStrings.onboardingSkip),
+                          style: TextStyle(color: tokens.textSecondary),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
               ),
               Expanded(
                 child: Center(
@@ -161,19 +168,13 @@ class OnboardingScaffold extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(24, 8, 24, 20),
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 560),
-                  child: Column(
-                    children: [
-                      OnboardingProgressDots(step: step, total: totalSteps),
-                      const SizedBox(height: 16),
-                      GameButton(
-                        label: ctaLabel,
-                        icon: Icons.arrow_forward,
-                        iconTrailing: true,
-                        pulse: true,
-                        isLoading: isCtaLoading,
-                        onPressed: onCta,
-                      ),
-                    ],
+                  child: GameButton(
+                    label: ctaLabel,
+                    icon: Icons.arrow_forward,
+                    iconTrailing: true,
+                    pulse: true,
+                    isLoading: isCtaLoading,
+                    onPressed: onCta,
                   ),
                 ),
               ),

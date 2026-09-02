@@ -97,9 +97,8 @@ class Translator {
           "Adorei meu novo nome! Vamos começar sua jornada!",
       AppStrings.namePetRequiredError: "Escolha um nome para continuar",
 
-      AppStrings.financialGoalTitle: "Qual será sua primeira missão?",
-      AppStrings.financialGoalSubtitle:
-          "Escolha o que você quer alcançar. Você pode mudar isso depois.",
+      AppStrings.financialGoalTitle: "Qual é o seu objetivo agora?",
+      AppStrings.financialGoalSubtitle: "Isso ajusta sua trilha. Você pode mudar depois.",
       AppStrings.financialGoalContinue: "Continuar",
 
       AppStrings.onboardingSkip: "Pular",
@@ -726,9 +725,8 @@ class Translator {
           "I love my new name! Let's start your journey!",
       AppStrings.namePetRequiredError: "Choose a name to continue",
 
-      AppStrings.financialGoalTitle: "What will be your first mission?",
-      AppStrings.financialGoalSubtitle:
-          "Choose what you want to achieve. You can change it later.",
+      AppStrings.financialGoalTitle: "What's your goal right now?",
+      AppStrings.financialGoalSubtitle: "This shapes your path. You can change it later.",
       AppStrings.financialGoalContinue: "Continue",
 
       AppStrings.onboardingSkip: "Skip",
@@ -1348,9 +1346,8 @@ class Translator {
           "¡Me encanta mi nuevo nombre! ¡Comencemos tu viaje!",
       AppStrings.namePetRequiredError: "Elige un nombre para continuar",
 
-      AppStrings.financialGoalTitle: "¿Cuál será tu primera misión?",
-      AppStrings.financialGoalSubtitle:
-          "Elige lo que quieres lograr. Puedes cambiarlo después.",
+      AppStrings.financialGoalTitle: "¿Cuál es tu objetivo ahora?",
+      AppStrings.financialGoalSubtitle: "Esto ajusta tu camino. Puedes cambiarlo después.",
       AppStrings.financialGoalContinue: "Continuar",
 
       AppStrings.onboardingSkip: "Omitir",

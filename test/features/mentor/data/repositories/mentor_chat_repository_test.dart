@@ -114,7 +114,7 @@ void main() {
     test(
       'sends the message with the user\'s saved goal/horizon and current language as context',
       () async {
-        await petPreferencesRepository.saveGoal(PetGoalEnum.retireEarly);
+        await petPreferencesRepository.saveGoal(PetGoalEnum.getOutOfDebt);
         await petPreferencesRepository.saveHorizon(
           InvestmentHorizonEnum.longTerm,
         );
@@ -141,7 +141,7 @@ void main() {
                 ).captured.single
                 as Map<String, String?>;
 
-        expect(captured['petGoal'], PetGoalEnum.retireEarly.label);
+        expect(captured['petGoal'], PetGoalEnum.getOutOfDebt.label);
         expect(
           captured['investmentHorizon'],
           InvestmentHorizonEnum.longTerm.label,

@@ -50,7 +50,7 @@ void main() {
     fakeMascotRepository = FakeMascotRepository();
     DI.mascotRepository = fakeMascotRepository;
     DI.petPreferencesRepository = PetPreferencesRepository();
-    await DI.petPreferencesRepository.saveGoal(PetGoalEnum.learnAboutInvesting);
+    await DI.petPreferencesRepository.saveGoal(PetGoalEnum.justWantToLearn);
   });
 
   Widget buildTestableWidget() {
@@ -68,7 +68,8 @@ void main() {
 
       expect(find.text('Sua jornada está pronta.'), findsOneWidget);
       expect(find.text('Agora é hora de começar a evoluir.'), findsOneWidget);
-      expect(find.text('Aprender a Investir'), findsNWidgets(2)); // goal label + path value share copy
+      expect(find.text('Só quero aprender'), findsOneWidget);
+      expect(find.text('Aprender a Investir'), findsOneWidget); // path value
       expect(find.textContaining('Bolt ·'), findsOneWidget);
       expect(find.text('+30 XP'), findsOneWidget);
     });
