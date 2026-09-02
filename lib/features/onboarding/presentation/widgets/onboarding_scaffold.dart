@@ -31,7 +31,7 @@ class OnboardingScaffold extends StatelessWidget {
     required this.intensity,
     required this.step,
     required this.totalSteps,
-    required this.title,
+    this.title,
     this.subtitle,
     required this.body,
     required this.ctaLabel,
@@ -45,7 +45,12 @@ class OnboardingScaffold extends StatelessWidget {
   final BackgroundIntensity intensity;
   final int step;
   final int totalSteps;
-  final String title;
+
+  /// Null for a hero-style screen (e.g. Welcome) that composes its own
+  /// badge/mascot/headline order directly inside [body] instead of using
+  /// this dedicated slot — skips the title block entirely rather than
+  /// rendering an empty one.
+  final String? title;
   final String? subtitle;
   final Widget body;
   final String ctaLabel;
@@ -93,36 +98,38 @@ class OnboardingScaffold extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: Column(
-                            children: [
-                              Text(
-                                title,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: tokens.textPrimary,
-                                  fontSize: 26,
-                                  fontWeight: FontWeight.bold,
-                                  height: 1.2,
-                                ),
-                              ),
-                              if (subtitle != null) ...[
-                                const SizedBox(height: 8),
+                        if (title != null) ...[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: Column(
+                              children: [
                                 Text(
-                                  subtitle!,
+                                  title!,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color: tokens.textSecondary,
-                                    fontSize: 14,
-                                    height: 1.4,
+                                    color: tokens.textPrimary,
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1.2,
                                   ),
                                 ),
+                                if (subtitle != null) ...[
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    subtitle!,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: tokens.textSecondary,
+                                      fontSize: 14,
+                                      height: 1.4,
+                                    ),
+                                  ),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 20),
+                          const SizedBox(height: 20),
+                        ],
                         Expanded(
                           child: LayoutBuilder(
                             builder: (context, constraints) {

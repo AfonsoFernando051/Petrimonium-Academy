@@ -105,8 +105,8 @@ class Translator {
       AppStrings.onboardingSkip: "Pular",
       AppStrings.onboardingNext: "Próximo",
 
-      AppStrings.welcomeHeadline: "Sua jornada financeira começa aqui.",
-      AppStrings.welcomeSubheadline: "Aprenda. Invista. Evolua.",
+      AppStrings.welcomeHeadline: "Aprenda finanças praticando com segurança.",
+      AppStrings.welcomeSubheadline: "PETRIMONIUM ACADEMY",
       AppStrings.welcomeBody:
           "Transforme conhecimento financeiro em progresso de verdade.",
       AppStrings.welcomeCta: "Começar",
@@ -734,8 +734,8 @@ class Translator {
       AppStrings.onboardingSkip: "Skip",
       AppStrings.onboardingNext: "Next",
 
-      AppStrings.welcomeHeadline: "Your financial journey starts here.",
-      AppStrings.welcomeSubheadline: "Learn. Invest. Evolve.",
+      AppStrings.welcomeHeadline: "Learn finance by practicing, safely.",
+      AppStrings.welcomeSubheadline: "PETRIMONIUM ACADEMY",
       AppStrings.welcomeBody: "Turn financial knowledge into real progress.",
       AppStrings.welcomeCta: "Start",
 
@@ -1356,8 +1356,8 @@ class Translator {
       AppStrings.onboardingSkip: "Omitir",
       AppStrings.onboardingNext: "Siguiente",
 
-      AppStrings.welcomeHeadline: "Tu viaje financiero comienza aquí.",
-      AppStrings.welcomeSubheadline: "Aprende. Invierte. Evoluciona.",
+      AppStrings.welcomeHeadline: "Aprende finanzas practicando con seguridad.",
+      AppStrings.welcomeSubheadline: "PETRIMONIUM ACADEMY",
       AppStrings.welcomeBody:
           "Convierte el conocimiento financiero en progreso real.",
       AppStrings.welcomeCta: "Comenzar",

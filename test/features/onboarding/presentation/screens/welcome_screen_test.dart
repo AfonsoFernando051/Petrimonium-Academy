@@ -19,26 +19,26 @@ void main() {
   }
 
   group('WelcomeScreen', () {
-    // Reduced-motion mode is set for the whole group: each _FloatingIcon
-    // and PetHeroCapsule reads `MediaQuery.disableAnimations` and skips its
-    // one-shot Future.delayed / repeat() entirely when it's set (per their
-    // own doc comments), which sidesteps a real timing hazard — the icons
-    // only actually mount partway through OnboardingScaffold's internal
-    // LayoutBuilder, so a delayed timer scheduled there is not reliably
-    // flushable by elapsing a fixed pump duration and would otherwise trip
-    // the framework's "pending Timer after dispose" check. GameButton's own
-    // pulse animation still repeats regardless (it doesn't check reduced
-    // motion) — that's a Ticker, not a Timer, so it's unaffected by this and
-    // the usual "never call pumpAndSettle" rule still applies below.
-    testWidgets('renders the headline, subheadline, body and CTA', (tester) async {
+    // Reduced-motion mode is set for the whole group: PetHeroCapsule reads
+    // `MediaQuery.disableAnimations` and skips its one-shot Future.delayed /
+    // repeat() entirely when it's set (per its own doc comment), which
+    // sidesteps a real timing hazard — it only actually mounts partway
+    // through OnboardingScaffold's internal LayoutBuilder, so a delayed
+    // timer scheduled there is not reliably flushable by elapsing a fixed
+    // pump duration and would otherwise trip the framework's "pending Timer
+    // after dispose" check. GameButton's own pulse animation still repeats
+    // regardless (it doesn't check reduced motion) — that's a Ticker, not a
+    // Timer, so it's unaffected by this and the usual "never call
+    // pumpAndSettle" rule still applies below.
+    testWidgets('renders the badge, headline, body and CTA in the mockup order', (tester) async {
       tester.platformDispatcher.accessibilityFeaturesTestValue = const FakeAccessibilityFeatures(disableAnimations: true);
       addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
 
       await tester.pumpWidget(buildThemedTestableWidget());
       await tester.pump();
 
-      expect(find.text('Sua jornada financeira começa aqui.'), findsOneWidget);
-      expect(find.text('Aprenda. Invista. Evolua.'), findsOneWidget);
+      expect(find.text('PETRIMONIUM ACADEMY'), findsOneWidget);
+      expect(find.text('Aprenda finanças praticando com segurança.'), findsOneWidget);
       expect(find.text('Transforme conhecimento financeiro em progresso de verdade.'), findsOneWidget);
       expect(find.text('Começar'), findsOneWidget);
     });
