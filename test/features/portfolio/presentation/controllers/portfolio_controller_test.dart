@@ -79,11 +79,10 @@ class FakeAchievementsLocalRepository implements AchievementsLocalRepository {
   }
 }
 
-/// In-memory [AchievementsRepository] double standing in for the real
-/// backend call — the achievement-*qualification* logic itself now lives
-/// server-side (see `EvaluateAchievementsUseCaseImplTest.java`), so this
-/// test only verifies `PortfolioController` correctly orchestrates whatever
-/// the backend reports.
+/// In-memory [AchievementsRepository] double. `PortfolioController` never
+/// calls it (see Demanda #91 — that endpoint is Wallet-only and this
+/// controller only runs in Academy); it stays wired here only so a test can
+/// assert `resultToReturn` is never surfaced.
 class FakeAchievementsRepository implements AchievementsRepository {
   AchievementEvaluationResult resultToReturn = AchievementEvaluationResult.empty;
 
@@ -256,35 +255,27 @@ void main() {
   });
 
   group('loadAll — gamification', () {
-    // Achievement *qualification* is now real, server-side logic (see
-    // EvaluateAchievementsUseCaseImplTest.java) — this only verifies
-    // PortfolioController correctly orchestrates whatever the backend
-    // reports: caching it locally, reporting newly-unlocked ones exactly
-    // once, and feeding real XP into the mascot.
-    test('reports newly-unlocked achievements from the backend and caches them locally', () async {
+    // GET /api/v1/achievements requires APP_CONTEXT_WALLET (backend
+    // SecurityConfig) and this controller only ever runs in an Academy
+    // session, so it must never be called here — it would 403 on every
+    // single invocation (Demanda #91). Unlock state comes from the local
+    // cache only; [achievementsRepository] stays wired only to prove that.
+    test('reads achievement unlock state from the local cache, never from the Wallet-only backend endpoint',
+        () async {
+      await achievementsLocalRepository.cacheUnlocked({'first_investment': DateTime(2026, 1, 1)});
+      // A different, real catalog id the fake backend claims is unlocked —
+      // if the old code path ran, this would end up unlocked too.
       achievementsRepository.resultToReturn = AchievementEvaluationResult(
-        unlockedAt: {'first_investment': DateTime(2026, 1, 1)},
-        newlyUnlockedCodes: {'first_investment'},
-        achievementXpTotal: 50,
+        unlockedAt: {'first_dividend': DateTime(2026, 1, 1)},
+        newlyUnlockedCodes: {'first_dividend'},
+        achievementXpTotal: 999,
       );
 
       await controller.loadAll();
 
-      expect(controller.newlyUnlocked.any((a) => a.id == 'first_investment'), isTrue);
       expect(controller.achievements.firstWhere((a) => a.id == 'first_investment').unlocked, isTrue);
-      expect((await achievementsLocalRepository.loadUnlocked()).containsKey('first_investment'), isTrue);
-
-      controller.clearNewlyUnlocked();
-      expect(controller.newlyUnlocked, isEmpty);
-
-      // A second load where the backend reports no *new* unlocks (already
-      // persisted server-side) must not re-report it as "newly" unlocked.
-      achievementsRepository.resultToReturn = AchievementEvaluationResult(
-        unlockedAt: {'first_investment': DateTime(2026, 1, 1)},
-        newlyUnlockedCodes: {},
-        achievementXpTotal: 50,
-      );
-      await controller.loadAll();
+      expect(controller.achievements.firstWhere((a) => a.id == 'first_dividend').unlocked, isFalse);
+      // No live evaluation call means no "newly unlocked" signal from this path anymore.
       expect(controller.newlyUnlocked, isEmpty);
     });
 

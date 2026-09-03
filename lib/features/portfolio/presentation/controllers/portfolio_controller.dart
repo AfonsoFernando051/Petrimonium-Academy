@@ -262,47 +262,29 @@ class PortfolioController extends ChangeNotifier {
     });
   }
 
-  /// The backend is the sole authority on achievement unlocks, mission
-  /// progress, and XP. [AchievementsRepository.evaluate] re-checks every
-  /// achievement condition against the user's real, server-side portfolio
-  /// and persists any new unlock; [MissionsRepository.evaluate] does the
-  /// same for every mission's current daily/weekly period, purely from real
-  /// lesson/module completion history; [GamificationRepository.fetchSummary]
-  /// returns the real total XP (learning + achievements + missions) and
-  /// level. All three calls are independently best-effort — offline, the
-  /// achievement path falls back to the last-known-real cache rather than
-  /// fabricating a number; missions have no such cache (each period resets
-  /// anyway) and simply keep whatever was last successfully fetched.
+  /// [MissionsRepository.evaluate] re-checks every mission's current
+  /// daily/weekly period against real lesson/module completion history and
+  /// persists progress; [GamificationRepository.fetchSummary] returns the
+  /// real total XP (learning + achievements + missions) and level.
+  ///
+  /// Achievement unlocks are read from the local cache only — never from
+  /// `GET /api/v1/achievements`. That endpoint requires `APP_CONTEXT_WALLET`
+  /// (see backend `SecurityConfig`) and this controller only ever runs in an
+  /// Academy session, so the call would 403 on every single invocation; it
+  /// used to be attempted anyway and silently swallowed on failure (Demanda
+  /// #91), which meant an unconditional failed network round-trip on every
+  /// `loadAll()` for no behavioral gain — `_unlockedAchievements` always
+  /// ended up as the cached value regardless.
   Future<void> _evaluateGamification() async {
-    try {
-      final result = await _achievementsRepository.evaluate();
-      _unlockedAchievements = result.unlockedAt;
-      await _achievementsLocalRepository.cacheUnlocked(result.unlockedAt);
-
-      if (result.newlyUnlockedCodes.isNotEmpty) {
-        newlyUnlocked = AchievementCatalog.resolve(_unlockedAchievements)
-            .where((a) => result.newlyUnlockedCodes.contains(a.id))
-            .toList();
-        // The in-screen celebration overlay (`newlyUnlocked` above) already
-        // shows these; the bus emission is for other, decoupled listeners
-        // (e.g. a future Character Engine reaction) rather than a second UI.
-        for (final achievement in newlyUnlocked) {
-          _eventBus.emit(AchievementUnlockedEvent(achievement));
-        }
-      }
-    } catch (_) {
-      // Offline or backend unavailable — fall back to the last-known-real
-      // cached unlock state rather than showing nothing or fabricating one.
-      _unlockedAchievements = await _achievementsLocalRepository.loadUnlocked();
-    }
+    _unlockedAchievements = await _achievementsLocalRepository.loadUnlocked();
 
     try {
       final result = await _missionsRepository.evaluate();
       missions = result.missions;
       newlyCompletedMissions = result.newlyCompletedCodes;
-      // Mirrors the achievement-unlock loop above: the in-screen celebration
-      // (`newlyCompletedMissions`) already shows these on the Portfolio tab;
-      // the bus emission is for decoupled listeners like the pet companion.
+      // The in-screen celebration (`newlyCompletedMissions`) already shows
+      // these on the Portfolio tab; the bus emission is for decoupled
+      // listeners like the pet companion.
       for (final code in result.newlyCompletedCodes) {
         _eventBus.emit(MissionCompletedEvent(MissionDisplayCatalog.forCode(code).title));
       }

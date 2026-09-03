@@ -26,6 +26,14 @@ void main() {
       verify(() => mockApiClient.post('/api/pets/configure', {'specie': 'FOX'})).called(1);
     });
 
+    test('includes the chosen name in the request body when provided', () async {
+      when(() => mockApiClient.post(any(), any())).thenAnswer((_) async => http.Response('', 200));
+
+      await dataSource.configurePet(PetSpecieEnum.FOX, name: 'Rusty');
+
+      verify(() => mockApiClient.post('/api/pets/configure', {'specie': 'FOX', 'name': 'Rusty'})).called(1);
+    });
+
     test('throws an Exception on a non-200 response', () async {
       when(() => mockApiClient.post(any(), any())).thenAnswer((_) async => http.Response('', 400));
 

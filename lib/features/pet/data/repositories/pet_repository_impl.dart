@@ -8,8 +8,8 @@ class PetRepositoryImpl implements PetRepository {
   PetRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<void> configurePet(PetSpecieEnum specie) async {
-    return await remoteDataSource.configurePet(specie);
+  Future<void> configurePet(PetSpecieEnum specie, {String? name}) async {
+    return await remoteDataSource.configurePet(specie, name: name);
   }
 
   @override

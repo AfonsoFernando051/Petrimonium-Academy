@@ -8,6 +8,7 @@ import 'package:petrimonium/features/pet/data/repositories/pet_repository_impl.d
 class MockPetRemoteDataSource extends PetRemoteDataSource {
   bool getStatusCalled = false;
   bool configurePetCalled = false;
+  String? lastConfiguredName;
 
   MockPetRemoteDataSource() : super(apiClient: ApiClient());
 
@@ -18,8 +19,9 @@ class MockPetRemoteDataSource extends PetRemoteDataSource {
   }
 
   @override
-  Future<void> configurePet(PetSpecieEnum specie) async {
+  Future<void> configurePet(PetSpecieEnum specie, {String? name}) async {
     configurePetCalled = true;
+    lastConfiguredName = name;
   }
 }
 
@@ -42,6 +44,11 @@ void main() {
     test('configurePet should call remote datasource with given specie', () async {
       await repository.configurePet(PetSpecieEnum.FOX);
       expect(mockDataSource.configurePetCalled, true);
+    });
+
+    test('configurePet should forward the chosen name to the remote datasource', () async {
+      await repository.configurePet(PetSpecieEnum.FOX, name: 'Rusty');
+      expect(mockDataSource.lastConfiguredName, 'Rusty');
     });
   });
 }
