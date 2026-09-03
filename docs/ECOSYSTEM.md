@@ -3,6 +3,13 @@
 Status as of 2026-08-31: **audited, partially split.** This is the furthest along
 of the three repos — see "What's actually been done" below.
 
+## Notion
+
+Project workspace: [Petrimonium](https://app.notion.com/p/3d08bfdad90780c3a935c0054a11770d)
+— product docs, the Atlas Técnico (what the system *is*, today, read by
+architecture slice) and the Demandas/Correção de Bugs boards findings from
+work here should be tracked against.
+
 ## The three repos
 
 | Repo | Job | Money |
