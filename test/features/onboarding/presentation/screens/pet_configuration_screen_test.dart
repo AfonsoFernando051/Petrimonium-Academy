@@ -72,7 +72,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('Escolha um nome para continuar'), findsOneWidget);
-      verifyNever(() => mockPetRepository.configurePet(any()));
+      verifyNever(() => mockPetRepository.configurePet(any(), name: any(named: 'name')));
     });
 
     testWidgets('picking a name suggestion clears the error and fills the field', (tester) async {
@@ -95,7 +95,7 @@ void main() {
     });
 
     testWidgets('continuing with a valid name configures the pet and navigates to AcademyIntroScreen', (tester) async {
-      when(() => mockPetRepository.configurePet(any())).thenAnswer((_) async {});
+      when(() => mockPetRepository.configurePet(any(), name: any(named: 'name'))).thenAnswer((_) async {});
       when(() => mockMascotRepository.saveName(any())).thenAnswer((_) async {});
 
       await tester.pumpWidget(buildTestableWidget());
@@ -109,13 +109,13 @@ void main() {
       await tester.pump(); // configurePet + saveName resolve
       await tester.pump(const Duration(milliseconds: 350)); // route transition
 
-      verify(() => mockPetRepository.configurePet(PetSpecieEnum.DOG)).called(1);
+      verify(() => mockPetRepository.configurePet(PetSpecieEnum.DOG, name: 'Loki')).called(1);
       verify(() => mockMascotRepository.saveName('Loki')).called(1);
       expect(find.byType(AcademyIntroScreen), findsOneWidget);
     });
 
     testWidgets('selecting a different species passes it to configurePet on continue', (tester) async {
-      when(() => mockPetRepository.configurePet(any())).thenAnswer((_) async {});
+      when(() => mockPetRepository.configurePet(any(), name: any(named: 'name'))).thenAnswer((_) async {});
       when(() => mockMascotRepository.saveName(any())).thenAnswer((_) async {});
 
       await tester.pumpWidget(buildTestableWidget());
@@ -135,11 +135,11 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 350));
 
-      verify(() => mockPetRepository.configurePet(PetSpecieEnum.CAT)).called(1);
+      verify(() => mockPetRepository.configurePet(PetSpecieEnum.CAT, name: 'Nino')).called(1);
     });
 
     testWidgets('shows a friendly error snackbar when configurePet fails', (tester) async {
-      when(() => mockPetRepository.configurePet(any())).thenThrow(Exception('boom'));
+      when(() => mockPetRepository.configurePet(any(), name: any(named: 'name'))).thenThrow(Exception('boom'));
 
       await tester.pumpWidget(buildTestableWidget());
       await tester.pump();

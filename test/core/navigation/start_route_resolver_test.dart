@@ -65,7 +65,7 @@ class FakePetRepository implements PetRepository {
   }
 
   @override
-  Future<void> configurePet(PetSpecieEnum specie) async {}
+  Future<void> configurePet(PetSpecieEnum specie, {String? name}) async {}
 
   @override
   Future<Map<String, dynamic>?> getMyPet() async => null;

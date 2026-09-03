@@ -68,7 +68,7 @@ class _PetConfigurationScreenState extends State<PetConfigurationScreen> {
 
     setState(() => _isLoading = true);
     try {
-      await DI.petRepository.configurePet(_selectedSpecie);
+      await DI.petRepository.configurePet(_selectedSpecie, name: name);
       await DI.mascotRepository.saveName(name);
       if (mounted) {
         Navigator.of(
