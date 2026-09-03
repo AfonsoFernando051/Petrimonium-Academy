@@ -52,6 +52,14 @@ class PortfolioController extends ChangeNotifier {
 
   final PortfolioRepository _repository;
   final AchievementsLocalRepository _achievementsLocalRepository;
+  /// Deliberately never called: `GET /api/v1/achievements` requires
+  /// `APP_CONTEXT_WALLET` (backend `SecurityConfig`) and this controller only
+  /// ever runs in an Academy session, so a live evaluation would 403 on every
+  /// invocation (Demanda #91). Unlock state comes from
+  /// [_achievementsLocalRepository] instead. The dependency stays wired — and
+  /// a test asserts it is never consulted — so that the constraint is visible
+  /// here rather than silently forgotten.
+  // ignore: unused_field
   final AchievementsRepository _achievementsRepository;
   final GamificationRepository _gamificationRepository;
   final MissionsRepository _missionsRepository;

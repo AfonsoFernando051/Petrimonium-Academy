@@ -1,23 +1,16 @@
 name: Academy CI
 
+# This repository *is* the academy app — its root holds pubspec.yaml — so every
+# path here is repo-root-relative. There is no "Petrimonium-Academy/"
+# subdirectory to filter on or cd into.
 on:
   push:
     branches: [main]
-    paths:
-      - "Petrimonium-Academy/**"
-      - ".github/workflows/academy-ci.yml"
-
   pull_request:
-    paths:
-      - "Petrimonium-Academy/**"
-      - ".github/workflows/academy-ci.yml"
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: Petrimonium-Academy
     steps:
       - uses: actions/checkout@v4
 
@@ -44,9 +37,6 @@ jobs:
 
   integration-test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: Petrimonium-Academy
     steps:
       - uses: actions/checkout@v4
 

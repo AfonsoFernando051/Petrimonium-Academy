@@ -37,7 +37,7 @@ class SimulatedWalletRemoteDataSource {
         'ticker': ticker,
         'side': side,
         'quantity': quantity,
-        if (clientOrderId != null) 'clientOrderId': clientOrderId,
+        'clientOrderId': ?clientOrderId,
       },
     );
     if (response.statusCode != 201) {

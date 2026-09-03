@@ -10,7 +10,7 @@ class PetRemoteDataSource {
   Future<void> configurePet(PetSpecieEnum specie, {String? name}) async {
     final response = await apiClient.post(
       '/api/pets/configure',
-      {'specie': specie.name, if (name != null) 'name': name},
+      {'specie': specie.name, 'name': ?name},
     );
     
     if (response.statusCode != 200) {

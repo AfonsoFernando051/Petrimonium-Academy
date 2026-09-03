@@ -121,6 +121,12 @@ void main() {
     when(
       () => mockAuthRepository.register(any(), any(), any()),
     ).thenAnswer((_) async {});
+    // HomeScreen.initState calls both on every mount; unstubbed, mocktail
+    // returns null where a Future<String?> is awaited and the whole dashboard
+    // fails to build. Null is the "no display name known" case, which these
+    // flows don't assert on.
+    when(() => mockAuthRepository.getSavedUserName()).thenAnswer((_) async => null);
+    when(() => mockAuthRepository.refreshUserName()).thenAnswer((_) async => null);
 
     mockOnboardingRepository = MockOnboardingRepository();
     DI.onboardingRepository = mockOnboardingRepository;
