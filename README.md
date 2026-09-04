@@ -1,8 +1,16 @@
 # Petrimonium Academy
 
-One of three sibling repos in the Petrimonium ecosystem — see
-[`docs/ECOSYSTEM.md`](docs/ECOSYSTEM.md) for this repo's job, current status,
-and how it relates to `petrimonium-wallet` and `petrimonium-backend`.
+Financial education with simulated money — *do I understand what I'm doing?*
+One of four sibling repos in the Petrimonium ecosystem, alongside
+`petrimonium-health` (cash flow), `petrimonium-wallet` (patrimony) and
+`petrimonium-backend`, which serves all three and is the only place the
+boundary between them is enforced.
+
+| Read this | For |
+|---|---|
+| [`Petrimonium-Backend/docs/INTEGRATION.md`](../Petrimonium-Backend/docs/INTEGRATION.md) | **The integration contract** — what the three products share, what never crosses between them, and the known gaps |
+| [`docs/ECOSYSTEM.md`](docs/ECOSYSTEM.md) | This repo's job and the history of how it got here |
+| [`docs/ARCHITECTURE/`](docs/ARCHITECTURE/) | Pointer into the shared Atlas Técnico, plus what is specific to this repo |
 
 ## Getting Started
 

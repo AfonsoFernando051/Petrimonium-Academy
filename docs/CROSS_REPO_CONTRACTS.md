@@ -1,5 +1,17 @@
 # Cross-repo contracts — proposal
 
+> **Superseded, 2026-09-04.** Every contract proposed here has since been
+> either implemented or replaced, and the ecosystem grew a third product
+> (Petrimonium Health) that this document predates and never mentions. The
+> canonical, current contract is
+> **[`Petrimonium-Backend/docs/INTEGRATION.md`](../../Petrimonium-Backend/docs/INTEGRATION.md)**
+> — hosted in the backend because that is the only repo that can enforce it.
+>
+> This file is kept as the reasoning trail: it is where the `app_context`
+> claim, the `petrimonium://` deep-link scheme and the shared Pet schema were
+> first argued out, from a repo that at the time had no counterpart to agree
+> with. Read it for *why*; read `INTEGRATION.md` for *what is true*.
+
 Status: **proposal, not yet confirmed** across `petrimonium-wallet` or
 `petrimonium-backend`. Nothing in this repo depends on the backend actually
 issuing/accepting these shapes yet — where that matters, it's called out

@@ -1,5 +1,16 @@
 # Ecosystem role — Petrimonium Academy
 
+> **Where the integration contract lives.** This file is history — the audit
+> trail of how this repo got here, update by update. What the ecosystem *is*
+> today, and what this app may and may not do at the boundary, is one document
+> in one place:
+>
+> **➜ [`Petrimonium-Backend/docs/INTEGRATION.md`](../../Petrimonium-Backend/docs/INTEGRATION.md)**
+>
+> Three products (Health, Wallet, Academy), one backend, four shared things
+> (identity, Pet, XP ledger, Mentor) and nothing else. Where this file and that
+> one disagree, that one wins.
+
 Status as of 2026-08-31: **audited, partially split.** This is the furthest along
 of the three repos — see "What's actually been done" below.
 
@@ -10,16 +21,24 @@ Project workspace: [Petrimonium](https://app.notion.com/p/3d08bfdad90780c3a935c0
 architecture slice) and the Demandas/Correção de Bugs boards findings from
 work here should be tracked against.
 
-## The three repos
+## The four repos
 
-| Repo | Job | Money |
+| Repo | The question it answers | Money |
 |---|---|---|
-| **`petrimonium-academy`** (this repo) | Financial education: courses, lessons, quizzes, Financial Lab simulators, full gamification (XP, streaks, levels, badges, leaderboards) | Simulated only — never real |
-| [`petrimonium-wallet`](../../Petrimonium-Wallet) | Real investment management, trust-forward, behavior-based gamification only | Real |
-| [`petrimonium-backend`](../../Petrimonium-Backend) | Shared Spring Boot / PostgreSQL backend for both apps | N/A (data layer) |
+| **`petrimonium-academy`** (this repo) | *Do I understand what I'm doing?* — courses, lessons, quizzes, Financial Lab simulators, full gamification (XP, streaks, levels, badges) | Simulated only — never real |
+| [`petrimonium-health`](../../Petrimonium-Health) | *How is my month, and what's left after the commitments I already know about?* | Real (cash flow) |
+| [`petrimonium-wallet`](../../Petrimonium-Wallet) | *How is my patrimony, and what is it doing?* | Real (patrimony) |
+| [`petrimonium-backend`](../../Petrimonium-Backend) | Shared Spring Boot / PostgreSQL backend for all three apps, and the only place the boundary between them is enforced | N/A (data layer) |
 
-All three share one identity/account graph and one Pet entity via the backend,
-but own no feature code with each other.
+All four share one identity/account graph and one Pet entity via the backend,
+and own no feature code with each other.
+
+Academy is the only product that generates XP today (the ledger's allow-list
+is learning/practice events only), which is why the shared Pet levels up here
+and nowhere else — see `INTEGRATION.md` §5.3 and the open product question in
+its §8.3. Academy's own boundary obligation is the inverse of the other two:
+real money — patrimony *or* cash flow — never reaches an Academy session, and
+every simulated surface carries its persistent fictitious-data mark.
 
 ## Where this actually came from
 
@@ -248,3 +267,16 @@ mockup/PRD ask for.
 
 `flutter analyze`: clean (one pre-existing, unrelated lint). Dashboard and
 achievement-overlay test suites: 8/8 green.
+
+## Update, 2026-09-04 (ecosystem integration contract)
+
+Docs-only, branch `docs/ecosystem-integration`. The ecosystem is three products
+now — Petrimonium Health shipped with its own `app_context`, schema and Flutter
+app — and no document here said so. The contract moved to a single canonical
+file in the backend
+([`INTEGRATION.md`](../../Petrimonium-Backend/docs/INTEGRATION.md)), which all
+three app repos now point at.
+
+[`CROSS_REPO_CONTRACTS.md`](CROSS_REPO_CONTRACTS.md) — written here back when
+no other repo had confirmed anything — is **superseded** by it and kept as the
+reasoning trail. `docs/ARCHITECTURE/README.md` updated to match.
