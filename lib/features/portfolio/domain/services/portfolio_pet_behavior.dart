@@ -94,7 +94,10 @@ class PortfolioPetBehavior extends PetBehavior {
         priority: PetMessagePriority.high,
         trigger: PetMessageTrigger.firstInvestment,
         textKey: AppStrings.companionEventFirstInvestment,
-        mood: PetAnimationState.celebrate,
+        // Neutral, never celebrate/victory — see AppEvent.isFinancial. An
+        // aporte is acknowledged and bridged into learning, not rewarded with
+        // the animation a finished lesson gets.
+        mood: PetAnimationState.idle,
         action: PetMessageAction(
           labelKey: AppStrings.companionActionUnderstand,
           destination: PetContext.academy,

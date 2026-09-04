@@ -106,7 +106,11 @@ void main() {
         final message = behavior.onEvent(const FirstInvestmentAddedEvent());
         expect(message!.id, 'event_first_investment');
         expect(message.priority, PetMessagePriority.high);
-        expect(message.mood, PetAnimationState.celebrate);
+        // Was `celebrate` until DEM-43: an aporte is real money, and the PRD
+        // reserves the celebratory moods for educational milestones. It is
+        // still high priority and still bridges into Academy — only the
+        // reward framing is gone. See financial_event_mood_guardrail_test.
+        expect(message.mood, PetAnimationState.idle);
         expect(message.params, isNull);
         expect(message.action?.destination, PetContext.academy);
       },

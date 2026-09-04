@@ -610,7 +610,7 @@ class Translator {
       AppStrings.companionEventSchoolMastered:
           "Você concluiu tudo disponível em {school}! Muito bem!",
       AppStrings.companionEventFirstInvestment:
-          "Esse foi seu primeiro investimento! Vamos entender melhor o que você acabou de adicionar à sua carteira?",
+          "Você adicionou seu primeiro investimento. Quer entender melhor o que acabou de entrar na sua carteira?",
       AppStrings.companionEventHighConcentration:
           "Percebi que {ticker} representa {percent}% da sua carteira. Quer entender por que diversificar pode reduzir o risco?",
       AppStrings.companionPortfolioActivationNudge:
@@ -1276,7 +1276,7 @@ class Translator {
       AppStrings.companionEventSchoolMastered:
           "You finished everything available in {school}! Well done!",
       AppStrings.companionEventFirstInvestment:
-          "That was your first investment! Want to understand what you just added to your portfolio?",
+          "You've added your first investment. Want to understand what just went into your portfolio?",
       AppStrings.companionEventHighConcentration:
           "I noticed {ticker} makes up {percent}% of your portfolio. Want to understand why diversifying can lower your risk?",
       AppStrings.companionPortfolioActivationNudge:
@@ -1946,7 +1946,7 @@ class Translator {
       AppStrings.companionEventSchoolMastered:
           "¡Completaste todo lo disponible en {school}! ¡Muy bien!",
       AppStrings.companionEventFirstInvestment:
-          "¡Esa fue tu primera inversión! ¿Quieres entender mejor lo que acabas de agregar a tu cartera?",
+          "Agregaste tu primera inversión. ¿Quieres entender mejor lo que acaba de entrar en tu cartera?",
       AppStrings.companionEventHighConcentration:
           "Noté que {ticker} representa el {percent}% de tu cartera. ¿Quieres entender por qué diversificar puede reducir el riesgo?",
       AppStrings.companionPortfolioActivationNudge:
