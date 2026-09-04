@@ -1,4 +1,5 @@
 import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
+import 'package:petrimonium/features/portfolio/domain/entities/price_status.dart';
 
 /// One purchase lot exactly as persisted on the backend — a single row in
 /// `jf_investments`. A [Holding] aggregates one or more lots that share the
@@ -14,6 +15,10 @@ class InvestmentLot {
   final double investedValue;
   final double currentValue;
 
+  /// Where [currentPrice] came from. Never assume [currentValue] is a live
+  /// valuation without checking this — see [PriceStatus].
+  final PriceStatus priceStatus;
+
   const InvestmentLot({
     required this.id,
     required this.ticker,
@@ -24,6 +29,7 @@ class InvestmentLot {
     required this.currentPrice,
     required this.investedValue,
     required this.currentValue,
+    this.priceStatus = PriceStatus.live,
   });
 
   double get gainValue => currentValue - investedValue;
@@ -44,6 +50,7 @@ class InvestmentLot {
       currentPrice: currentPrice,
       investedValue: (json['investedValue'] as num?)?.toDouble() ?? quantity * purchasePrice,
       currentValue: (json['currentValue'] as num?)?.toDouble() ?? quantity * currentPrice,
+      priceStatus: PriceStatus.fromWire(json['priceStatus'] as String?),
     );
   }
 }
