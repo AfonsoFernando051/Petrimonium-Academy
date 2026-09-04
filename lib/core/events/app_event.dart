@@ -9,6 +9,24 @@ import 'package:petrimonium/features/portfolio/domain/entities/achievement.dart'
 /// today. Add a case when a real trigger exists for it, not in advance of one.
 sealed class AppEvent {
   const AppEvent();
+
+  /// Whether this event is about the user's real money — an aporte, a holding,
+  /// a portfolio state — as opposed to something they learned or achieved.
+  ///
+  /// Exists so the guardrail can be enforced instead of merely documented: the
+  /// PRD (§10.3, §12.2, FR-MEN-002) reserves the Pet's celebratory and happy
+  /// moods strictly for educational milestones, and a financial event may be
+  /// acknowledged but never celebrated with the same animation a finished
+  /// lesson gets. A test walks every financial event and fails if any of them
+  /// produces a celebratory mood, so adding a new financial event without
+  /// thinking about its mood breaks the build rather than shipping quietly.
+  ///
+  /// Deliberately not true for [AchievementUnlockedEvent] or
+  /// [MissionCompletedEvent]: those carry a catalog entry that may be either
+  /// educational or wealth-based, so the honest fix there is removing the
+  /// financial badges from the catalog (a separate concern), not blanket-muting
+  /// the Pet for every achievement.
+  bool get isFinancial => false;
 }
 
 /// Fired the moment a permanent achievement is unlocked (see
@@ -77,6 +95,9 @@ class SchoolMasteredEvent extends AppEvent {
 /// as "just invested").
 class FirstInvestmentAddedEvent extends AppEvent {
   const FirstInvestmentAddedEvent();
+
+  @override
+  bool get isFinancial => true;
 }
 
 /// Fired when a single holding's share of the portfolio newly crosses the
@@ -88,6 +109,9 @@ class HighConcentrationDetectedEvent extends AppEvent {
   final String ticker;
   final double percent;
   const HighConcentrationDetectedEvent({required this.ticker, required this.percent});
+
+  @override
+  bool get isFinancial => true;
 }
 
 /// Fired the moment a mission (daily/weekly, see `MissionStatus`) is newly
