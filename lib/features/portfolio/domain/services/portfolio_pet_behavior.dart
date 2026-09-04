@@ -6,14 +6,15 @@ import 'package:petrimonium/features/pet/presentation/companion/pet_context.dart
 import 'package:petrimonium/features/pet/presentation/companion/pet_message.dart';
 
 /// The real-portfolio Pet reaction script — holdings, dividends,
-/// concentration risk, missions/achievements tied to the user's actual
-/// investments, and the Mentor chat nudge. This is Wallet-shaped
-/// functionality that currently lives in this repo (see the repo audit —
-/// `features/portfolio`/`features/investment`/`features/asset_details` are
-/// flagged real-money leakage kept here only per the "leave in place, build
-/// alongside" decision) and is expected to move to `petrimonium-wallet`
-/// eventually, at which point this class — not `AcademyPetBehavior` — is
-/// what moves with it. Implements the same [PetBehavior] contract so the
+/// concentration risk, missions/achievements, and the Mentor chat nudge.
+/// `petrimonium-wallet` is its own repo now and keeps its own copy of this
+/// class for the real-money holdings screens it owns. This copy stays wired
+/// into Academy's `_kPetBehaviors` only because `DashboardScreen` still runs
+/// `PortfolioController.loadAll()` here for its own achievements/missions
+/// gamification evaluation — Academy no longer has any real-holdings screen
+/// (`features/asset_details` and the investment-configuration flow were
+/// removed as dead code; see `docs/BACKEND_MODULE_PLAN.md`/`ECOSYSTEM.md`
+/// for the split history). Implements the same [PetBehavior] contract so the
 /// two scripts stay swappable without either needing to know the other
 /// exists (`PetCompanionController` composes both).
 class PortfolioPetBehavior extends PetBehavior {

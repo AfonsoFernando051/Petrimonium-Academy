@@ -17,8 +17,6 @@ import 'package:petrimonium/features/pet/data/repositories/mascot_repository_imp
 import 'package:petrimonium/features/pet/data/repositories/pet_companion_preferences_repository.dart';
 import 'package:petrimonium/features/pet/data/repositories/pet_preferences_repository.dart';
 import 'package:petrimonium/features/pet/domain/repositories/mascot_repository.dart';
-import 'package:petrimonium/features/investment/data/datasources/investment_remote_datasource.dart';
-import 'package:petrimonium/features/investment/data/repositories/investment_repository.dart';
 import 'package:petrimonium/features/mentor/data/datasources/mentor_remote_datasource.dart';
 import 'package:petrimonium/features/mentor/data/repositories/mentor_chat_repository.dart';
 import 'package:petrimonium/features/portfolio/data/datasources/achievements_remote_datasource.dart';
@@ -32,8 +30,6 @@ import 'package:petrimonium/features/simulated_wallet/data/datasources/simulated
 import 'package:petrimonium/features/simulated_wallet/data/repositories/simulated_wallet_repository.dart';
 import 'package:petrimonium/features/settings/data/datasources/settings_remote_datasource.dart';
 import 'package:petrimonium/features/settings/data/repositories/settings_repository.dart';
-import 'package:petrimonium/features/asset_details/data/datasources/asset_details_remote_datasource.dart';
-import 'package:petrimonium/features/asset_details/data/repositories/asset_details_repository.dart';
 
 class DI {
   static final ApiClient _apiClient = ApiClient();
@@ -84,13 +80,6 @@ class DI {
   // Not `final` so tests can replace it with a mock repository.
   static PetCompanionPreferencesRepository petCompanionPreferencesRepository =
       PetCompanionPreferencesRepository();
-
-  static final InvestmentRemoteDataSource _investmentRemoteDataSource =
-      InvestmentRemoteDataSource(apiClient: _apiClient);
-  // Not `final` so tests can replace it with a mock repository.
-  static InvestmentRepository investmentRepository = InvestmentRepository(
-    remoteDataSource: _investmentRemoteDataSource,
-  );
 
   static final SettingsRemoteDataSource _settingsRemoteDataSource =
       SettingsRemoteDataSource(apiClient: _apiClient);
@@ -153,12 +142,5 @@ class DI {
   static MentorChatRepository mentorChatRepository = MentorChatRepository(
     remoteDataSource: _mentorRemoteDataSource,
     petPreferencesRepository: petPreferencesRepository,
-  );
-
-  static final AssetDetailsRemoteDataSource _assetDetailsRemoteDataSource =
-      AssetDetailsRemoteDataSource(apiClient: _apiClient);
-  // Not `final` so tests can replace it with a mock repository.
-  static AssetDetailsRepository assetDetailsRepository = AssetDetailsRepository(
-    remoteDataSource: _assetDetailsRemoteDataSource,
   );
 }

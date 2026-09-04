@@ -16,7 +16,6 @@ void main() {
       expect(DI.mascotRepository, isNotNull);
       expect(DI.petPreferencesRepository, isNotNull);
       expect(DI.petCompanionPreferencesRepository, isNotNull);
-      expect(DI.investmentRepository, isNotNull);
       expect(DI.settingsRepository, isNotNull);
       expect(DI.portfolioRepository, isNotNull);
       expect(DI.achievementsLocalRepository, isNotNull);
@@ -26,7 +25,6 @@ void main() {
       expect(DI.academyRemoteDataSource, isNotNull);
       expect(DI.academyCatalogRepository, isNotNull);
       expect(DI.mentorChatRepository, isNotNull);
-      expect(DI.assetDetailsRepository, isNotNull);
     });
   });
 }
