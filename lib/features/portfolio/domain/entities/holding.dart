@@ -1,5 +1,6 @@
 import 'package:petrimonium/features/investment/data/models/investment_type_enum.dart';
 import 'package:petrimonium/features/portfolio/domain/entities/investment_lot.dart';
+import 'package:petrimonium/features/portfolio/domain/entities/price_status.dart';
 
 /// A single ticker's aggregated position — the sum of every [InvestmentLot]
 /// the user holds for that ticker, each of which may have its own purchase
@@ -31,6 +32,23 @@ class Holding {
   double get gainValue => currentValue - investedValue;
 
   double get gainPercent => investedValue == 0 ? 0.0 : (gainValue / investedValue) * 100;
+
+  /// The provenance of this holding's price. Every lot of a given ticker is
+  /// priced from the same quote, so they normally agree; when they don't, the
+  /// least-trustworthy one wins — a holding is only "live" if all of it is.
+  PriceStatus get priceStatus {
+    if (lots.any((l) => l.priceStatus == PriceStatus.stalePurchasePrice)) {
+      return PriceStatus.stalePurchasePrice;
+    }
+    if (lots.any((l) => l.priceStatus == PriceStatus.notQuoted)) {
+      return PriceStatus.notQuoted;
+    }
+    return PriceStatus.live;
+  }
+
+  /// Whether [gainValue]/[gainPercent] may be presented to the user as a real
+  /// return. False means the price is a fallback and any "0%" is an artifact.
+  bool get hasLiveQuote => priceStatus.isLive;
 
   DateTime get firstPurchaseDate =>
       lots.map((l) => l.purchaseDate).reduce((a, b) => a.isBefore(b) ? a : b);
