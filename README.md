@@ -26,6 +26,17 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
+## Application identity
+
+Academy is a separate installable product. Its native application identifier is
+`com.petrimonium.academy` on Android, iOS, macOS and Linux. Do not reuse this ID
+for Wallet or Health.
+
+When configuring Google Sign-In or store distribution, register this exact ID
+as its own Android/iOS client (including the Android signing-certificate
+fingerprint). The backend-facing web `serverClientId` may remain shared, but the
+native OAuth clients and store records must be product-specific.
+
 ## Configuring the backend URL
 
 `ApiConstants.baseUrl` (`lib/core/constants/api_constants.dart`) defaults to

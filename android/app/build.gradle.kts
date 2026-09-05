@@ -20,7 +20,7 @@ if (hasReleaseSigning) {
 }
 
 android {
-    namespace = "com.jf.petrimonium"
+    namespace = "com.petrimonium.academy"
     // flutter_secure_storage requires compiling against SDK 37 — flutter.compileSdkVersion
     // (36 as of this Flutter version) is a version behind, which fails the build below.
     compileSdk = 37
@@ -36,7 +36,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.jf.petrimonium"
+        applicationId = "com.petrimonium.academy"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

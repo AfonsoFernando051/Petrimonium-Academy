@@ -1,4 +1,4 @@
-package com.jf.petrimonium
+package com.petrimonium.academy
 
 import io.flutter.embedding.android.FlutterActivity
 
